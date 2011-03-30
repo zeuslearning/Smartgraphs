@@ -28,22 +28,26 @@ esac
 export SERVER_PATH="${SERVER_ROOT}/shared/public/static"
 export LABEL_PATH="${SERVER_ROOT}/shared/public/labels"
 
-# rm -rf tmp/
-# sc-build
+echo "Building smartgraphs."
 
-# If you don't have rsync, use scp instead
-# scp -r tmp/build/static/* geniverse@$SERVER:$SERVER_PATH/
-# rsync -rlzP tmp/build/static/* $USER@$SERVER:$SERVER_PATH/
+rm -rf tmp/
+sc-build
 
 BUILD=$(sc-build-number smartgraphs)
 echo "Smartgraphs build hash: ${BUILD}"
 
+echo "Syncing with the server: $SERVER"
+# If you don't have rsync, use scp instead
+# scp -r tmp/build/static/* geniverse@$SERVER:$SERVER_PATH/
+rsync -rlzP tmp/build/static/* $USER@$SERVER:$SERVER_PATH/
+
+
 read -p "What label should this be deployed with? " -e -r LABEL
 
 CMD="rm $LABEL_PATH/${LABEL}; ln -s $SERVER_PATH/smartgraphs/en/${BUILD} $LABEL_PATH/${LABEL}"
-echo "Running command: $CMD"
+# echo "Running command: $CMD"
 ssh -t $USER@$SERVER $CMD
 
 CMD="cd $SERVER_ROOT/current/public; for i in \$(ls $LABEL_PATH); do rm \$i; ln -s $LABEL_PATH/\$i \$i; done"
-echo "Running command: $CMD"
+# echo "Running command: $CMD"
 ssh -t $USER@$SERVER $CMD
