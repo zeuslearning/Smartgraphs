@@ -54,7 +54,7 @@ Smartgraphs.CouchDataSource = SC.DataSource.extend(
 
     if (recordType === Smartgraphs.Activity) {
       var activityId = id;
-      var requestUrl = '/db/smartgraphs/_design/app/_view/activities-by-url-and-version?key=["'+activityId+'",'+Smartgraphs.DATA_FORMAT_VERSION+']';
+      var requestUrl = '/activities/'+activityId+'.sg';
 
       if (Smartgraphs.activityDocs[id]) {
         var response = SC.Object.create({ body: { rows: [ { value: Smartgraphs.activityDocs[id] } ] } });
@@ -76,9 +76,12 @@ Smartgraphs.CouchDataSource = SC.DataSource.extend(
       var body = response.get('body');
       this.log('retrieved response.body = ', body);
       
-      if (body && body.rows && body.rows.length === 1 && body.rows[0].value) {
-        var doc = body.rows[0].value;
-        
+      if (body) {
+        var doc = body;
+        if (body.rows && body.rows.length === 1 && body.rows[0].value) {
+          doc = body.rows[0].value;
+        }
+
         this.log('doc = ', doc);
         this.log('doc.activity = ', doc.activity);
         
