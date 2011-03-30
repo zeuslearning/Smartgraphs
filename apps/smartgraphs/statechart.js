@@ -81,6 +81,9 @@ Smartgraphs.statechart = SC.Statechart.create(
           if (activity.get('status') & SC.Record.READY) {
             activity.removeObserver('status',checkActivityStatus);
             onward();
+          } else if (activity.get('status') & SC.Record.ERROR) {
+            activity.removeObserver('status',checkActivityStatus);
+            SC.Error.create();
           } else {
             activity.addObserver('status', self, checkActivityStatus);
           }
