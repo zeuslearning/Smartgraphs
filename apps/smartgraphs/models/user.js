@@ -21,6 +21,12 @@ Smartgraphs.User = SC.Record.extend(
   
   name: SC.Record.attr(String),
   
-  sessions: SC.Record.toMany(Smartgraphs.Session, { inverse: 'user' })
+  sessions: SC.Record.toMany(Smartgraphs.Session, { inverse: 'user' }),
+  
+  init: function() {
+    sc_super(); // MUST call first
+    this._ids = {};
+    this._revs = {};
+  }
 
 }) ;

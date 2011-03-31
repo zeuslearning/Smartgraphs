@@ -34,6 +34,14 @@ Smartgraphs = SC.Application.create(
     return this._nextGuid++;
   },
   
+  couchIdForStoreKey: function(storeKey) {
+    return Smartgraphs.dataSource.couch._ids[storeKey];
+  },
+  
+  couchRevForStoreKey: function(storeKey) {
+    return Smartgraphs.dataSource.couch._revs[storeKey];
+  },
+  
   // DEBUG SETTINGS
   trace: YES,                   // whether to trace firstResponder changes and app actions      
   logDataSource: YES,           // whether the data source should log
