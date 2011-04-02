@@ -72,6 +72,11 @@ Smartgraphs.statechart = SC.Statechart.create(
               alert("Could not create a required CouchDB view.");
             }
           }
+        } else {
+          var result = response.get('body') || {} ;
+          if (result.error !== "file_exists") {
+            alert("CouchDB is not running. Please go to http://www.couchbase.com/downloads and download Couchbase Server Community Edition and start up CouchDB on the default port. Then reload this application.");
+          }
         }
 
         this.gotoState('READY');
