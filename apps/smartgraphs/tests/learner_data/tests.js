@@ -11,62 +11,92 @@ module("Learner Data", {
   setup: function () {
     env = JSV.createEnvironment() ;
     schema = {
-      "type" : "object",
-      "properties": {
-        "_id": { "type": "string", "required": true },
-        "_rev": { "type": "string", "required": true },
-        "url": { "type": "string", "required": true },
-        "learner": {
-          "type": "object",
-          "required": true,
-          "properties": {
-            "url": { "type": "string", "required": true }
-          }
-        },
-        "activity": {
-          "type": "object",
-          "required": true,
-          "properties": {
-            "id": { "type": "string", "required": true },
-            "rev": { "type": "string", "required": true },
-            "url": { "type": "string", "required": true }
-          }
-        },
-        "pages": {
-          "required": true,
-          "items": {
-            "type": "object",
-            "required": true,
-            "properties": {
-              "url": { "type": "string", "required": true },
-              "steps": {
+        "type": "object",
+        "properties": {
+            "_id": {
+                "type": "string",
+                "required": true
+            },
+            "_rev": {
+                "type": "string",
+                "required": true
+            },
+            "url": {
+                "type": "string",
+                "required": true
+            },
+            "learner": {
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            },
+            "activity": {
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "rev": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "url": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            },
+            "pages": {
                 "required": true,
                 "items": {
-                  "type": "object",
-                  "required": true,
-                  "properties": {
-                    "url": { "type": "string", "required": true },
-                    "responseTemplate": {
-                      "type": "object",
-                      "required": false,
-                      "properties": {
-                        "url": { "type": "string", "required": true },
-                        "values": {
-                          "required": true,
-                          "items": {
-                            "type": ["any"],
+                    "type": "object",
+                    "required": true,
+                    "properties": {
+                        "url": {
+                            "type": "string",
                             "required": true
-                          }
+                        },
+                        "steps": {
+                            "required": true,
+                            "items": {
+                                "type": "object",
+                                "required": true,
+                                "properties": {
+                                    "url": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "responseTemplate": {
+                                        "type": "object",
+                                        "required": false,
+                                        "properties": {
+                                            "url": {
+                                                "type": "string",
+                                                "required": true
+                                            },
+                                            "values": {
+                                                "required": true,
+                                                "items": {
+                                                    "type": ["any"],
+                                                    "required": true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
-                      }
                     }
-                  }
                 }
-              }
             }
-          }
         }
-      }
     };
   }
 });
