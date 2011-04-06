@@ -40,45 +40,6 @@ Smartgraphs.statechart = SC.Statechart.create(
       enterState: function () {
         // for now we use just a default user and assume the user record loads in synchronously from fixtures
         Smartgraphs.userController.set('content', Smartgraphs.store.find(Smartgraphs.User, 'default'));
-        this.gotoState('CONFIGURING_COUCHDB');
-      }
-    }),
-    
-    CONFIGURING_COUCHDB: SC.State.design({
-      enterState: function() {
-        var url = '/db/smartgraphs',
-            response = SC.Request.putUrl(url).async(NO).json().send();
-
-        if (SC.ok(response)) {
-          var body = response.get('body');
-          if (body.ok) {
-            console.log("Created the 'smartgraphs' database in CouchDB.");
-
-            // create the views
-            response = SC.Request.postUrl(url).async(NO).json().send({
-              "_id": "_design/by_url",
-              "language": "javascript",
-              "views": {
-                "url": {
-                  "map": "function(doc) { if (doc.url) emit(doc.url, doc);  }"
-                }
-              }
-            });
-            if (SC.ok(response)) {
-              console.log("Created the 'url' view in CouchDB.");
-            } else {
-              body = response.get('body');
-              console.log("Got a "+body.error+" error when trying to create the 'url' view. Reason: "+body.reason);
-              alert("Could not create a required CouchDB view.");
-            }
-          }
-        } else {
-          var result = response.get('body') || {} ;
-          if (result.error !== "file_exists") {
-            alert("CouchDB is not running. Please go to http://www.couchbase.com/downloads and download Couchbase Server Community Edition and start up CouchDB on the default port. Then reload this application.");
-          }
-        }
-
         this.gotoState('READY');
       }
     }),
@@ -94,6 +55,13 @@ Smartgraphs.statechart = SC.Statechart.create(
         },
 
         route: function (route) {
+          var databaseName = route.database || 'smartgraphs',
+              haveDatabase = Smartgraphs.ensureCouchDatabase(databaseName);
+
+          if (!haveDatabase) {
+            alert("CouchDB is not running. Please go to http://www.couchbase.com/downloads and download Couchbase Server Community Edition and start up CouchDB on the default port. Then reload this application.");
+          }
+
           if (route.learner) {
             var userContent = Smartgraphs.userController.get('content'),
                 learnerId, user, key, url, response, body;
@@ -109,7 +77,7 @@ Smartgraphs.statechart = SC.Statechart.create(
               // any saved values can be applied as needed when the activity 
               // loads.
               key = "%@%@".fmt(route.activityId,learnerId);
-              url = "/db/smartgraphs/_design/by_url/_view/url?key=\"%@\"".fmt(key);
+              url = "/db/%@/_design/by_url/_view/url?key=\"%@\"".fmt(databaseName, key);
 
               // MUST be synchronous, currently.
               response = SC.Request.getUrl(url).async(NO).json().send();

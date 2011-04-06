@@ -97,7 +97,7 @@ Smartgraphs.userController = SC.ObjectController.create(
     // updated an existing document.
     if (isCreate) {
       // console.log('Creating learner data.');
-      SC.Request.postUrl('/db/smartgraphs')
+      SC.Request.postUrl('/db/%@'.fmt(Smartgraphs.get('couchDatabase')))
           .json()
           .header('Accept', 'application/json')
           .notify(this, '_didSaveLearnerData', savedResponse)
@@ -106,8 +106,9 @@ Smartgraphs.userController = SC.ObjectController.create(
       // Need to add existing data from couchdb
       // console.log('Updating learner data.');
       var user = this.get('content'),
-          url = '/db/smartgraphs/'+user._ids[savedResponse.url];
+          url = '/db/%@/%@'.fmt(Smartgraphs.get('couchDatabase'), user._ids[savedResponse.url]);
 
+      console.log(url);
       savedResponse._rev = user._revs[savedResponse.url];
       SC.Request.putUrl(url)
           .json()
