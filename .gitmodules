@@ -10,3 +10,6 @@
 [submodule "applets"]
 	path = applets
 	url = http://github.com/stepheneb/lightweight-sensor-graphs.git
+[submodule "frameworks/jsonschema"]
+	path = frameworks/jsonschema
+	url = git@github.com:erichocean/jsonschema.git
