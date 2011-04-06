@@ -200,6 +200,21 @@ Smartgraphs.activityViewController = SC.ObjectController.create(
     return YES;
   },
   
+  showWeb: function (pane, url) {
+    pane = this.validPaneFor(pane);
+    var which = this.firstOrSecondFor(pane),
+        controller;
+    
+    if ( !which ) return NO;
+    
+    controller = Smartgraphs.get(which+'WebController');
+    controller.openUrl(url);
+    
+    this.set(pane+'PaneNowShowing', 'Smartgraphs.activityPage.'+which+'WebView');
+    
+    return YES;
+  },
+  
   hidePane: function (pane) {
     pane = this.validPaneFor(pane);
     

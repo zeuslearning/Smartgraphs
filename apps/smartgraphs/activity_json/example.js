@@ -42,12 +42,15 @@ Smartgraphs.activityDocs["/shared/example"] =
     {
       "url": "/shared/example/page/1/step/1",
       "activityPage": "/shared/example/page/1",
-      "paneConfig": "single",
+      "paneConfig": "split",
       "panes": {
-        "single": {
-          "type": "image",
-          "caption": "The Concord Consortium",
-          "path": "http://www.concord.org/sites/all/themes/cc/img/css/bg-footer-home.png"
+        "top": {
+          "type": "web",
+          "url": "http://www.youtube.com/embed/ES6kGzy6rvw"
+        },
+        "bottom": {
+          "type": "web",
+          "url": "http://seeingmath.concord.org/broken_calculator/"
         }
       },
       "beforeText": "<p>What's different about the highlighted point?</p>",
@@ -68,9 +71,8 @@ Smartgraphs.activityDocs["/shared/example"] =
       "paneConfig": "single",
       "panes": {
         "single": {
-          "type": "image",
-          "caption": "The Concord Consortium",
-          "path": "http://www.concord.org/sites/all/themes/cc/img/css/bg-footer-home.png"
+          "type": "web",
+          "url": "http://shodor.org/interactivate/activities/FunctionRevolution/"
         }
       },
       "beforeText": "<p>Try to explain why you made your choice. Write at least five characters. Bonus points for creative combinations of the words &quot;hermeneutic&quot;, &quot;heteroskedacity&quot;, and &quot;sesquipedalian&quot;.</p> <p>Failure is also an option.</p>",
