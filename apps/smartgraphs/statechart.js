@@ -114,9 +114,29 @@ Smartgraphs.statechart = SC.Statechart.create(
         
         // need to do this so we don't load the activity into the session store which gets destroyed when we exit the
         // ACTIVITY state.
-        Smartgraphs.activityController.set('content', Smartgraphs.get('rootStore').find(Smartgraphs.Activity, args.id));
+        var activity = Smartgraphs.get('rootStore').find(Smartgraphs.Activity, args.id);
+        Smartgraphs.activityController.set('content', activity);
         
-        this.gotoState('LOADING_ACTIVITY');
+        var self = this;
+        var onward = function() {
+          self.gotoState('LOADING_ACTIVITY');
+        };
+
+        var checkActivityStatus = function() {
+          // don't trigger loading the activity until the activity itself is done loading (ie from a remote data source)
+          if (activity.get('status') & SC.Record.READY) {
+            activity.removeObserver('status',checkActivityStatus);
+            onward();
+          } else if (activity.get('status') & SC.Record.ERROR) {
+            activity.removeObserver('status',checkActivityStatus);
+            SC.Error.create();
+          } else {
+            activity.addObserver('status', self, checkActivityStatus);
+          }
+        };
+
+        checkActivityStatus();
+
         return YES;
       },
       

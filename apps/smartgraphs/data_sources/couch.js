@@ -54,10 +54,14 @@ Smartgraphs.CouchDataSource = SC.DataSource.extend(
 
     if (recordType === Smartgraphs.Activity) {
       var activityId = id;
-      var requestUrl = '/db/smartgraphs/_design/app/_view/activities-by-url-and-version?key=["'+activityId+'",'+Smartgraphs.DATA_FORMAT_VERSION+']';
+      var requestUrl = '/activities/'+activityId+'.sg';
 
-      var response = Smartgraphs.activityDocs[id] ? SC.Object.create({ body: { rows: [ { value: Smartgraphs.activityDocs[id] } ] } }) : SC.Error.create();      
-      this.didRetrieveActivity(response, store, storeKey);
+      if (Smartgraphs.activityDocs[id]) {
+        var response = SC.Object.create({ body: { rows: [ { value: Smartgraphs.activityDocs[id] } ] } });
+        this.didRetrieveActivity(response, store, storeKey);
+      } else {
+        this._jsonGet(requestUrl, 'didRetrieveActivity', store, storeKey);
+      }
       return YES;
     }
 
@@ -79,9 +83,12 @@ Smartgraphs.CouchDataSource = SC.DataSource.extend(
       var body = response.get('body');
       this.log('retrieved response.body = ', body);
       
-      if (body && body.rows && body.rows.length === 1 && body.rows[0].value) {
-        var doc = body.rows[0].value;
-        
+      if (body) {
+        var doc = body;
+        if (body.rows && body.rows.length === 1 && body.rows[0].value) {
+          doc = body.rows[0].value;
+        }
+
         this.log('doc = ', doc);
         this.log('doc.activity = ', doc.activity);
         
@@ -288,6 +295,22 @@ Smartgraphs.CouchDataSource = SC.DataSource.extend(
         this.log = console.log;
       }
     }
+  },
+
+  _jsonGet: function(url, callback, params){
+    // replace the url with 'this'
+    // so we can pass the params to notify
+    params = SC.A(arguments).slice(1);
+    params.unshift(this);
+    
+    var request = SC.Request.getUrl(url).header({
+      'Accept': 'application/json'
+    }).json();
+    request.notify.apply(request, params);
+    
+    // SC.Logger.log('request.address: %s', request.address);
+    // SC.Logger.log('request: ', request);
+    request.send();
   }
   
 }) ;
