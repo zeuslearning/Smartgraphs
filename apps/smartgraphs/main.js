@@ -29,9 +29,9 @@ Smartgraphs.main = function main() {
   
   // prevent unintended reload or back button; use 'onbeforeunload' syntax rather than $.bind just to be sure
   // there's only one handler (and $.bind doesn't really try to normalize this handler anyway)
-  window.onbeforeunload = function () {
-    return "You will lose your place in the activity if you leave this page.";
-  };
+  // window.onbeforeunload = function () {
+  //   return "You will lose your place in the activity if you leave this page.";
+  // };
   
   // and kick things off
   Smartgraphs.statechart.initStatechart();
