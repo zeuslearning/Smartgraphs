@@ -55,7 +55,7 @@ Smartgraphs.statechart = SC.Statechart.create(
         },
 
         route: function (route) {
-          var databaseName = route.database || 'smartgraphs',
+          var databaseName = route.database || 'assessment',
               haveDatabase = Smartgraphs.ensureCouchDatabase(databaseName);
 
           if (!haveDatabase) {

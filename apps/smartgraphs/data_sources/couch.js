@@ -233,7 +233,7 @@ Smartgraphs.CouchDataSource = SC.DataSource.extend(
 
         this.applyToChildRecords(store, record, this.markRecordBusy);
         
-        SC.Request.putUrl('/db/smartgraphs/'+this._ids[storeKey])
+        SC.Request.putUrl('/db/assessment/'+this._ids[storeKey])
                   .json()
                   .header('Accept', 'application/json')
                   .notify(this, 'didUpdateActivity', store, storeKey)
