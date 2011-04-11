@@ -1,14 +1,43 @@
 #!/bin/sh
 
-if [ -x $1 ]; then
-  echo "You must specify which server to install to.\nSupported servers: production, staging, dev\n\nUsage: $0 [server]"
+usage()
+{
+cat << EOF
+usage: $0 [options] server
+
+This script builds and deploys the SproutCore app to the specified server.
+Supported servers are: production, staging, dev
+
+OPTIONS:
+   -s      Skip building the sproutcore app and just deploy the current build
+EOF
+}
+
+
+SKIP_BUILD=false
+while getopts “s” OPTION
+do
+  case $OPTION in
+    s)
+      SKIP_BUILD=true
+      ;;
+    ?)
+    usage
+    exit
+    ;;
+  esac
+done
+
+SERVER_LABEL=${@:$OPTIND}
+if [ -x $SERVER_LABEL ]; then
+  usage
   exit 1
 fi
 
 USER="deploy"
 SERVER_ROOT="/web/portal"
 
-case "$1" in
+case "$SERVER_LABEL" in
   production)
     SERVER=ruby-vm4.concord.org
     ;;
@@ -21,6 +50,7 @@ case "$1" in
     ;;
   *)
     echo "Invalid server!"
+    usage
     exit 1
     ;;
 esac
@@ -28,10 +58,14 @@ esac
 export SERVER_PATH="${SERVER_ROOT}/shared/public/static"
 export LABEL_PATH="${SERVER_ROOT}/shared/public/labels"
 
-echo "Building smartgraphs."
 
-rm -rf tmp/
-sc-build
+if $SKIP_BUILD; then
+  echo "Skipping build."
+else
+  echo "Building smartgraphs."
+  rm -rf tmp/
+  sc-build
+fi
 
 BUILD=$(sc-build-number smartgraphs)
 echo "Smartgraphs build hash: ${BUILD}"
