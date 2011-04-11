@@ -65,7 +65,7 @@ Smartgraphs = SC.Application.create(
 
     if (SC.ok(response)) {
       var body = response.get('body');
-      if (body.ok) {
+      if (body.db_name) {
         console.log("Created the '%@' database in CouchDB.".fmt(databaseName));
 
         // create the views
