@@ -12,7 +12,7 @@ sc_require('resources/pages/main_page');
 Smartgraphs.activityPageDef = SC.Page.extend({
 
   activityView: SC.View.design({
-    childViews: 'instructionsWrapper dataWrapper'.w(),
+    childViews: 'splitView'.w(),
   
     theme: 'sc-ace',
     loadingMessage: 'Loading Activity...',
@@ -22,107 +22,114 @@ Smartgraphs.activityPageDef = SC.Page.extend({
     //
     // the left pane shows the activity page intro and the instructions for the currently selected activity step
   
-    instructionsWrapper: SC.View.design({
-      layout: { left: 0, width: 0.45 },       // need to specify 0.5 rather than '50%'
-      childViews: 'instructionsView'.w(),
+    splitView: SC.SplitView.design({
+      
+      defaultThickness: 0.45,
+      topLeftMinThickness: 200,
+      bottomRightMinThickness: 200,
+      canCollapseViews: NO,
+      
+      topLeftView: SC.View.design({
+
+        childViews: 'instructionsView'.w(),
     
-      instructionsView: SC.View.design({
-        classNames: 'smartgraph-pane',
-        childViews: 'textWrapper'.w(),
+        instructionsView: SC.View.design({
+          classNames: 'smartgraph-pane',
+          childViews: 'textWrapper'.w(),
 
-        // provide padding and style rules for the intro text and dialog
-        textWrapper: SC.View.design({
-          layout: {
-            top: 20,
-            right: 20,
-            left: 20
-          },
+          // provide padding and style rules for the intro text and dialog
+          textWrapper: SC.View.design({
+            layout: {
+              top: 20,
+              right: 20,
+              left: 20
+            },
 
-          classNames: 'text-wrapper'.w(),
+            classNames: 'text-wrapper'.w(),
 
-          childViews: 'introText activityStepWrapper'.w(),
+            childViews: 'introText activityStepWrapper'.w(),
 
-          introText: SC.StaticContentView.design({            
-            contentBinding: 'Smartgraphs.activityPageController.introText',
-            isVisibleBinding: SC.Binding.bool('Smartgraphs.activityPageController.introText')
-          }),
-        
-          activityStepWrapper: SC.View.design({
-            useStaticLayout: YES,
-          
-            childViews: 'activityStepDialog buttonsView'.w(),
-          
-            activityStepDialog: SC.View.design({          
-              useStaticLayout: YES,
-              isVisibleBinding: 'Smartgraphs.activityStepController.dialogTextHasContent',
-            
-              childViews: 'beforeText responseTemplate afterText'.w(),
-              classNames: 'dialog-text'.w(),
-
-              beforeText: SC.StaticContentView.design({
-                contentBinding: 'Smartgraphs.activityStepController.beforeText',
-                isVisibleBinding: SC.Binding.bool('Smartgraphs.activityStepController.beforeText')
-              }),
-            
-              responseTemplate: Smartgraphs.ResponseTemplateView.design({
-                fieldTypesBinding: 'Smartgraphs.responseTemplateController.fieldTypes',
-                fieldChoicesListBinding: 'Smartgraphs.responseTemplateController.fieldChoicesList',
-                valuesBinding: 'Smartgraphs.responseTemplateController.values',
-                editingShouldBeEnabledBinding: 'Smartgraphs.responseTemplateController.editingShouldBeEnabled',
-                viewShouldResetBinding: 'Smartgraphs.responseTemplateController.viewShouldReset'
-              }),
-            
-              afterText: SC.StaticContentView.design({
-                contentBinding: 'Smartgraphs.activityStepController.afterText',
-                isVisibleBinding: SC.Binding.bool('Smartgraphs.activityStepController.afterText')
-              })
+            introText: SC.StaticContentView.design({            
+              contentBinding: 'Smartgraphs.activityPageController.introText',
+              isVisibleBinding: SC.Binding.bool('Smartgraphs.activityPageController.introText')
             }),
         
-            buttonsView: SC.View.design({
+            activityStepWrapper: SC.View.design({
               useStaticLayout: YES,
           
-              layout: {
-                height: 24
-              },
+              childViews: 'activityStepDialog buttonsView'.w(),
+          
+              activityStepDialog: SC.View.design({          
+                useStaticLayout: YES,
+                isVisibleBinding: 'Smartgraphs.activityStepController.dialogTextHasContent',
+            
+                childViews: 'beforeText responseTemplate afterText'.w(),
+                classNames: 'dialog-text'.w(),
 
-              childViews: 'submitButton'.w(),
-
-              submitButton: SC.ButtonView.design({
+                beforeText: SC.StaticContentView.design({
+                  contentBinding: 'Smartgraphs.activityStepController.beforeText',
+                  isVisibleBinding: SC.Binding.bool('Smartgraphs.activityStepController.beforeText')
+                }),
+            
+                responseTemplate: Smartgraphs.ResponseTemplateView.design({
+                  fieldTypesBinding: 'Smartgraphs.responseTemplateController.fieldTypes',
+                  fieldChoicesListBinding: 'Smartgraphs.responseTemplateController.fieldChoicesList',
+                  valuesBinding: 'Smartgraphs.responseTemplateController.values',
+                  editingShouldBeEnabledBinding: 'Smartgraphs.responseTemplateController.editingShouldBeEnabled',
+                  viewShouldResetBinding: 'Smartgraphs.responseTemplateController.viewShouldReset'
+                }),
+            
+                afterText: SC.StaticContentView.design({
+                  contentBinding: 'Smartgraphs.activityStepController.afterText',
+                  isVisibleBinding: SC.Binding.bool('Smartgraphs.activityStepController.afterText')
+                })
+              }),
+        
+              buttonsView: SC.View.design({
+                useStaticLayout: YES,
+          
                 layout: {
-                  width: 180,
-                  right: 0
+                  height: 24
                 },
-                titleBinding: 'Smartgraphs.activityStepController.submitButtonTitle',
-                isVisibleBinding: 'Smartgraphs.activityViewController.showSubmitButton',
-                isEnabledBinding: 'Smartgraphs.activityViewController.enableSubmitButton',
-                isDefaultBinding: 'Smartgraphs.activityViewController.enableSubmitButton',                
-                action: 'submitStep',
 
-                titleDidChange: function () {
-                  var metrics = SC.metricsForString(this.get('title'), 'label', ['sc-button-label', 'text-wrapper']);
-                  this.adjust('width', metrics.width + 48);     
-                }.observes('title')
+                childViews: 'submitButton'.w(),
+
+                submitButton: SC.ButtonView.design({
+                  layout: {
+                    width: 180,
+                    right: 0
+                  },
+                  titleBinding: 'Smartgraphs.activityStepController.submitButtonTitle',
+                  isVisibleBinding: 'Smartgraphs.activityViewController.showSubmitButton',
+                  isEnabledBinding: 'Smartgraphs.activityViewController.enableSubmitButton',
+                  isDefaultBinding: 'Smartgraphs.activityViewController.enableSubmitButton',                
+                  action: 'submitStep',
+
+                  titleDidChange: function () {
+                    var metrics = SC.metricsForString(this.get('title'), 'label', ['sc-button-label', 'text-wrapper']);
+                    this.adjust('width', metrics.width + 48);     
+                  }.observes('title')
               
+                })
               })
             })
           })
         })
-      })
-    }),
+      }),
   
   
-    // ..........................................................
-    // RIGHT PANE
-    //
-    // the right pane shows the data the user is manipulating
-    dataWrapper: SC.View.design({
-      layout: { right: 0, width: 0.55 },
+      // ..........................................................
+      // RIGHT PANE
+      //
+      // the right pane shows the data the user is manipulating
+      bottomRightView: SC.View.design({
+
+        childViews: 'dataView'.w(),
     
-      childViews: 'dataView'.w(),
-    
-      dataView: SC.ContainerView.design({
-        layout: { top: 4, right: 4, bottom: 4, left: 4 },
-        nowShowingBinding: 'Smartgraphs.activityViewController.dataViewNowShowing'
+        dataView: SC.ContainerView.design({
+          layout: { top: 4, right: 4, bottom: 4, left: 4 },
+          nowShowingBinding: 'Smartgraphs.activityViewController.dataViewNowShowing'
+        })
       })
     })
   }),
