@@ -4,7 +4,7 @@
 # Author:    Richard Klancer <rpk@pobox.com>
 # ===========================================================================
 
-config :all, :required => [:sproutcore]
+config :all, :required => [:sproutcore], :title => 'Assessments'
 
 config :smartgraphs,
   :required => ['sproutcore/statechart', 'raphael_views/raphael_views', 'raphael_views/g_raphael', 'cc/cc'],
@@ -12,6 +12,7 @@ config :smartgraphs,
   :test_required => ['sproutcore/testing', 'jsonschema'],
   :load_fixtures => true,
   :theme => :pig
+
 
 config 'raphael_views/raphael_views', 
   :required => 'raphael_views/raphael'
