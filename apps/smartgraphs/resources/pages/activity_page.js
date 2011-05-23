@@ -24,7 +24,7 @@ Smartgraphs.activityPageDef = SC.Page.extend({
   
     splitView: SC.SplitView.design({
       
-      defaultThickness: 0.45,
+      defaultThickness: 0.25,
       topLeftMinThickness: 200,
       bottomRightMinThickness: 200,
       canCollapseViews: NO,
