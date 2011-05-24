@@ -33,6 +33,22 @@ Smartgraphs.activityStepController = SC.ObjectController.create(
       this._liveExpression.die();
     }
   },
+
+  isLastStep: function () {
+    return (this.get('content') === Smartgraphs.activityPageController.get('lastStep'));
+  },
+
+  isFirstStep: function () {
+    return (this.get('content') === Smartgraphs.activityPageController.get('firstStep'));
+  },
+
+  isNotLastStep: function () {
+    return (!this.isLastStep());
+  },
+  
+  isNotFirstStep: function () {
+    return (!this.isFirstStep());
+  },
   
   /**
     Initializes the ActivityStep. Called when we enter ACTIVITY_STEP state.
