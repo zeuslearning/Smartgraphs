@@ -91,9 +91,16 @@ Smartgraphs.activityViewController = SC.ObjectController.create(
     return (this.get('enableBackAndForward') && !this.get('isLastPage')) || this.get('highlightNextPageButton');
   }.property('enableBackAndForward', 'isLastPage', 'highlightNextPageButton').cacheable(),
   
-  enableBackPageButton: function () {
+  showPreviousPageButton: null,
+  showPreviousPageButtonBinding: SC.Binding.not('Smartgraphs.activityPagesController.isFirstPage'),
+  
+  highlightPreviousPageButton: function () {
+    return (this.get('enableBackAndForward') && this.get('canGotoPreviousPage')  && !this.get('isFirstPage'));
+  }.property('canGotoPreviousPage').cacheable(),
+  
+  enablePreviousPageButton: function () {
     return (this.get('enableBackAndForward') && !this.get('isFirstPage'));
-  }.property('enableBackAndForward', 'isFirstPage'),
+  }.property('enableBackAndForward', 'highlightPreviousPageButton'),
   
   // ..........................................................
   // PANE NAME HANDLING

@@ -118,9 +118,11 @@ Smartgraphs.mainPage = SC.Page.design({
         action: 'gotoPreviousPage',
         isSwipeLeft: YES,
 
-        isEnabledBinding: 'Smartgraphs.activityViewController.enableBackPageButton'
+        isVisibleBinding: 'Smartgraphs.activityStepController.isNotFirstStep',
+        isEnabledBinding: 'Smartgraphs.activityStepController.isNotFirstStep',
+        isDefaultBinding: 'Smartgraphs.activityViewController.highlightPreviousPageButton'
       }),
-      
+
       pageButtons: SC.SegmentedView.design({
         layout: { left: 120, right: 120, height: 24, centerY: 0 },
         classNames: ['sc-regular-size'],        // workaround for apparent bug in SC.SegmentedView
@@ -131,16 +133,17 @@ Smartgraphs.mainPage = SC.Page.design({
       }),
       
       nextButton: SC.ButtonView.design({
-        layout: { right: 20, centerY: 0, height: 24, width: 80 },
+        layout: { left: 120, centerY: 0, height: 24, width: 80 },
         title: 'Next',
         // theme: 'point-right',
         theme: 'capsule',
-        action: 'gotoNextPage',
+        action: 'Smartgraphs.activityStepController.handleSubmission',
         isSwipeRight: YES,
-        
-        isVisibleBinding: 'Smartgraphs.activityViewController.showNextPageButton',
-        isEnabledBinding: 'Smartgraphs.activityViewController.enableNextPageButton',
-        isDefaultBinding: 'Smartgraphs.activityViewController.highlightNextPageButton'
+
+        titleBinding: 'Smartgraphs.activityStepController.submitButtonTitle',
+        isVisibleBinding: 'Smartgraphs.activityViewController.showSubmitButton',
+        isEnabledBinding: 'Smartgraphs.activityViewController.enableSubmitButton',
+        isDefaultBinding: 'Smartgraphs.activityViewController.enableSubmitButton',                
       })
     })
   }),

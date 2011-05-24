@@ -17,6 +17,7 @@ Smartgraphs.activityStepController = SC.ObjectController.create(
 
   canSubmit: NO,
   showSubmitButton: NO,
+  nextButtonShouldSubmit: NO,
   
   /**
     YES iff there is content (a response template or before/after text) to put in the 'dialog text' area
