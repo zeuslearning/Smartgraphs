@@ -115,7 +115,7 @@ Smartgraphs.mainPage = SC.Page.design({
         title: 'Back',
         // theme: 'point-left',
         theme: 'capsule',
-        action: 'gotoPreviousPage',
+        action: 'gotoPreviousStep',
         isSwipeLeft: YES,
 
         isVisibleBinding: 'Smartgraphs.activityStepController.isNotFirstStep',
@@ -137,7 +137,7 @@ Smartgraphs.mainPage = SC.Page.design({
         title: 'Next',
         // theme: 'point-right',
         theme: 'capsule',
-        action: 'Smartgraphs.activityStepController.handleSubmission',
+        action: 'submitStep',
         isSwipeRight: YES,
 
         titleBinding: 'Smartgraphs.activityStepController.submitButtonTitle',

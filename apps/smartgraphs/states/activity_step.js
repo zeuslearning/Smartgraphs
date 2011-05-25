@@ -82,6 +82,15 @@ Smartgraphs.ACTIVITY_STEP = SC.State.extend(
     }
     return YES;
   },
+
+  gotoPreviousStep: function () {
+    // if (Smartgraphs.activityStepController.get('canSubmit')) {
+    //   Smartgraphs.userController.saveLearnerDataToServer();
+    // }
+    Smartgraphs.activityStepController.handleBack();
+    // this.gotoState('ACTIVITY_STEP_DEFAULT');
+    return YES;
+  },
   
   /**
     Submits the current ActivityStep and opens the next ActivityPage. Note that this action will fail if the current

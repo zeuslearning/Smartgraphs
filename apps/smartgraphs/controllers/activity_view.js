@@ -80,7 +80,8 @@ Smartgraphs.activityViewController = SC.ObjectController.create(
   enableSubmitButtonBindingDefault: SC.Binding.oneWay(),
     
   showNextPageButton: null,
-  showNextPageButtonBinding: SC.Binding.not('Smartgraphs.activityPagesController.isLastPage'),
+  showNextPageButtonBinding: 'Smartgraphs.activityStepController.canSubmit',
+  // showNextPageButtonBinding: SC.Binding.not('Smartgraphs.activityPagesController.isLastPage'),
   
   highlightNextPageButton: function () {
     return this.get('canGotoNextPage') || 

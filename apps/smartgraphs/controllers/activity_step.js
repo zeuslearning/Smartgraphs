@@ -17,6 +17,7 @@ Smartgraphs.activityStepController = SC.ObjectController.create(
 
   canSubmit: NO,
   showSubmitButton: NO,
+  hideSubmitButton: NO,
   nextButtonShouldSubmit: NO,
   
   /**
@@ -246,6 +247,16 @@ Smartgraphs.activityStepController = SC.ObjectController.create(
     
     if (defaultBranch) {
       Smartgraphs.statechart.sendAction('gotoStep', this, { stepId: defaultBranch.get('id') });
+    }
+  },
+
+  handleBack: function () {
+    // if ( !this.get('canSubmit') ) return NO;
+    
+    var previousBranch = this.get('previousBranch');
+    
+    if (previousBranch) {
+      Smartgraphs.statechart.sendAction('gotoStep', this, { stepId: previousBranch.get('id') });
     }
   },
   

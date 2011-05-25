@@ -87,13 +87,13 @@ Smartgraphs.activityPageDef = SC.Page.extend({
         
               buttonsView: SC.View.design({
                 useStaticLayout: YES,
-          
+                        
                 layout: {
                   height: 24
                 },
-
+              
                 childViews: 'submitButton'.w(),
-
+              
                 submitButton: SC.ButtonView.design({
                   layout: {
                     width: 180,
@@ -104,7 +104,7 @@ Smartgraphs.activityPageDef = SC.Page.extend({
                   isEnabledBinding: 'Smartgraphs.activityViewController.enableSubmitButton',
                   isDefaultBinding: 'Smartgraphs.activityViewController.enableSubmitButton',                
                   action: 'submitStep',
-
+              
                   titleDidChange: function () {
                     var metrics = SC.metricsForString(this.get('title'), 'label', ['sc-button-label', 'text-wrapper']);
                     this.adjust('width', metrics.width + 48);     
