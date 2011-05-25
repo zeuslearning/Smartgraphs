@@ -261,6 +261,7 @@ Smartgraphs.activityStepController = SC.ObjectController.create(
     if (previousBranch) {
       Smartgraphs.statechart.sendAction('gotoStep', this, { stepId: previousBranch.get('id') });
     }
+    return YES;
   },
   
   /**** 

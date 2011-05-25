@@ -92,11 +92,15 @@ Smartgraphs.ACTIVITY_STEP = SC.State.extend(
     
   */
   gotoPreviousStep: function () {
-    if (Smartgraphs.activityStepController.get('canSubmit')) {
-      Smartgraphs.userController.saveLearnerDataToServer();
+    if (!Smartgraphs.activityStepController.isFirstStep()) {
+      if (Smartgraphs.activityStepController.get('canSubmit')) {
+        Smartgraphs.userController.saveLearnerDataToServer();
+      }
+      this.gotoState('ACTIVITY_STEP_SUBMITTED_GOTO_PREVIOUS');
+      return YES;
+    } else {
+      return NO;
     }
-    this.gotoState('ACTIVITY_STEP_SUBMITTED_GOTO_PREVIOUS');
-    return YES;
   },
   
   /**
