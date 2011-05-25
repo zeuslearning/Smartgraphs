@@ -83,12 +83,19 @@ Smartgraphs.ACTIVITY_STEP = SC.State.extend(
     return YES;
   },
 
+  /**
+    If submission is enabled, saves learner data and executes any 'afterSubmissionCommands' specified
+    by the current ACTIVITY_STEP.
+    
+    Then it transitions to the ACTIVITY_STEP_SUBMITTED_GOTO_PREVIOUS state which branches to the
+    previousBranch if one is defined.
+    
+  */
   gotoPreviousStep: function () {
-    // if (Smartgraphs.activityStepController.get('canSubmit')) {
-    //   Smartgraphs.userController.saveLearnerDataToServer();
-    // }
-    Smartgraphs.activityStepController.handleBack();
-    // this.gotoState('ACTIVITY_STEP_DEFAULT');
+    if (Smartgraphs.activityStepController.get('canSubmit')) {
+      Smartgraphs.userController.saveLearnerDataToServer();
+    }
+    this.gotoState('ACTIVITY_STEP_SUBMITTED_GOTO_PREVIOUS');
     return YES;
   },
   

@@ -252,10 +252,12 @@ Smartgraphs.activityStepController = SC.ObjectController.create(
   },
 
   handleBack: function () {
-    // if ( !this.get('canSubmit') ) return NO;
-    
+    if ( this.get('canSubmit') ) {
+        this.executeCommands(this.get('afterSubmissionCommands'));
+    }
+
     var previousBranch = this.get('previousBranch');
-    
+
     if (previousBranch) {
       Smartgraphs.statechart.sendAction('gotoStep', this, { stepId: previousBranch.get('id') });
     }

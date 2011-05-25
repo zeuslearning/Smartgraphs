@@ -44,10 +44,10 @@ Smartgraphs.ACTIVITY = SC.State.extend(
   
   
   ACTIVITY_STEP: SC.State.plugin('Smartgraphs.ACTIVITY_STEP'),
-  
-  
+
   ACTIVITY_STEP_SUBMITTED: SC.State.plugin('Smartgraphs.ACTIVITY_STEP_SUBMITTED'),
-  
+
+  ACTIVITY_STEP_SUBMITTED_GOTO_PREVIOUS: SC.State.plugin('Smartgraphs.ACTIVITY_STEP_SUBMITTED_GOTO_PREVIOUS'),
   
   ACTIVITY_PAGE_DONE: SC.State.design({
     
