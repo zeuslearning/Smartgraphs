@@ -79,6 +79,7 @@ Smartgraphs.activityDocs["/shared/example"] =
       "responseTemplate": "/components/response-template/open",
       "submissibilityCriterion": ["textLengthIsAtLeast", 5, ["responseField", 1]],
       "defaultBranch": "/shared/example/page/1/step/3",
+      "previousBranch": "/shared/example/page/1/step/1",
       "isFinalStep": false,
       "hideSubmitButton": false,
       "nextButtonShouldSubmit": false,
@@ -102,6 +103,7 @@ Smartgraphs.activityDocs["/shared/example"] =
       "responseTemplate": null,
       "hideSubmitButton": true,
       "defaultBranch": "/shared/example/page/1/step/3",
+      "previousBranch": "/shared/example/page/1/step/2",
       "isFinalStep": true
     }
   ],

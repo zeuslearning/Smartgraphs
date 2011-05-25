@@ -246,6 +246,13 @@ Smartgraphs.ActivityStep = SC.Record.extend(
     @property {Smartgraphs.ActivityStep}
   */
   defaultBranch: SC.Record.toOne('Smartgraphs.ActivityStep'),
+
+  /**
+    The ActivityStep that will be loaded with the Previous Step button.
+
+    @property {Smartgraphs.ActivityStep}
+  */
+  previousBranch: SC.Record.toOne('Smartgraphs.ActivityStep'),
   
   /** 
     If this value is YES, this step is a 'terminal step', indicating that, if this step completes without branching
