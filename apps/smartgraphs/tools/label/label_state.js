@@ -15,20 +15,20 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
 
   /**
     The name of the label or labelset we care about. Set before entry to LABEL_TOOL state and unset on state exit.
-    
+
     @property {String}
   */
   annotationName: null,
-  
+
   /**
     The label or labelset we are managing. Set during entry to LABEL_TOOL state and unset on state exit.
-    
+
     @property {Smartgraphs.Label|Smartgraphs.LabelSet}
   */
   annotation: null,
-  
+
   initialSubstate: 'OFF',
-  
+
   OFF: SC.State.design({
     labelToolStartTool: function (context, annotationName) {
       var parentState = this.get('parentState');
@@ -36,16 +36,16 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
       this.gotoState(parentState.get('name') + '.ON');
     }
   }),
-  
+
   ON: SC.State.design({
-    
+
     initialSubstate: 'START',
-        
+
     stopTool: function () {
       var parentState = this.get('parentState');
       this.gotoState(parentState.get('name') + '.OFF');
     },
-    
+
     enterState: function () {
       var parentState    = this.get('parentState'),
           annotationName = parentState.get('annotationName'),
@@ -56,30 +56,30 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
 
     exitState: function () {
       var parentState = this.get('parentState');
-      
+
       parentState.get('annotation').disableRemoval();
       parentState.set('annotation', null);
       parentState.set('annotationName', null);
     },
-  
+
     // EVENT HANDLERS
-  
+
     mouseDownAtPoint: function (context, args) {
       this.get('statechart').sendAction('addLabel', this, {x: args.x, y: args.y, shouldMarkTargetPoint: YES});
       return YES;
     },
-  
+
     dataPointSelected: function (context, args) {
       this.get('statechart').sendAction('addLabel', this, {x: args.x, y: args.y, shouldMarkTargetPoint: NO});
       return YES;
     },
-  
+
     // SUBSTATES
-  
+
     START: SC.State.design({
       enterState: function () {
         var annotation = this.getPath('parentState.parentState.annotation');
-        
+
         if (SC.kindOf(annotation, Smartgraphs.Label)) {
           this.gotoState('LABEL_ONE');
         }
@@ -88,17 +88,17 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
         }
       }
     }),
-  
+
     LABEL_ONE: SC.State.design({
-    
+
       initialSubstate: 'NOT_ADDED',
-  
+
       NOT_ADDED: SC.State.design({
-    
+
         enterState: function () {
           Smartgraphs.labelTool.addLabelsStarting(this);
         },
-    
+
         exitState: function () {
           Smartgraphs.labelTool.addLabelsFinished(this);
         },
@@ -110,22 +110,22 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
           label.set('y', args.y);
           label.set('shouldMarkTargetPoint', args.shouldMarkTargetPoint);
           label.set('createdByLabelTool', YES);
-      
+
           Smartgraphs.labelTool.appendLabel(this, label);
           this.gotoState('ADDED');
           return YES;
         }
       }),
-  
+
       ADDED: SC.State.design({
-      
+
         enterState: function () {
           this.getPath('parentState.parentState.parentState.annotation').enableRemoval();
         },
-      
+
         removeLabel: function (context, args) {
           var label = this.getPath('parentState.parentState.parentState.annotation');
-        
+
           if (args.label === label) {
             Smartgraphs.labelTool.removeLabel(this, label);
             this.gotoState('NOT_ADDED');
@@ -134,33 +134,33 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
         }
       })
     }),
-  
+
     LABEL_MANY: SC.State.design({
-    
+
       enterState: function () {
         var labelSet = this.getPath('parentState.parentState.annotation');
         labelSet.enableRemoval();
         Smartgraphs.labelTool.appendLabelSet(this, labelSet);
         Smartgraphs.labelTool.addLabelsStarting(this);
       },
-  
+
       exitState: function () {
-        var labelSet = this.getPath('parentState.parentState.annotation');      
+        var labelSet = this.getPath('parentState.parentState.annotation');
         labelSet.disableRemoval();
         Smartgraphs.labelTool.addLabelsFinished(this);
       },
-    
+
       addLabel: function (context, args) {
         var labelSet = this.getPath('parentState.parentState.annotation'),
             label    = labelSet.createChildLabel();
-    
+
         label.set('x', args.x);
         label.set('y', args.y);
         label.set('createdByLabelTool', YES);
         label.set('shouldMarkTargetPoint', args.shouldMarkTargetPoint);
         return YES;
       },
-    
+
       removeLabel: function (context, args) {
         var labelSet = this.getPath('parentState.parentState.annotation');
         labelSet.removeLabel(args.label);

@@ -15,5 +15,5 @@ Smartgraphs.appletPage = SC.Page.design({
     layout: { width: 1, height: 1 },
     listenerPath: 'Smartgraphs.sensorTool'   // path to object that will receive applet callbacks
   })
-  
+
 });

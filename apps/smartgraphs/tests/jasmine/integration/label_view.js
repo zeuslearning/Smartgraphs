@@ -43,11 +43,11 @@ describe("LabelView behavior", function () {
       toBeVisible: function () {
         return !!this.actual.get('isVisible');
       },
-      
+
       toBeWithinOneUnitOf: function (value) {
         return Math.abs(this.actual - value) <= 1;
       },
-        
+
       toBeLikeAnArrow: function(startx,starty,endx,endy,len,angle) {
         // this happens to be our arrows default angle (deg from base)
         if (typeof angle == 'undefined'){ angle = 20; }
@@ -798,7 +798,7 @@ describe("LabelView behavior", function () {
                   labelView = graphView.getPath('annotationsHolder.childViews').objectAt(0);
                   labelTextView = labelView.getPath('labelBodyView.labelTextView');
                 });
-                
+
                 it ("the label text should not change its position after adding a new record", function () {
                   expect(labelTextView.get("x")).toBeWithinOneUnitOf(x);
                   expect(labelTextView.get("y")).toBeWithinOneUnitOf(y);
