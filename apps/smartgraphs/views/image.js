@@ -8,7 +8,7 @@
 /** @class
 
   Show an image and caption inside a Smartgraph pane. The image will be scaled to completely fill the pane. The aspect
-  ratio of the image is preserved, so one dimension may "overflow" while the other one is fitted exactly. The image 
+  ratio of the image is preserved, so one dimension may "overflow" while the other one is fitted exactly. The image
   will be centered in that overflow dimension.
 
   @extends SC.View
@@ -18,20 +18,20 @@ Smartgraphs.ImageView = SC.View.extend(
 
   /**
     @property String
-    
+
     URL of the image to show
   */
   imageURL: null,
   imageURLBindingDefault: SC.Binding.oneWay(),
-  
+
   /**
     @property String
-    
+
     Caption text for the image.
   */
   caption: null,
   captionBindingDefault: SC.Binding.oneWay(),
-  
+
   childViews: ['imageView', 'captionView'],
 
   captionView: SC.LabelView.design({
@@ -75,13 +75,13 @@ Smartgraphs.ImageView = SC.View.extend(
       this.$().width('');
       imgHeight = this.$().height();
       imgWidth  = this.$().width();
-      
+
       if (imgHeight / imgWidth > paneHeight / paneWidth) {
         this.$().height('');
-        this.$().width('100%');      
+        this.$().width('100%');
         this.$().css('left', '0');
         this.$().css('top', (paneHeight - imgHeight * (paneWidth / imgWidth)) / 2);
-      } 
+      }
       else {
         this.$().height('100%');
         this.$().width('');

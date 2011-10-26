@@ -25,7 +25,7 @@ Smartgraphs.LineToAxis = Smartgraphs.Annotation.extend(
     The point from which we draw the line
   */
   point: SC.Record.toOne('Smartgraphs.DataPoint'),
-  
+
   /**
    Whether the linePath should be hidden or not
   */

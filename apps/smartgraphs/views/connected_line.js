@@ -13,33 +13,33 @@
 */
 Smartgraphs.ConnectedLineView = RaphaelViews.RaphaelView.extend(
 /** @scope Smartgraphs.ConnectedLineView.prototype */ {
-  
+
   isAnimatable: YES,
-  
+
   strokeOpacity: 0.7,
-  
+
   notDimmedColorBinding: '*item.color',
   dimmedColor: '#cccccc',
 
   notDimmedStrokeWidth: 3,
   dimmedStrokeWidth: 2,
 
-  dataRepresentation: SC.outlet('item.dataRepresentation'),  
+  dataRepresentation: SC.outlet('item.dataRepresentation'),
   isDimmedBinding: '.dataRepresentation.isDimmed',
   isDimmedBindingDefault: SC.Binding.oneWay(),
-  
+
   isHiddenForAnimation: NO,
 
   strokeWidth: function () {
     return this.get('isDimmed') ? this.get('dimmedStrokeWidth') : this.get('notDimmedStrokeWidth');
   }.property('isDimmed', 'dimmedStrokeWidth', 'notDimmedStrokeWidth'),
-  
+
   color: function () {
     return this.get('isDimmed') ? this.get('dimmedColor') : this.get('notDimmedColor');
   }.property('isDimmed', 'dimmedColor', 'notDimmedColor'),
-  
+
   displayProperties: 'item.points.[] color strokeWidth isHiddenForAnimation'.w(),
-  
+
   renderCallback: function (raphaelCanvas, pathStr, attrs) {
     return raphaelCanvas.path(pathStr).attr(attrs);
   },
@@ -55,7 +55,7 @@ Smartgraphs.ConnectedLineView = RaphaelViews.RaphaelView.extend(
         pathStr,
         attrs,
         pathObj;
-    
+
     for (i = 0, len = points.get('length'); i < len; i++) {
       point = points.objectAt(i);
       coords = graphView.coordinatesForPoint(point[0], point[1]) || {x: 0, y: 0};
@@ -64,14 +64,14 @@ Smartgraphs.ConnectedLineView = RaphaelViews.RaphaelView.extend(
       str.push(' ');
       str.push(Math.round(coords.y));
     }
-    
+
     pathStr = str.join('') || 'M0 0';         // Raphael won't make path go away in IE if path string = ''
     attrs = {
       'stroke':         this.get('color'),
       'stroke-width':   this.get('strokeWidth'),
       'stroke-opacity': this.get('isHiddenForAnimation') ? 0 : this.get('strokeOpacity')
     };
-    
+
     if (firstTime) {
       context.callback(this, this.renderCallback, pathStr, attrs);
     }
@@ -80,5 +80,5 @@ Smartgraphs.ConnectedLineView = RaphaelViews.RaphaelView.extend(
       pathObj.attr({d: pathStr}).attr(attrs);
     }
   }
-  
+
 });

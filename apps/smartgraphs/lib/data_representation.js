@@ -8,7 +8,7 @@
 /** @class
 
   Base class of DataRepresentation hierarchy.
-  
+
   DataRepresentations manage lists of Mark objects, which are updated from a Sampleset
 
   @extends SC.Object
@@ -16,14 +16,14 @@
 */
 Smartgraphs.DataRepresentation = SC.Object.extend(
 /** @scope Smartgraphs.DataRepresentation.prototype */ {
-  
+
   init: function () {
     var options = this.get('options') || {},
         graphableObjects = [],
         pointset,
         line,
         sampleset;
-  
+
     if (options['line-type'] === "connected") {
       line = Smartgraphs.ConnectedLine.create({
         dataRepresentation: this
@@ -39,13 +39,13 @@ Smartgraphs.DataRepresentation = SC.Object.extend(
       this.set('pointset', pointset);
       graphableObjects.push(pointset);
     }
-    
+
     if (options['color']) {
       this.set('color', options['color']);
     }
 
     this.set('graphableObjects', graphableObjects);
-    
+
     this._getSampleset = function () {
       return sampleset;
     };
@@ -58,19 +58,19 @@ Smartgraphs.DataRepresentation = SC.Object.extend(
   pointset: null,
   line: null,
   graphableObjects: null,
-  
+
   datadef: SC.outlet('sampleset.datadef'),
   xUnits:  SC.outlet('sampleset.datadef.xUnits'),
   yUnits:  SC.outlet('sampleset.datadef.yUnits'),
   name:    SC.outlet('sampleset.datadef.name'),
   points:  SC.outlet('sampleset.points'),
-  
+
   // some representative options
   color: null,
   isDimmed: NO,
   pointStyle: null,
   lineStyle: null,
-  
+
   sampleset: function (key, value) {
     if (value !== undefined) {
       this._setSampleset(value);
@@ -78,28 +78,28 @@ Smartgraphs.DataRepresentation = SC.Object.extend(
     }
     return this._getSampleset();
   }.property(),
-  
+
   didSetSampleset: function () {
     var sampleset = this.get('sampleset');
     sampleset.addObserver('points.[]', this, this._pointsDidChange);
     this._pointsDidChange();
   },
-  
+
   _pointsDidChange: function () {
     var samplePoints = this.getPath('sampleset.points') || [],    // FIXME I don't know why this.get('points') doesn't work
         pointset     = this.get('pointset'),
         line         = this.get('line');
-         
+
     if (pointset) {
       pointset.set('points', samplePoints.map( function (pair) {
         window.pointsCreated++;
         return Smartgraphs.Point.create( { x: pair[0], y: pair[1] });
       }));
     }
-    
+
     if (line) {
       line.set('points', samplePoints);
     }
   }
-  
+
 });

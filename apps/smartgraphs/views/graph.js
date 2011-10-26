@@ -23,7 +23,7 @@ Smartgraphs.GraphView = SC.View.extend(
   animationInfoBinding: '*graphController.animationInfo',
   showAnimationBinding: '*animationInfo.hasAnimation',
   channelWidthBinding: '*animationInfo.channelWidth',
-  
+
   inputAreaView:     SC.outlet('graphCanvasView.axesView.inputAreaView'),
   xAxisView:         SC.outlet('graphCanvasView.axesView.xAxisView'),
   yAxisView:         SC.outlet('graphCanvasView.axesView.yAxisView'),
@@ -57,7 +57,7 @@ Smartgraphs.GraphView = SC.View.extend(
   showAnimationDidChange: function () {
     var showAnimation = this.get('showAnimation'),
         channelWidth  = this.get('channelWidth');
-    
+
     this.padding.left = 50 + (showAnimation ? channelWidth : 0);
     this.replaceLayer();
   }.observes('showAnimation'),
@@ -94,7 +94,7 @@ Smartgraphs.GraphView = SC.View.extend(
       // add views for items (DataRepresentations or Annotations) not currently in the list of child views
       for (i = 0, len = list.get('length'); i < len; i++) {
         item = list.objectAt(i);
-        
+
         // skip modifier annotations (which have no view) in the calculation of which views to add or remove
         if (item.get('isModifierAnnotation')) continue;
 
@@ -144,13 +144,13 @@ Smartgraphs.GraphView = SC.View.extend(
           item: item,
           itemType: itemType
         }),
-        
+
         animatedDatadefNames = (this.getPath('animationInfo.animations') || []).concat(this.getPath('animationInfo.linkedAnimations')).getEach('datadefName');
 
     // append data and annotations
     if (itemType === 'data') {
       view.set('isHiddenForAnimation', animatedDatadefNames.indexOf(item.getPath('dataRepresentation.datadef.name')) >= 0);
-      this.get('dataHolder').appendChild(view);      
+      this.get('dataHolder').appendChild(view);
     }
     else if (itemType === 'annotation') {
       if (item.get('isOverlayAnnotation')) {
@@ -248,16 +248,16 @@ Smartgraphs.GraphView = SC.View.extend(
 
     init: function () {
       sc_super();
-      
+
       var cursor = SC.Cursor.create();
       cursor.bind('cursorStyle', this, 'requestedCursorStyle');
-      this.set('cursor', cursor);      
+      this.set('cursor', cursor);
     },
-      
+
     layout: { zIndex: 0 },
 
     graphView: SC.outlet('parentView'),
-    
+
     xAxisBinding: '.graphView.xAxis',
     yAxisBinding: '.graphView.yAxis',
     requestedCursorStyleBinding: '.graphView.requestedCursorStyle',
@@ -268,13 +268,13 @@ Smartgraphs.GraphView = SC.View.extend(
     childViews: 'axesView dataHolder annotationsHolder overlayAnnotationsHolder animationView'.w(),
 
     _animationIsPaused: NO,
-    
+
     _getScreenBounds: function () {
       var frame   = this.get('frame'),
           padding = this.getPath('graphView.padding');
-          
+
       if (!padding) return null;
-          
+
       return {
         xLeft:      frame.x + padding.left,
         xRight:     frame.x + frame.width - padding.right,
@@ -284,31 +284,31 @@ Smartgraphs.GraphView = SC.View.extend(
         plotHeight: frame.height - padding.top - padding.bottom
       };
     },
-    
+
     _getLogicalBounds: function () {
       var xAxis = this.getPath('graphView.xAxis'),
           yAxis = this.getPath('graphView.yAxis');
-          
+
       if (!xAxis || !yAxis) return null;
-      
-      return {        
-        xMin: xAxis.get('min'), 
+
+      return {
+        xMin: xAxis.get('min'),
         xMax: xAxis.get('max'),
         yMin: yAxis.get('min'),
         yMax: yAxis.get('max')
       };
     },
-    
+
     _startAnimationLoop: function (loopParameters, datadefName, dataViews, raphaelForImage) {
       console.log("**** _startAnimationLoop()");
-    
+
       var points        = dataViews.objectAt(0).getPath('item.points') || [],
           logicalBounds = this._getLogicalBounds(),
           screenBounds  = this._getScreenBounds(),
           ms            = this.getPath('animationInfo.duration'),
           animationSpec = this.getPath('animationView.animationSpecsByDatadefName')[datadefName],
           yOffset       = animationSpec.yOffset,
-          
+
           raphaelForGraph, raphaelForFirstDataView, i, len, animationTime, pt, dist, y;
 
       // Without these two, animation will occasionally screw up.
@@ -317,10 +317,10 @@ Smartgraphs.GraphView = SC.View.extend(
         raphaelForGraph.stop();
       }
       raphaelForImage.stop();
-      
+
       console.log("**** in startAnimationLoop: regenerateKeyframes = %s", loopParameters.regenerateKeyframes ? "YES" : "NO");
       console.log("**** in startAnimationLoop: animationIsRestarting = %s", loopParameters.animationIsRestarting ? "YES" : "NO");
-      
+
       // The keyframes on the first loop are set below. Once we've looped once,
       // when restarting a previous animation, we need to regenerate the keyframes
       // to handle the "full" animation loop. This flag is toggled, below.
@@ -336,7 +336,7 @@ Smartgraphs.GraphView = SC.View.extend(
       if (loopParameters.animationIsRestarting) {
         loopParameters.regenerateKeyframes   = YES;   // The next loop, we need to regenerate keyframes.
         loopParameters.animationIsRestarting = NO;
-        animationTime = parseInt(ms - (raphaelForGraph.attrs['clip-rect'][2]/screenBounds.plotWidth)*ms, 10);      
+        animationTime = parseInt(ms - (raphaelForGraph.attrs['clip-rect'][2]/screenBounds.plotWidth)*ms, 10);
       }
       else {
         // Reset raphael parameters to the "beginning".
@@ -350,14 +350,14 @@ Smartgraphs.GraphView = SC.View.extend(
         raphaelForImage.attr({ y: screenBounds.yTop + (screenBounds.plotHeight*(1-y)) + yOffset });
         animationTime = ms;
       }
-      
+
       // and sync the animations together!
       raphaelForFirstDataView = dataViews.objectAt(0).get('layer').raphael;
-      
+
       raphaelForFirstDataView.animate({
         "clip-rect": [screenBounds.xLeft, screenBounds.yTop, screenBounds.plotWidth, screenBounds.plotHeight].join(',')
       }, animationTime);
-      
+
       for (i = 1, len = dataViews.get('length'); i < len; i++) {
         raphaelForGraph = dataViews.objectAt(i).get('layer').raphael;
         raphaelForGraph.animateWith(raphaelForFirstDataView, {
@@ -367,61 +367,61 @@ Smartgraphs.GraphView = SC.View.extend(
 
       raphaelForImage.animateWith(raphaelForFirstDataView, loopParameters.keyframes,  animationTime);
     },
- 
+
     _calculateKeyframes: function (keyframes, points, logicalBounds, screenBounds, yOffset, startingXFrac, loopCallback) {
       var xScale              = 1 / (logicalBounds.xMax - logicalBounds.xMin),
           yScale              = 1 / (logicalBounds.yMax - logicalBounds.yMin),
           startingXPercentage = startingXFrac * 100,        // if restarting, percentage along the x-axis to start from
-          
+
           idx, len, pt, xPercentage, scaledXPercentage, xFrac, yFrac;
 
       for (idx=0, len=points.length; idx<len; ++idx) {
         pt = points[idx];
         xFrac = pt[0] * xScale;             // the fractional progress along x-axis
         xPercentage = xFrac * 100;
-        
+
         // only insert keyframes for points to the right of the x-value we're restarting the animation at
-        if (xPercentage >= startingXPercentage) { 
-          
+        if (xPercentage >= startingXPercentage) {
+
           // rescale the percentage to account for starting in the middle (a point right at startingXPercentage should be keyframe '0%')
           scaledXPercentage = (xPercentage - startingXPercentage) / (1 - startingXFrac);
           if (scaledXPercentage >= 100) scaledXPercentage = 100;
-          
+
           yFrac = pt[1] * yScale;         // the fractional distance along y-axis at which the icon should display
-          
+
           keyframes[parseInt(scaledXPercentage, 10)+'%'] = {
             y: screenBounds.yTop + (screenBounds.plotHeight * (1-yFrac)) + yOffset
           };
-          
+
           if (idx+1===len) {
             keyframes[parseInt(scaledXPercentage, 10)+'%'].callback = loopCallback;
           }
         }
       }
     },
-    
+
     _startAnimationForDatadef: function (datadefName) {
-      
+
       console.log("**** graphCanvasView._startAnimationForDatadef(%s)", datadefName);
-      
+
       var screenBounds           = this._getScreenBounds(),
           logicalBounds          = this._getLogicalBounds(),
-          animationSpecsByDatadefName = this.getPath('animationView.animationSpecsByDatadefName') || {},          
+          animationSpecsByDatadefName = this.getPath('animationView.animationSpecsByDatadefName') || {},
           dataViewsByDatadefName = this.getPath('animationView.dataViewsByDatadefName'),
-          
+
           dataViews              = dataViewsByDatadefName[datadefName] || [],
           firstDataView          = dataViews.objectAt(0),
           raphaelForDataView     = firstDataView.get('layer') && firstDataView.get('layer').raphael,
-          
+
           points                 = firstDataView.getPath('item.points') || [],
           yOffset                = animationSpecsByDatadefName[datadefName].yOffset,
           clipRect               = raphaelForDataView.attrs['clip-rect'],
           currentX               = clipRect ? clipRect[2] : 0, // occasionally, clip-rect is undefined; deal with it gracefully
-          currentXFrac           = currentX / screenBounds.plotWidth,          
-          
+          currentXFrac           = currentX / screenBounds.plotWidth,
+
           imagesByDatadefName    = this.getPath('animationView.imagesByDatadefName'),
           raphaelForImage        = imagesByDatadefName[datadefName],
-          
+
           self = this,
           loopParameters;
 
@@ -430,18 +430,18 @@ Smartgraphs.GraphView = SC.View.extend(
         self.getPath('parentView.graphController').sendAction('animationFinished');
         SC.RunLoop.end();
       }
-      
+
       function startAnimationLoop() {
         self._startAnimationLoop(loopParameters, datadefName, dataViews, raphaelForImage);
       }
-      
+
       loopParameters = {
         animationIsRestarting: this._animationIsPaused,
         regenerateKeyframes:   NO,
         keyframes:             {},
         callback:              this.getPath('animationInfo.loop') ? startAnimationLoop : gotoAnimationFinishedState
       };
-      
+
       // Calculate the first set of keyframes. This takes into account any
       // progress already made on animating the graph. The keyframes will
       // be regenerated in startAnimationLoop() if we're restarting animation
@@ -449,25 +449,25 @@ Smartgraphs.GraphView = SC.View.extend(
       this._calculateKeyframes(loopParameters.keyframes, points, logicalBounds, screenBounds, yOffset, currentXFrac, loopParameters.callback);
 
       dataViews.setEach('isHiddenForAnimation', NO);
-      
+
       // Actually start the animation loop.
       startAnimationLoop();
     },
-    
+
     _dataViewsForDatadefName: function (datadefName) {
       var ret = [],
           dataViews = this.getPath('parentView.dataHolder.childViews') || [];
-          
+
       dataViews.forEach( function (dataView) {
         if (dataView.getPath('item.dataRepresentation.datadef.name') === datadefName) ret.push(dataView);
       });
-      
+
       return ret;
     },
-    
+
     _startLinkedAnimationForDatadef: function (datadefName, animationIsRestarting, loopCallback) {
       console.log("**** _startLinkedAnimationForDatadef('%s')", datadefName);
-      
+
       var screenBounds            = this._getScreenBounds(),
           dataViews               = this._dataViewsForDatadefName(datadefName),
           firstDataView           = dataViews.objectAt(0),
@@ -484,7 +484,7 @@ Smartgraphs.GraphView = SC.View.extend(
           len,
           animationTime,
           raphaelForGraph;
-  
+
       for (i = 0, len = dataViews.get('length'); i < len; i++) {
         raphaelForGraph = dataViews.objectAt(i).get('layer').raphael;
         raphaelForGraph.stop();
@@ -509,7 +509,7 @@ Smartgraphs.GraphView = SC.View.extend(
       else {
         callback = null;
       }
-      
+
       dataViews.setEach('isHiddenForAnimation', NO);
       raphaelForFirstDataView.animate({
         "clip-rect": [screenBounds.xLeft, screenBounds.yTop, screenBounds.plotWidth, screenBounds.plotHeight].join(',')
@@ -522,43 +522,43 @@ Smartgraphs.GraphView = SC.View.extend(
         }, animationTime);
       }
     },
-    
+
     animate: function () {
       console.log("**** graphCanvasView.animate()");
-      
+
       var animations = this.getPath('animationInfo.animations')             || [],
           linkedAnimations = this.getPath('animationInfo.linkedAnimations') || [],
           self = this;
-      
+
       animations.forEach( function (animationSpec) {
         self._startAnimationForDatadef(animationSpec.datadefName);
       });
-      
+
       linkedAnimations.forEach( function (linkedSpec) {
         self._startLinkedAnimationForDatadef(linkedSpec.datadefName, self._animationIsPaused);
       });
     },
 
     stop: function () {
-      console.log("**** graphCanvasView.stop()");   
-            
+      console.log("**** graphCanvasView.stop()");
+
       var animations             = this.getPath('animationInfo.animations')       || [],
           linkedAnimations       = this.getPath('animationInfo.linkedAnimations') || [],
           dataViewsByDatadefName = this.getPath('animationView.dataViewsByDatadefName'),
           imagesByDatadefName    = this.getPath('animationView.imagesByDatadefName'),
           self = this;
-      
+
       animations.forEach( function (animationSpec) {
         var datadefName     = animationSpec.datadefName,
             dataViews       = dataViewsByDatadefName[datadefName],
             raphaelForImage = imagesByDatadefName[datadefName];
-        
+
         dataViews.forEach( function (dataView) {
           dataView.get('layer').raphael.stop();
         });
         raphaelForImage.stop();
       });
-      
+
       linkedAnimations.forEach( function (linkedSpec) {
         self._dataViewsForDatadefName(linkedSpec.datadefName).forEach( function (dataView) {
           dataView.get('layer').raphael.stop();
@@ -570,10 +570,10 @@ Smartgraphs.GraphView = SC.View.extend(
 
     reset: function () {
       console.log("**** graphCanvasView.reset()");
-      
+
       var screenBounds  = this._getScreenBounds(),
           logicalBounds = this._getLogicalBounds(),
-          
+
           animations             = this.getPath('animationInfo.animations')       || [],
           linkedAnimations       = this.getPath('animationInfo.linkedAnimations') || [],
           dataViewsByDatadefName = this.getPath('animationView.dataViewsByDatadefName'),
@@ -584,7 +584,7 @@ Smartgraphs.GraphView = SC.View.extend(
           },
 
           self = this;
-                
+
       animations.forEach( function (animationSpec) {
         var datadefName     = animationSpec.datadefName,
             dataViews       = dataViewsByDatadefName[datadefName],
@@ -599,14 +599,14 @@ Smartgraphs.GraphView = SC.View.extend(
           var raphaelForGraph = dataView.get('layer').raphael;
           raphaelForGraph.attr(graphResetAttributes);
         });
-        
+
         if (raphaelForImage) {
           raphaelForImage.attr({
             y: screenBounds.yTop + screenBounds.plotHeight * (1-y) + yOffset
           });
         }
       });
-      
+
       linkedAnimations.forEach( function (linkedSpec) {
         self._dataViewsForDatadefName(linkedSpec.datadefName).forEach( function (dataView) {
           dataView.set('isHiddenForAnimation', YES);
@@ -621,7 +621,7 @@ Smartgraphs.GraphView = SC.View.extend(
 
       graphCanvasView: SC.outlet('parentView'),
       graphView: SC.outlet('graphCanvasView.graphView'),
-      
+
       xAxisBinding: '.graphView.xAxis',
       yAxisBinding: '.graphView.yAxis',
       paddingBinding: '.graphView.padding',
@@ -629,16 +629,16 @@ Smartgraphs.GraphView = SC.View.extend(
       childViews: 'inputAreaView xAxisView yAxisView'.w(),
 
       inputAreaView: RaphaelViews.RaphaelView.design({
-        
+
         graphCanvasView: SC.outlet('parentView.graphCanvasView'),
         graphView: SC.outlet('parentView.graphView'),
-        
+
         didCreateLayer: function () {
           // cache these rather than lookup the jquery object (graphView.$()) per mouse event
           this._graphView = this.get('graphView');
           this._$graphView = this._graphView.$();
         },
-        
+
         renderCallback: function (raphaelCanvas, xLeft, yTop, plotWidth, plotHeight) {
           return raphaelCanvas.rect(xLeft, yTop, plotWidth, plotHeight).attr({
             fill: '#f7f8fa', stroke: '#f7f8fa', opacity: 1.0
@@ -651,7 +651,7 @@ Smartgraphs.GraphView = SC.View.extend(
 
           // cache this for coordsForEvent() below
           this._screenBounds = bounds;
-          
+
           if (firstTime) {
             context.callback(this, this.renderCallback, bounds.xLeft, bounds.yTop, bounds.plotWidth, bounds.plotHeight);
           }
@@ -667,8 +667,8 @@ Smartgraphs.GraphView = SC.View.extend(
               x           = evt.pageX - graphOffset.left,
               y           = evt.pageY - graphOffset.top,
               fraction;
-          
-          // clip the event to the inputArea boundaries. Simple clipping seems to work fine        
+
+          // clip the event to the inputArea boundaries. Simple clipping seems to work fine
           x = (x < bounds.xLeft) ? bounds.xLeft : (x > bounds.xRight)  ? bounds.xRight  : x;
           y = (y < bounds.yTop)  ? bounds.yTop  : (y > bounds.yBottom) ? bounds.yBottom : y;
 
@@ -677,7 +677,7 @@ Smartgraphs.GraphView = SC.View.extend(
 
         mouseDown: function (evt) {
           var coords = this.coordsForEvent(evt),
-              point = this._graphView.pointForCoordinates(coords.x, coords.y);          
+              point = this._graphView.pointForCoordinates(coords.x, coords.y);
 
           this._graphController = this._graphView.get('graphController');
           return this._graphController.inputAreaMouseDown(point.x, point.y);
@@ -686,14 +686,14 @@ Smartgraphs.GraphView = SC.View.extend(
         mouseDragged: function (evt) {
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
-              
+
           return this._graphController.inputAreaMouseDragged(point.x, point.y);
         },
 
         mouseUp: function (evt) {
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
-              
+
           return this._graphController.inputAreaMouseUp(point.x, point.y);
         }
       }),
@@ -712,19 +712,19 @@ Smartgraphs.GraphView = SC.View.extend(
         type: 'y'
       })
     }),
-    
+
     // Holds the data views. Should be earlier in the DOM (and thus "behind") the annotation views
     dataHolder: RaphaelViews.RaphaelView.design({
     }),
-    
+
     // Holds the annotation views. Should be later in the DOM (and thus "in front of") the data views
     annotationsHolder: RaphaelViews.RaphaelView.design({
     }),
-    
+
     // Holds the 'overlay annotations'; is transparent to mouse events
     overlayAnnotationsHolder: RaphaelViews.RaphaelView.design({
 
-      // In order to be transparent to mouse events, we weant to intercept mousemove, mousedown, and mouseup events at 
+      // In order to be transparent to mouse events, we weant to intercept mousemove, mousedown, and mouseup events at
       // the DOM level, so that we can trick the SproutCore root responder into thinking the events actually happened
       // on the non-overlay views beneath us (see handleEvent)
       didCreateLayer: function () {
@@ -744,7 +744,7 @@ Smartgraphs.GraphView = SC.View.extend(
       },
 
       handleEvent: function (evt) {
-        // Stop propagation. If we let the mousemove event bubble, the SproutCore root responder will think we were the 
+        // Stop propagation. If we let the mousemove event bubble, the SproutCore root responder will think we were the
         // "last hovered" view, which screws up its calculation of hover (i.e., mouseEntered and mouseExited) events for
         // any views below us.
         evt.stopPropagation();
@@ -754,15 +754,15 @@ Smartgraphs.GraphView = SC.View.extend(
         var el = document.elementFromPoint(evt.clientX, evt.clientY);     // should work in IE!
         this.$().show();
 
-        // Set the event target to be the element beneath us. Because 'event' is a jQuery-normalized event, 'target' is a 
+        // Set the event target to be the element beneath us. Because 'event' is a jQuery-normalized event, 'target' is a
         // normal R/W property
         evt.target = el;
 
-        // NOW let SproutCore think the event happened directly to the element below us. It will handle forwarding 
+        // NOW let SproutCore think the event happened directly to the element below us. It will handle forwarding
         // mouseDown, mouseMoved, mouseExited, mouseEntered events to the SC.Views beneath us.
         SC.Event.handle.call(document, evt);
       }
-      
+
     }),
 
     // Holds the animation channel. Should be later in the DOM (and thus "in front of") the annotation views.
@@ -778,22 +778,22 @@ Smartgraphs.GraphView = SC.View.extend(
       dataViewsByDatadefName: null,
       imagesByDatadefName: null,
       animationSpecsByDatadefName: null,
-      
+
       // used for bookkeeping when rendering static images in the animation channel (e.g., start or stop lines overlaid over the channel)
       staticImagesByURL: null,
-      
+
       displayProperties: ['animations.[]','staticImages.[]', 'dataViews.[]'],
-      
+
       // Handle the special shapes we allow authors to use.
       _normalizeImageURL: function (imageURL) {
         if (imageURL.indexOf('.') === -1) {
-          
+
           var longURL = {
                 circle: sc_static('images/circle'),
                 box:    sc_static('images/box'),
                 cross:  sc_static('images/cross')
               }[imageURL];
-            
+
           imageURL = longURL || sc_static('images/cross');
         }
         return imageURL;
@@ -822,24 +822,24 @@ Smartgraphs.GraphView = SC.View.extend(
           console.warn("logicalBounds is not defined.");
           return;
         }
-        
+
         // gather up the list of requested images
         staticImages.forEach( function (staticImage) {
           url = staticImage.image;
-          
+
           if (!url) {
             console.log("no image url for static image");
             return null; // next in forEach
           }
-          
+
           if (!requestedStaticImagesByURL[url]) requestedStaticImagesByURL[url] = [];
           requestedStaticImagesByURL[url].push(staticImage);
         });
-        
-        
+
+
         for (url in staticImagesByURL) {
           if ( !staticImagesByURL.hasOwnProperty(url) ) continue;
-          
+
           // delete all images not currently requested
           if ( !requestedStaticImagesByURL[url] ) {
             console.log("deleting all images for static image url '%s'", url);
@@ -850,15 +850,15 @@ Smartgraphs.GraphView = SC.View.extend(
             continue;     // next url!
           }
         }
-        
+
         for (url in requestedStaticImagesByURL) {
           if ( !requestedStaticImagesByURL.hasOwnProperty(url) ) continue;
 
           if ( !staticImagesByURL[url] ) staticImagesByURL[url] = [];
-          
+
           nRequested = requestedStaticImagesByURL[url].length;
           nActual    = staticImagesByURL[url].length;
-          
+
           // delete excess images
           if (nRequested  < nActual) {
             console.log("deleting %d excess images for static image url '%s'", nActual - nRequested, url);
@@ -867,7 +867,7 @@ Smartgraphs.GraphView = SC.View.extend(
             }
             staticImagesByURL[url].removeAt(nRequested, nActual - nRequested);
           }
-          
+
           // create needed images
           if (nActual < nRequested) {
             console.log("creating %d new images for static image url '%s'", nRequested - nActual, url);
@@ -875,17 +875,17 @@ Smartgraphs.GraphView = SC.View.extend(
               staticImagesByURL[url].push(raphaelCanvas.image(url));
             }
           }
-        
+
           // adjust images
-          
+
           for (i = 0; i < nRequested; i++) {
             console.log("adjusting image %d for static image url '%s'", i, url);
-            
+
             requestedImage = requestedStaticImagesByURL[url][i];
             actualImage    = staticImagesByURL[url][i];
-            
+
             yFrac = requestedImage.y / (logicalBounds.yMax - logicalBounds.yMin);
-            
+
             actualImage.attr({
               x: this.get('frame').x + 10  + requestedImage.xOffset,
               y: screenBounds.yTop + (screenBounds.plotHeight * (1 - yFrac)) - requestedImage.yOffset,
@@ -914,34 +914,34 @@ Smartgraphs.GraphView = SC.View.extend(
             dataView,
             points,
             y;
-        
+
         animations.forEach( function (animationSpec) {
           var datadefName = animationSpec.datadefName;
           dataViewsByDatadefName[datadefName] = [];
           requestedImageURLs[datadefName] = animationSpec.foregroundImageURL;
           animationSpecsByDatadefName[datadefName] = animationSpec;
         });
-        
+
         dataViews.forEach( function (dataView) {
           var datadefName = dataView.getPath('item.dataRepresentation.datadef.name');
-          
+
           if (dataViewsByDatadefName[datadefName] && dataView.get('isAnimatable')) {
             dataViewsByDatadefName[datadefName].push(dataView);
           }
         });
-        
+
         for (datadefName in requestedImageURLs) {
           if (!requestedImageURLs.hasOwnProperty(datadefName)) continue;
-          
+
           if (!imagesByDatadefName[datadefName]) {
             console.log('creating new image');
             imagesByDatadefName[datadefName] = raphaelCanvas.image(this._normalizeImageURL(requestedImageURLs[datadefName]));
           }
         }
-        
+
         for (datadefName in imagesByDatadefName) {
           if (!imagesByDatadefName.hasOwnProperty(datadefName)) continue;
-          
+
           // remove images for datadefs we're not animating
           if (!requestedImageURLs[datadefName]) {
             console.log('removing data image');
@@ -949,7 +949,7 @@ Smartgraphs.GraphView = SC.View.extend(
           }
           else {
             // finally, display the right image in the right place.
-            dataView = dataViewsByDatadefName[datadefName][0];        // pick one of the data views we're animating            
+            dataView = dataViewsByDatadefName[datadefName][0];        // pick one of the data views we're animating
             if (dataView) {
               points        = dataView.getPath('item.points');
               y             = points[0][1] / (logicalBounds.yMax - logicalBounds.yMin);
@@ -959,8 +959,8 @@ Smartgraphs.GraphView = SC.View.extend(
               imageHeight   = animationSpec.height || 30;
               xOffset       = animationSpec.xOffset || 0;
               yOffset       = animationSpec.yOffset || 0;
-          
-              console.log('adjusting data image');      
+
+              console.log('adjusting data image');
 
               imagesByDatadefName[datadefName].attr({
                 src:    this._normalizeImageURL(requestedImageURLs[datadefName]),
@@ -972,11 +972,11 @@ Smartgraphs.GraphView = SC.View.extend(
             }
           }
         }
-        
+
         this.set('dataViewsByDatadefName', dataViewsByDatadefName);
         this.setIfChanged('imagesByDatadefName', imagesByDatadefName);
         this.set('animationSpecsByDatadefName', animationSpecsByDatadefName);
-                
+
         return null;     // we don't generate a layer
       },
 

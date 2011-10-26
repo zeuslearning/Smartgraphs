@@ -1,7 +1,7 @@
 /*globals Smartgraphs */
 
 Smartgraphs.activityDocs = Smartgraphs.activityDocs || {};
-Smartgraphs.activityDocs["/shared/calculated-velocity"] = 
+Smartgraphs.activityDocs["/shared/calculated-velocity"] =
 {
   "_id": "calculated-velocity.df6",
   "_rev": "1",
@@ -10,7 +10,7 @@ Smartgraphs.activityDocs["/shared/calculated-velocity"] =
     "title": "Example of Calculated Velocity",
     "url": "/shared/calculated-velocity",
     "owner": "shared",
-    "pages": [   
+    "pages": [
       "/shared/calculated-velocity/page/1"
     ],
     "axes": [
@@ -24,7 +24,7 @@ Smartgraphs.activityDocs["/shared/calculated-velocity"] =
       "url": "/shared/calculated-velocity/page/1",
       "activity": "/shared/calculated-velocity",
       "index": 1,
-      "introText": "<h1>Labeling Calculated Data</h1>",                        
+      "introText": "<h1>Labeling Calculated Data</h1>",
       "steps": [
         "/shared/calculated-velocity/page/1/step/1"
       ],
@@ -74,7 +74,7 @@ Smartgraphs.activityDocs["/shared/calculated-velocity"] =
   ],
   "units": [
   ],
-  "axes": [  
+  "axes": [
     {
       "url": "/shared/calculated-velocity/axes/12s",
       "units": "/builtins/units/seconds",
@@ -102,7 +102,7 @@ Smartgraphs.activityDocs["/shared/calculated-velocity"] =
   ],
   "responseTemplates": [
   ],
-  "tags": [  
+  "tags": [
   ],
   "variables": [
   ],
@@ -110,7 +110,7 @@ Smartgraphs.activityDocs["/shared/calculated-velocity"] =
     {
       "type": "UnorderedDataPoints",
       "records": [
-        {    
+        {
           "url": "/shared/calculated-velocity/datadefs/position-data",
           "name": "position-data",
           "activity": "/shared/calculated-velocity",
@@ -127,7 +127,7 @@ Smartgraphs.activityDocs["/shared/calculated-velocity"] =
     {
       "type": "FirstOrderDifference",
       "records": [
-        {    
+        {
           "url": "/shared/calculated-velocity/datadefs/velocity-calculated",
           "name": "velocity-calculated",
           "activity": "/shared/calculated-velocity",
@@ -140,7 +140,7 @@ Smartgraphs.activityDocs["/shared/calculated-velocity"] =
           "source": "/shared/calculated-velocity/datadefs/position-data"
         }
       ]
-    }  
+    }
   ],
   "annotations": [
     {

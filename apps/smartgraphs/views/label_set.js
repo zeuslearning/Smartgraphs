@@ -10,7 +10,7 @@
   @extends RaphaelViews.RaphaelCollectionView
 */
 Smartgraphs.LabelSetView = RaphaelViews.RaphaelCollectionView.extend({
-  
+
   exampleView: Smartgraphs.LabelView,
   // unfortunately, the current CollectionViewFastPath implementation confuses labels
   useFastPath: NO,

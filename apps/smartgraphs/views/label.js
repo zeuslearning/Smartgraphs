@@ -64,7 +64,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
   defaultWidth: 100,
   defaultHeight: 45,
-  
+
   labelBodyWidthBinding:  '.labelBodyView.width',
   labelBodyHeightBinding: '.labelBodyView.height',
   cornerRadius: 4,
@@ -239,7 +239,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
     defaultStrokeWidth:       1,
     highlightedStrokeWidth:   2,
-    
+
     defaultStrokeBinding:     '.labelView.stroke',
     highlightedStrokeBinding: '.labelView.highlightedStroke',
     isHighlightedBinding:     '.labelView.isBodyDragging',

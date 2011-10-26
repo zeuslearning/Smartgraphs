@@ -16,15 +16,15 @@ Smartgraphs.animationTool = Smartgraphs.Tool.create(
 
   name: 'animation',
   state: 'ANIMATION_TOOL',
-  
+
   /**
     Finds the appropriate graph view for a given 'pane' name
-    
+
     @param {String} pane
       The pane containing the graph we're interested in; one of 'top', 'bottom', or 'single'
-      
+
     @returns {Smartgraphs.GraphView}
-  */    
+  */
   graphViewForPane: function (pane) {
     return Smartgraphs.activityPage.getPath(Smartgraphs.activityViewController.firstOrSecondFor(pane)+'GraphPane.graphView');
   },
@@ -42,7 +42,7 @@ Smartgraphs.animationTool = Smartgraphs.Tool.create(
   staticImages: [],
   animations: [],
   linkedAnimationsByPane: {},
-  
+
   /*
     How many times the animation has played through on this step.
   */
@@ -58,32 +58,32 @@ Smartgraphs.animationTool = Smartgraphs.Tool.create(
     return this._linkedPanes;
   }.property(),
 
-  _isAnimating: NO,  
+  _isAnimating: NO,
   isAnimating: function () {
     return this._isAnimating;
   }.property(),
-  
+
   linkedGraphs: function () {
     var pane,
         linkedAnimationsByPane = this.get('linkedAnimationsByPane'),
         ret = [];
-        
+
     for (pane in linkedAnimationsByPane) {
       if ( !linkedAnimationsByPane.hasOwnProperty(pane) ) continue;
       ret.push(this.graphViewForPane(pane));
     }
     return ret;
   }.property(),
-  
+
   allAnimatedGraphs: function () {
     var ret = this.get('linkedGraphs');
     ret.insertAt(0, this.graphViewForPane(this.get('mainPane')));
     return ret;
   }.property(),
-  
+
   setup: function (args) {
     args = args || {};
-    
+
     var pane = Smartgraphs.activityViewController.validPaneFor(args.pane),
         animationHashes        = args.animations       || [],
         linkedAnimationHashes  = args.linkedAnimations || [],
@@ -98,7 +98,7 @@ Smartgraphs.animationTool = Smartgraphs.Tool.create(
     this.set('backgroundImageURL', args.backgroundImage || this.get('defaultBackgroundImageURL'));
     this.set('duration',           args.duration        || this.get('defaultDuration'));      // duration of 0 makes no sense
     this.set('channelWidth',       args.channelWidth    || this.get('defaultChannelWidth'));  // channelWidth of 0 makes no sense
-    this.set('playCount', 0);    
+    this.set('playCount', 0);
 
     staticImageHashes.forEach(function (hash) {
       var instances = hash.instances || [],
@@ -129,21 +129,21 @@ Smartgraphs.animationTool = Smartgraphs.Tool.create(
         height:             hash.height  || 30
       };
     }));
-    
+
     linkedAnimationHashes.forEach(function (hash) {
       var pane       = Smartgraphs.activityViewController.validPaneFor(hash.pane),
           animations = hash.animations || [];
-          
+
       if (!pane) throw "bad pane argument '@%' in linkedAnimations".fmt(pane);
       if (linkedAnimationsByPane[pane]) throw "repeated set of linkedAnimations for pane '%@'".fmt(pane);
-      
+
       linkedAnimationsByPane[pane] = animations.map(function (hash) {
         return {
           datadefName: hash.data
         };
       });
     });
-    
+
     this.set('linkedAnimationsByPane', linkedAnimationsByPane);
 
     this._mainPane = pane;
@@ -166,7 +166,7 @@ Smartgraphs.animationTool = Smartgraphs.Tool.create(
     return SC.Object.create({
       hasAnimation:       YES,
       duration:           null,
-      loop:               null, 
+      loop:               null,
       channelWidth:       null,
       animations:         [],
       staticImages:       [],
@@ -174,49 +174,49 @@ Smartgraphs.animationTool = Smartgraphs.Tool.create(
       linkedAnimations:   []
     });
   },
-  
+
   setupGraphControllers: function () {
     var linkedAnimationsByPane = this.get('linkedAnimationsByPane'),
-        pane, 
-        controller, 
+        pane,
+        controller,
         animationInfo;
-    
+
     pane = this.get('mainPane');
     controller = this.graphControllerForPane(pane);
 
     animationInfo = this.makeAnimationInfoObject();
     this.copyPropertiesTo(animationInfo, ['channelWidth', 'backgroundImageURL', 'duration', 'loop', 'animations', 'staticImages']);
     controller.set('animationInfo', animationInfo);
-    
+
     for (pane in linkedAnimationsByPane) {
       if (!linkedAnimationsByPane.hasOwnProperty(pane)) continue;
-      
+
       controller = this.graphControllerForPane(pane);
-      
+
       animationInfo = this.makeAnimationInfoObject();
       this.copyPropertiesTo(animationInfo, ['duration', 'loop', 'channelWidth']);
       animationInfo.set('linkedAnimations', linkedAnimationsByPane[pane]);
       controller.set('animationInfo', animationInfo);
-    }    
+    }
   },
-  
+
   clearGraphControllers: function () {
     var linkedAnimationsByPane = this.get('linkedAnimationsByPane'),
-        pane, 
+        pane,
         controller;
-        
+
     pane = this.get('mainPane');
     controller = this.graphControllerForPane(pane);
     controller.set('animationInfo', null);
-    
+
     for (pane in linkedAnimationsByPane) {
       if (!linkedAnimationsByPane.hasOwnProperty(pane)) continue;
-      
+
       controller = this.graphControllerForPane(pane);
       controller.set('animationInfo', null);
     }
   },
-  
+
   copyPropertiesTo: function (object, props) {
     var self = this;
     object.beginPropertyChanges();
@@ -233,7 +233,7 @@ Smartgraphs.animationTool = Smartgraphs.Tool.create(
     if (!this._mainPane || this._isAnimating) return NO;
     this._isAnimating = YES;
     this.notifyPropertyChange('isAnimating');
-    
+
     this.get('allAnimatedGraphs').invoke('animate');
   },
 
@@ -254,7 +254,7 @@ Smartgraphs.animationTool = Smartgraphs.Tool.create(
   clearAnimation: function () {
     this._isAnimating = NO;
     this.notifyPropertyChange('isAnimating');
-    
+
     this.get('allAnimatedGraphs').invoke('reset');
   }
 

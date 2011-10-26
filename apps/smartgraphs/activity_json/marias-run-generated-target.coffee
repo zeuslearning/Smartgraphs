@@ -27,9 +27,9 @@ Smartgraphs.activityDocs["/shared/marias-run"] =
       "/shared/marias-run/page/introduction"
       "/shared/marias-run/page/where-did-she-stop"
     ]
-    
+
   pages: [
-    
+
     {
       name:      "Introduction"
       url:       "/shared/marias-run/page/introduction"
@@ -41,7 +41,7 @@ Smartgraphs.activityDocs["/shared/marias-run"] =
       ]
       firstStep: "/shared/marias-run/page/introduction/step/1"
     }
-    
+
     {
       name:      "Where did she stop"
       url:       "/shared/marias-run/page/where-did-she-stop"
@@ -54,7 +54,7 @@ Smartgraphs.activityDocs["/shared/marias-run"] =
       firstStep: "/shared/marias-run/page/where-did-she-stop/step/1"
     }
   ]
-  
+
   steps: [
     {
       url:          "/shared/marias-run/page/introduction/step/1"
@@ -64,7 +64,7 @@ Smartgraphs.activityDocs["/shared/marias-run"] =
       isFinalStep: true
       nextButtonShouldSubmit: true
     }
-    
+
     {
       url:          "/shared/marias-run/page/where-did-she-stop/step/1"
       activityPage: "/shared/marias-run/page/where-did-she-stop"
@@ -74,7 +74,7 @@ Smartgraphs.activityDocs["/shared/marias-run"] =
       nextButtonShouldSubmit: true
     }
   ]
-  
+
   responseTemplates: []
   axes:              []
   datadefs:          []
@@ -82,4 +82,4 @@ Smartgraphs.activityDocs["/shared/marias-run"] =
   annotations:       []
   variables:         []
   units:             []
-  
+
