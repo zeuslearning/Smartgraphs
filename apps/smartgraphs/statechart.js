@@ -69,6 +69,8 @@ Smartgraphs.statechartDef = SC.Statechart.extend(
 
         route: function (route) {
           if (route.activityId) Smartgraphs.statechart.sendAction('openActivity', this, { id: route.activityId });
+          // if we have no route try loading from window.authoredActivityJSON
+          else Smartgraphs.statechart.sendAction('loadWindowsAuthoredActivityJSON', this);
         }
       }),
 
@@ -81,11 +83,23 @@ Smartgraphs.statechartDef = SC.Statechart.extend(
         // need to do this so we don't load the activity into the session store which gets destroyed when we exit the
         // ACTIVITY state.
         Smartgraphs.activityController.set('content', Smartgraphs.get('rootStore').find(Smartgraphs.Activity, args.id));
-
         this.gotoState('LOADING_ACTIVITY');
         return YES;
       },
 
+
+      loadWindowsAuthoredActivityJSON: function (context) {
+        // TODO: handle missing value:
+        var activityJSON = window.authoredActivityJSON;
+        var id = "dynamic_authored_content";
+
+        // 1: add it to our existing collection of activities:
+        Smartgraphs.activityDocs[id] = authoredActivityJSON;
+        // 2 load that activity into the controller
+        Smartgraphs.activityController.set('content', Smartgraphs.get('rootStore').find(Smartgraphs.Activity, id));
+        this.gotoState('LOADING_ACTIVITY');
+        return YES;
+      },
 
       LOADING_ACTIVITY: SC.State.design(Smartgraphs.ResourceLoader, {
 

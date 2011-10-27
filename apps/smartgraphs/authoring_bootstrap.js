@@ -1,1 +1,59 @@
-window.authoredActivityJSON="<%= authoring_activity_json %>";
+// This is here so things will run in development mode:
+window.authoredActivityJSON= {
+    _id: "marias-run-generated-target.df6",
+    _rev: 1,
+    data_format_version: 6,
+    activity: {
+      title: "Maria's Run",
+      url: "/shared/marias-run",
+      owner: "shared",
+      pages: ["/shared/marias-run/page/introduction", "/shared/marias-run/page/where-did-she-stop"]
+    },
+    pages: [
+      {
+        name: "Introduction",
+        url: "/shared/marias-run/page/introduction",
+        activity: "/shared/marias-run",
+        index: 1,
+        introText: "in this activity....",
+        steps: ["/shared/marias-run/page/introduction/step/1"],
+        firstStep: "/shared/marias-run/page/introduction/step/1"
+      }, {
+        name: "Where did she stop",
+        url: "/shared/marias-run/page/where-did-she-stop",
+        activity: "/shared/marias-run",
+        index: 2,
+        introText: "look at the graph...",
+        steps: ["/shared/marias-run/page/where-did-she-stop/step/1"],
+        firstStep: "/shared/marias-run/page/where-did-she-stop/step/1"
+      }
+    ],
+    steps: [
+      {
+        url: "/shared/marias-run/page/introduction/step/1",
+        activityPage: "/shared/marias-run/page/introduction",
+        paneConfig: "single",
+        panes: null,
+        isFinalStep: true,
+        nextButtonShouldSubmit: true
+      }, {
+        url: "/shared/marias-run/page/where-did-she-stop/step/1",
+        activityPage: "/shared/marias-run/page/where-did-she-stop",
+        paneConfig: "single",
+        panes: null,
+        isFinalStep: true,
+        nextButtonShouldSubmit: true
+      }
+    ],
+    responseTemplates: [],
+    axes: [],
+    datadefs: [],
+    tags: [],
+    annotations: [],
+    variables: [],
+    units: []
+  };
+
+// uncomment this line to dynmically replace the JSON content on the server
+// window.authoredActivityJSON="<%= authored_activity_json %>";
+
