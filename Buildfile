@@ -11,7 +11,6 @@ config :all, :required => [:sproutcore]
 config :smartgraphs,
   :required => ['sproutcore/statechart', 'raphael_views/raphael_views', 'raphael_views/g_raphael', 'cc/cc'],
   :load_fixtures => true,
-  :bootstrap_inline => ['smartgraphs:authoring_bootstrap.js','sproutcore/bootstrap:javascript'],
   :theme => :pig
 
 config 'raphael_views/raphael_views',
