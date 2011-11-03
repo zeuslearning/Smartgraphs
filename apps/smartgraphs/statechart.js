@@ -90,11 +90,11 @@ Smartgraphs.statechartDef = SC.Statechart.extend(
 
       loadWindowsAuthoredActivityJSON: function (context) {
         // TODO: handle missing value:
-        var activityJSON = window.authoredActivityJSON;
-        var id = "dynamic_authored_content";
+        var activityJSON = window.authoredActivityJSON,
+            id           = activityJSON.activity.url;
 
         // 1: add it to our existing collection of activities:
-        Smartgraphs.activityDocs[id] = authoredActivityJSON;
+        Smartgraphs.activityDocs[id] = activityJSON;
         // 2 load that activity into the controller
         Smartgraphs.activityController.set('content', Smartgraphs.get('rootStore').find(Smartgraphs.Activity, id));
         this.gotoState('LOADING_ACTIVITY');
