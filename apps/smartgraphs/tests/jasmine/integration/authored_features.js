@@ -1,81 +1,98 @@
 (function() {
   defineJasmineHelpers();
-  describe("authored features", function() {
+  $(function() {
+    return $('body').css('overflow', 'auto');
+  });
+  describe("The Smartgraphs runtime, when loading content converted from the authored format", function() {
+    var aSmartgraphPane;
+    aSmartgraphPane = '.smartgraph-pane';
     beforeEach(function() {
       return this.addMatchers({
         toHaveTheText: function(text) {
           var elements;
-          elements = $(this.actual + ":contains('" + text + "'):visible");
+          elements = $("" + this.actual + ":contains('" + text + "'):visible");
           return elements.length > 0;
         },
         toBeEmpty2: function() {
           return this.actual.length === 0;
         },
-        toHaveTheImage: function(url) {
-          var allImages, correctImages;
-          allImages = $(this.actual + " img");
-          correctImages = allImages.filter(function(i, img) {
-            var scView;
-            if (img.id) {
-              scView = SC.View.views[img.id];
-              return scView.get('value') === url;
+        toHaveTheImageUrl: function(url) {
+          var img, _i, _len, _ref, _ref2;
+          _ref = $("" + this.actual + " img");
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            img = _ref[_i];
+            if (((_ref2 = SC.View.views[img.id]) != null ? _ref2.get('value') : void 0) === url) {
+              return true;
             }
-          });
-          return correctImages.length > 0;
+          }
+          return false;
         }
       });
     });
     afterEach(function() {
       return integrationTestHelper.teardownApp();
     });
-    it("should have two pages with text", function() {
-      var nextButton, theSmartGraphPane;
-      integrationTestHelper.startAppWithContent({
-        "type": "Activity",
-        "name": "Maria’s Run",
-        "pages": [
-          {
-            "type": "Page",
-            "name": "Introduction",
-            "text": "in this activity...."
-          }, {
-            "type": "Page",
-            "name": "Where did she stop",
-            "text": "look at the graph..."
-          }
-        ]
+    describe("when the authored content specifies two pages", function() {
+      beforeEach(function() {
+        return integrationTestHelper.startAppWithContent({
+          "type": "Activity",
+          "name": "Maria’s Run",
+          "pages": [
+            {
+              "type": "Page",
+              "name": "Introduction",
+              "text": "in this activity...."
+            }, {
+              "type": "Page",
+              "name": "Where did she stop",
+              "text": "look at the graph..."
+            }
+          ]
+        });
       });
-      theSmartGraphPane = '.smartgraph-pane';
-      expect(theSmartGraphPane).toHaveTheText('in this activity....');
-      integrationTestHelper.clickButton('Next');
-      expect(theSmartGraphPane).toHaveTheText('look at the graph...');
-      nextButton = $(".sc-button-view:contains('Next'):visible");
-      return expect(nextButton).toBeEmpty2();
+      it("should have the specified first page text initially", function() {
+        return expect(aSmartgraphPane).toHaveTheText('in this activity....');
+      });
+      return describe("after you click on the 'Next' button", function() {
+        beforeEach(function() {
+          return integrationTestHelper.clickButton('Next');
+        });
+        it("should have the specified second page text", function() {
+          return expect(aSmartgraphPane).toHaveTheText('look at the graph...');
+        });
+        return it("should have not have a visible 'Next' button", function() {
+          var nextButton;
+          nextButton = $(".sc-button-view:contains('Next'):visible");
+          return expect(nextButton).toBeEmpty2();
+        });
+      });
     });
-    return it("should have a page with an image", function() {
-      var theSmartGraphPane;
-      integrationTestHelper.startAppWithContent({
-        "type": "Activity",
-        "name": "Maria’s Run",
-        "pages": [
-          {
-            "type": "Page",
-            "name": "Introduction",
-            "text": "in this activity....",
-            "panes": [
-              {
-                "type": "ImagePane",
-                "name": "Shoes",
-                "url": "/example.jpg",
-                "license": "Creative Commons BY-NC-ND 2.0",
-                "attribution": "image courtesy flickr user altopower"
-              }
-            ]
-          }
-        ]
+    return describe("when the authored content specifies a page with an image pane", function() {
+      beforeEach(function() {
+        return integrationTestHelper.startAppWithContent({
+          "type": "Activity",
+          "name": "Maria’s Run",
+          "pages": [
+            {
+              "type": "Page",
+              "name": "Introduction",
+              "text": "in this activity....",
+              "panes": [
+                {
+                  "type": "ImagePane",
+                  "name": "Shoes",
+                  "url": "/example.jpg",
+                  "license": "Creative Commons BY-NC-ND 2.0",
+                  "attribution": "image courtesy flickr user altopower"
+                }
+              ]
+            }
+          ]
+        });
       });
-      theSmartGraphPane = '.sc-view';
-      return expect(theSmartGraphPane).toHaveTheImage('/example.jpg');
+      return it("should have a pane with the specified image url", function() {
+        return expect(aSmartgraphPane).toHaveTheImageUrl('/example.jpg');
+      });
     });
   });
 }).call(this);
