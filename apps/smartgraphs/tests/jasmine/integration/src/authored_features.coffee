@@ -206,3 +206,138 @@ describe "The Smartgraphs runtime, when loading content converted from the autho
           {x, y} = coords = graphView.coordinatesForPoint dataX, dataY
           expect("#{aSmartgraphPane} svg").toContainAPointAt(x, y)
 
+  describe "when the authored content specifies a table", ->
+
+    describe "with no graph", ->
+      beforeEach ->
+        # PENDING we don't have a converter for this yet, so use runtime json
+        SC.RunLoop.begin();
+        window.authoredActivityJSON =
+          {
+            "_id": "simple-table.df6",
+            "_rev": 1,
+            "data_format_version": 6,
+            "activity": {
+              "title": "Simple Table",
+              "url": "/shared/simple-table",
+              "owner": "shared",
+              "pages": [
+                "/shared/simple-table/page/1-table"
+              ],
+              "axes": [
+                "/shared/simple-table/axes/1",
+                "/shared/simple-table/axes/2"
+              ]
+            },
+            "pages": [
+              {
+                "name": "Table",
+                "url": "/shared/simple-table/page/1-table",
+                "activity": "/shared/simple-table",
+                "index": 1,
+                "introText": "in this activity....",
+                "steps": [
+                  "/shared/simple-table/page/1-table/step/1"
+                ],
+                "firstStep": "/shared/simple-table/page/1-table/step/1"
+              }
+            ],
+            "steps": [
+              {
+                "url": "/shared/simple-table/page/1-table/step/1",
+                "activityPage": "/shared/simple-table/page/1-table",
+                "paneConfig": "single",
+                "panes": {
+                  "single": {
+                    "type": "table",
+                    "data": "unordered-1",
+                    "annotations": []
+                  }
+                },
+                "isFinalStep": true,
+                "nextButtonShouldSubmit": true
+              }
+            ],
+            "units": [
+              {
+                "url": "/shared/simple-table/units/meters",
+                "activity": null,
+                "name": "meter",
+                "abbreviation": "m",
+                "pluralName": "meters"
+              },
+              {
+                "url": "/shared/simple-table/units/minutes",
+                "activity": null,
+                "name": "minute",
+                "abbreviation": "m",
+                "pluralName": "minutes"
+              }
+            ],
+            "axes": [
+              {
+                "url": "/shared/simple-table/axes/1",
+                "units": "/shared/simple-table/units/minutes",
+                "min": 0,
+                "max": 10,
+                "nSteps": 10,
+                "label": "Time"
+              },
+              {
+                "url": "/shared/simple-table/axes/2",
+                "units": "/shared/simple-table/units/meters",
+                "min": 0,
+                "max": 2000,
+                "nSteps": 10,
+                "label": "Position"
+              }
+            ],
+            "responseTemplates": [
+            ],
+            "tags": [
+            ],
+            "variables": [
+            ],
+            "datadefs": [
+              {
+                "type": "UnorderedDataPoints",
+                "records": [
+                  {
+                    "url": "/shared/simple-table/datadefs/unordered-1",
+                    "name": "unordered-1",
+                    "activity": "/shared/simple-table",
+                    "xUnits": "/shared/simple-table/units/minutes",
+                    "xLabel": "Time",
+                    "xShortLabel": "Time",
+                    "yUnits": "/shared/simple-table/units/meters",
+                    "yLabel": "Position",
+                    "yShortLabel": "Position",
+                    "points": [[1,200], [2,400], [3,600]]
+                  }
+                ]
+              }
+            ],
+            "annotations": []
+          }
+        integrationTestHelper.startApp()
+        Smartgraphs.statechart.sendAction 'loadWindowsAuthoredActivityJSON'
+        SC.RunLoop.end();
+
+      aTablePane = "#{aSmartgraphPane} .smartgraph-table"
+
+      it 'should display a table pane', ->
+        expect(aTablePane).toBeVisible()
+
+      it 'should display the authored headings', ->
+        expect(aTablePane).toHaveTheText("Time (m)")
+        expect(aTablePane).toHaveTheText("Position (m)")
+
+      it 'should display columns with the authored data', ->
+        expect("#{aTablePane} .table-column").toExistNTimes(2)
+        expect("#{aTablePane} .table-column:first").toHaveTheText("1")
+        expect("#{aTablePane} .table-column:first").toHaveTheText("2")
+        expect("#{aTablePane} .table-column:first").toHaveTheText("3")
+
+        expect("#{aTablePane} .table-column:last").toHaveTheText("200")
+        expect("#{aTablePane} .table-column:last").toHaveTheText("400")
+        expect("#{aTablePane} .table-column:last").toHaveTheText("600")
