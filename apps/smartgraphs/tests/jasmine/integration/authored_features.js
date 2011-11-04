@@ -5,7 +5,7 @@
       return this.addMatchers({
         toHaveTheText: function(text) {
           var elements;
-          elements = SC.CoreQuery(this.actual + ":contains('" + text + "'):visible");
+          elements = $(this.actual + ":contains('" + text + "'):visible");
           return elements.length > 0;
         },
         toBeEmpty2: function() {
@@ -13,7 +13,7 @@
         },
         toHaveTheImage: function(url) {
           var allImages, correctImages;
-          allImages = SC.CoreQuery(this.actual + " img");
+          allImages = $(this.actual + " img");
           correctImages = allImages.filter(function(i, img) {
             var scView;
             if (img.id) {
@@ -25,9 +25,12 @@
         }
       });
     });
+    afterEach(function() {
+      return integrationTestHelper.teardownApp();
+    });
     it("should have two pages with text", function() {
-      var authoredContent, converter, nextButton, theSmartGraphPane;
-      authoredContent = {
+      var nextButton, theSmartGraphPane;
+      integrationTestHelper.startAppWithContent({
         "type": "Activity",
         "name": "Maria’s Run",
         "pages": [
@@ -41,20 +44,17 @@
             "text": "look at the graph..."
           }
         ]
-      };
-      converter = require('./converter.js');
-      window.authoredActivityJSON = converter.convert(authoredContent);
+      });
       theSmartGraphPane = '.smartgraph-pane';
       expect(theSmartGraphPane).toHaveTheText('in this activity....');
-      helper.clickButton('Next');
+      integrationTestHelper.clickButton('Next');
       expect(theSmartGraphPane).toHaveTheText('look at the graph...');
-      nextButton = SC.CoreQuery(".sc-button-view:contains('Next'):visible");
-      expect(nextButton).toBeEmpty2();
-      return helper.teardownApp();
+      nextButton = $(".sc-button-view:contains('Next'):visible");
+      return expect(nextButton).toBeEmpty2();
     });
     return it("should have a page with an image", function() {
-      var authoredContent, converter, helper, theSmartGraphPane;
-      authoredContent = {
+      var theSmartGraphPane;
+      integrationTestHelper.startAppWithContent({
         "type": "Activity",
         "name": "Maria’s Run",
         "pages": [
@@ -73,14 +73,9 @@
             ]
           }
         ]
-      };
-      converter = require('./converter.js');
-      window.authoredActivityJSON = converter.convert(authoredContent);
-      helper = IntegrationTestHelper.create();
-      helper.setupApp();
+      });
       theSmartGraphPane = '.sc-view';
-      expect(theSmartGraphPane).toHaveTheImage('/example.jpg');
-      return helper.teardownApp();
+      return expect(theSmartGraphPane).toHaveTheImage('/example.jpg');
     });
   });
 }).call(this);
