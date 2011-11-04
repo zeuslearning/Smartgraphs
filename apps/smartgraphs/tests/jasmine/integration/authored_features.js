@@ -84,6 +84,33 @@
         });
       });
     });
+    describe("when the authored content specifies a page with an image pane", function() {
+      beforeEach(function() {
+        return integrationTestHelper.startAppWithContent({
+          "type": "Activity",
+          "name": "Maria’s Run",
+          "pages": [
+            {
+              "type": "Page",
+              "name": "Introduction",
+              "text": "in this activity....",
+              "panes": [
+                {
+                  "type": "ImagePane",
+                  "name": "Shoes",
+                  "url": "/example.jpg",
+                  "license": "Creative Commons BY-NC-ND 2.0",
+                  "attribution": "image courtesy flickr user altopower"
+                }
+              ]
+            }
+          ]
+        });
+      });
+      return it("should have a pane with the specified image url", function() {
+        return expect(aSmartgraphPane).toHaveTheImageUrl('/example.jpg');
+      });
+    });
     return describe("when the authored content specifies a graph", function() {
       describe("with no data", function() {
         beforeEach(function() {

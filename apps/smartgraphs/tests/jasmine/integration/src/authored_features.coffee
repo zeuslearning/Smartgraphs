@@ -61,30 +61,30 @@ describe "The Smartgraphs runtime, when loading content converted from the autho
         expect(nextButton).toBeEmpty2()
 
 
-  # describe "when the authored content specifies a page with an image pane", ->
-  #   beforeEach ->
-  #     integrationTestHelper.startAppWithContent
-  #       "type": "Activity"
-  #       "name": "Maria’s Run"
-  #       "pages": [
-  #         {
-  #           "type": "Page"
-  #           "name": "Introduction"
-  #           "text": "in this activity...."
-  #           "panes": [
-  #             {
-  #               "type": "ImagePane"
-  #               "name": "Shoes"
-  #               "url": "/example.jpg"
-  #               "license": "Creative Commons BY-NC-ND 2.0"
-  #               "attribution": "image courtesy flickr user altopower"
-  #             }
-  #           ]
-  #         }
-  #       ]
-  #
-  #   it "should have a pane with the specified image url", ->
-  #     expect(aSmartgraphPane).toHaveTheImageUrl '/example.jpg'
+  describe "when the authored content specifies a page with an image pane", ->
+    beforeEach ->
+      integrationTestHelper.startAppWithContent
+        "type": "Activity"
+        "name": "Maria’s Run"
+        "pages": [
+          {
+            "type": "Page"
+            "name": "Introduction"
+            "text": "in this activity...."
+            "panes": [
+              {
+                "type": "ImagePane"
+                "name": "Shoes"
+                "url": "/example.jpg"
+                "license": "Creative Commons BY-NC-ND 2.0"
+                "attribution": "image courtesy flickr user altopower"
+              }
+            ]
+          }
+        ]
+
+    it "should have a pane with the specified image url", ->
+      expect(aSmartgraphPane).toHaveTheImageUrl '/example.jpg'
 
   describe "when the authored content specifies a graph", ->
 
