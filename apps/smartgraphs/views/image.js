@@ -63,6 +63,9 @@ Smartgraphs.ImageView = SC.View.extend(
     },
 
     resizeImage: function () {
+      if (!this.getPath('parentView.parentView')){
+        return;
+      }
       var $pane = this.getPath('parentView.parentView').$(),
           $pv = this.get('parentView').$(),
           paneHeight = $pane.innerHeight(),
