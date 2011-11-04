@@ -3,6 +3,8 @@
 integrationTestHelper = SC.Object.create({
 
   converter: require('./converter.js'),
+  
+  authoredConent: null,
 
   startApp: function() {
     // Run the full app main method which would normally happen on page load
@@ -15,6 +17,7 @@ integrationTestHelper = SC.Object.create({
   },
 
   startAppWithContent: function (content) {
+    this.set('authoredContent', content);
     SC.RunLoop.begin();
     window.authoredActivityJSON = this.converter.convert(content);
     this.startApp();
