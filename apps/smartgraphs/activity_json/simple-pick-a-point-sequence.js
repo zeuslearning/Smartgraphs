@@ -26,7 +26,11 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
       "index": 1,
       "introText": "in this activity....",
       "steps": [
-        "/shared/pick-a-point-sequence/page/1-introduction/step/1"
+        "/shared/pick-a-point-sequence/page/1-introduction/step/1",
+        "/shared/pick-a-point-sequence/page/1-introduction/step/2",
+        "/shared/pick-a-point-sequence/page/1-introduction/step/3",
+        "/shared/pick-a-point-sequence/page/1-introduction/step/4",
+        "/shared/pick-a-point-sequence/page/1-introduction/step/5"
       ],
       "firstStep": "/shared/pick-a-point-sequence/page/1-introduction/step/1"
     }
@@ -35,6 +39,111 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
     {
       "url": "/shared/pick-a-point-sequence/page/1-introduction/step/1",
       "activityPage": "/shared/pick-a-point-sequence/page/1-introduction",
+      "beforeText": "Click the point...",
+      "paneConfig": "split",
+      "panes": {
+        "top": {
+          "type": "graph",
+          "title": "Position vs. Time",
+          "xAxis": "/shared/pick-a-point-sequence/axes/1",
+          "yAxis": "/shared/pick-a-point-sequence/axes/2",
+          "annotations": [],
+          "data": [
+            "datadef-1"
+          ]
+        },
+        "bottom": {
+          "type": "table",
+          "data": "datadef-1",
+          "annotations": []
+        }
+      },
+      "isFinalStep": false,
+      "submitButtonTitle": "OK",
+      "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/2"
+    },
+    {
+      "url": "/shared/pick-a-point-sequence/page/1-introduction/step/2",
+      "activityPage": "/shared/pick-a-point-sequence/page/1-introduction",
+      "beforeText": "Look at the graph...",
+      "paneConfig": "split",
+      "panes": {
+        "top": {
+          "type": "graph",
+          "title": "Position vs. Time",
+          "xAxis": "/shared/pick-a-point-sequence/axes/1",
+          "yAxis": "/shared/pick-a-point-sequence/axes/2",
+          "annotations": [],
+          "data": [
+            "datadef-1"
+          ]
+        },
+        "bottom": {
+          "type": "table",
+          "data": "datadef-1",
+          "annotations": []
+        }
+      },
+      "isFinalStep": false,
+      "submitButtonTitle": "OK",
+      "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/3"
+    },
+    {
+      "url": "/shared/pick-a-point-sequence/page/1-introduction/step/3",
+      "activityPage": "/shared/pick-a-point-sequence/page/1-introduction",
+      "beforeText": "In these two intervals....",
+      "paneConfig": "split",
+      "panes": {
+        "top": {
+          "type": "graph",
+          "title": "Position vs. Time",
+          "xAxis": "/shared/pick-a-point-sequence/axes/1",
+          "yAxis": "/shared/pick-a-point-sequence/axes/2",
+          "annotations": [],
+          "data": [
+            "datadef-1"
+          ]
+        },
+        "bottom": {
+          "type": "table",
+          "data": "datadef-1",
+          "annotations": []
+        }
+      },
+      "isFinalStep": false,
+      "submitButtonTitle": "OK",
+      "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/4"
+    },
+    {
+      "url": "/shared/pick-a-point-sequence/page/1-introduction/step/4",
+      "activityPage": "/shared/pick-a-point-sequence/page/1-introduction",
+      "beforeText": "If you look carefully, ....",
+      "paneConfig": "split",
+      "panes": {
+        "top": {
+          "type": "graph",
+          "title": "Position vs. Time",
+          "xAxis": "/shared/pick-a-point-sequence/axes/1",
+          "yAxis": "/shared/pick-a-point-sequence/axes/2",
+          "annotations": [],
+          "data": [
+            "datadef-1"
+          ]
+        },
+        "bottom": {
+          "type": "table",
+          "data": "datadef-1",
+          "annotations": []
+        }
+      },
+      "isFinalStep": false,
+      "submitButtonTitle": "OK",
+      "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/5"
+    },
+    {
+      "url": "/shared/pick-a-point-sequence/page/1-introduction/step/5",
+      "activityPage": "/shared/pick-a-point-sequence/page/1-introduction",
+      "beforeText": "Four minutes into her run ....",
       "paneConfig": "split",
       "panes": {
         "top": {
