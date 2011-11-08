@@ -104,8 +104,28 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
       ]
     }
   ],
-  "tags": [],
-  "annotations": [],
+  "tags": [
+    {
+      "url": "/shared/pick-a-point-sequence/tags/tag-1",
+      "activity": "/shared/pick-a-point-sequence",
+      "name": "tag-1"
+    }
+  ],
+  "annotations": [
+    {
+      "type": "HighlightedPoint",
+      "records": [
+        {
+          "url": "/shared/pick-a-point-sequence/annotations/highlighted-point-1",
+          "name": "highlighted-point-1",
+          "activity": "/shared/pick-a-point-sequence",
+          "datadefName": "datadef-1",
+          "tag": "/shared/pick-a-point-sequence/tags/tag-1",
+          "color": "#1f77b4"
+        }
+      ]
+    }
+  ],
   "variables": [],
   "units": []
 };
