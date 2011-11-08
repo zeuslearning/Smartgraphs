@@ -189,6 +189,13 @@ Smartgraphs.evaluator.defineOperators( function (def) {
   }).args(2);
 
 
+  def('coordinates=', function (name, x, y) {
+    var tag = Smartgraphs.activityObjectsController.findTag(name);
+
+    return tag && tag.get('x') === x && tag.get('y') === y;
+  }).args(3);
+
+
   def('pointInSegment', function (pointTagName, overlaySegmentName) {
     var tag     = Smartgraphs.activityObjectsController.findTag(pointTagName),
         segment = Smartgraphs.activityObjectsController.findAnnotation(overlaySegmentName),
