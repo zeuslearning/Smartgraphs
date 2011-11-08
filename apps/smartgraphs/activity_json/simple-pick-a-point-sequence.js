@@ -67,9 +67,15 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
           }
         }
       ],
-      "isFinalStep": false,
-      "submitButtonTitle": "OK",
-      "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/2"
+      "submitButtonTitle": "Check My Answer",
+      "responseBranches": [
+        {
+          "criterion": ["coordinates=", "tag-1", 4, 800],
+          "step": "/shared/pick-a-point-sequence/page/1-introduction/step/5"
+        }
+      ],
+      "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/2",
+      "isFinalStep": false
     },
     {
       "url": "/shared/pick-a-point-sequence/page/1-introduction/step/2",
@@ -102,9 +108,15 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
           }
         }
       ],
-      "isFinalStep": false,
-      "submitButtonTitle": "OK",
-      "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/3"
+      "submitButtonTitle": "Check My Answer",
+      "responseBranches": [
+        {
+          "criterion": ["coordinates=", "tag-1", 4, 800],
+          "step": "/shared/pick-a-point-sequence/page/1-introduction/step/5"
+        }
+      ],
+      "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/3",
+      "isFinalStep": false
     },
     {
       "url": "/shared/pick-a-point-sequence/page/1-introduction/step/3",
@@ -137,9 +149,15 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
           }
         }
       ],
-      "isFinalStep": false,
-      "submitButtonTitle": "OK",
-      "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/4"
+      "submitButtonTitle": "Check My Answer",
+      "responseBranches": [
+        {
+          "criterion": ["coordinates=", "tag-1", 4, 800],
+          "step": "/shared/pick-a-point-sequence/page/1-introduction/step/5"
+        }
+      ],
+      "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/4",
+      "isFinalStep": false
     },
     {
       "url": "/shared/pick-a-point-sequence/page/1-introduction/step/4",
@@ -163,9 +181,8 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
           "annotations": []
         }
       },
-      "isFinalStep": false,
-      "submitButtonTitle": "OK",
-      "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/5"
+      "nextButtonShouldSubmit": true,
+      "isFinalStep": true
     },
     {
       "url": "/shared/pick-a-point-sequence/page/1-introduction/step/5",
@@ -189,8 +206,8 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
           "annotations": []
         }
       },
-      "isFinalStep": true,
-      "nextButtonShouldSubmit": true
+      "nextButtonShouldSubmit": true,
+      "isFinalStep": true
     }
   ],
   "responseTemplates": [],
