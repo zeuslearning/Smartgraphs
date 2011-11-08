@@ -98,6 +98,10 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
             [
               3,
               600
+            ],
+            [
+              4,
+              800
             ]
           ]
         }
