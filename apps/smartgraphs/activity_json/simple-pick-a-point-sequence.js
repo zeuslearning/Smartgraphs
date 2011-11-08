@@ -47,7 +47,7 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
           "title": "Position vs. Time",
           "xAxis": "/shared/pick-a-point-sequence/axes/1",
           "yAxis": "/shared/pick-a-point-sequence/axes/2",
-          "annotations": [],
+          "annotations": ["highlighted-point-1"],
           "data": [
             "datadef-1"
           ]
@@ -55,9 +55,18 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
         "bottom": {
           "type": "table",
           "data": "datadef-1",
-          "annotations": []
+          "annotations": ["highlighted-point-1"]
         }
       },
+      "tools": [
+        {
+          "name": "tagging",
+          "setup": {
+            "tag": "tag-1",
+            "data": "datadef-1"
+          }
+        }
+      ],
       "isFinalStep": false,
       "submitButtonTitle": "OK",
       "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/2"
@@ -73,7 +82,7 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
           "title": "Position vs. Time",
           "xAxis": "/shared/pick-a-point-sequence/axes/1",
           "yAxis": "/shared/pick-a-point-sequence/axes/2",
-          "annotations": [],
+          "annotations": ["highlighted-point-1"],
           "data": [
             "datadef-1"
           ]
@@ -81,9 +90,18 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
         "bottom": {
           "type": "table",
           "data": "datadef-1",
-          "annotations": []
+          "annotations": ["highlighted-point-1"]
         }
       },
+      "tools": [
+        {
+          "name": "tagging",
+          "setup": {
+            "tag": "tag-1",
+            "data": "datadef-1"
+          }
+        }
+      ],
       "isFinalStep": false,
       "submitButtonTitle": "OK",
       "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/3"
@@ -99,7 +117,7 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
           "title": "Position vs. Time",
           "xAxis": "/shared/pick-a-point-sequence/axes/1",
           "yAxis": "/shared/pick-a-point-sequence/axes/2",
-          "annotations": [],
+          "annotations": ["highlighted-point-1"],
           "data": [
             "datadef-1"
           ]
@@ -107,9 +125,18 @@ Smartgraphs.activityDocs["/shared/pick-a-point-sequence"] =
         "bottom": {
           "type": "table",
           "data": "datadef-1",
-          "annotations": []
+          "annotations": ["highlighted-point-1"]
         }
       },
+      "tools": [
+        {
+          "name": "tagging",
+          "setup": {
+            "tag": "tag-1",
+            "data": "datadef-1"
+          }
+        }
+      ],
       "isFinalStep": false,
       "submitButtonTitle": "OK",
       "defaultBranch": "/shared/pick-a-point-sequence/page/1-introduction/step/4"
