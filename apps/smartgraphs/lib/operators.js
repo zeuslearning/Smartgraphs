@@ -10,6 +10,12 @@ sc_require('lib/evaluator');
 
 Smartgraphs.evaluator.defineOperators( function (def) {
 
+  // Returns true if the argument is a string that represents a valid, finite number (or is a valid, finite number)
+  function isNumeric(val) {
+    // see http://stackoverflow.com/questions/18082/validate-numbers-in-javascript-isnumeric/1830844#1830844
+    return !isNaN(parseFloat(val)) && isFinite(val);
+  }
+
   function checkNumeric() {
     for (var i = 0; i < arguments.length; i++) {
       if (typeof arguments[i] !== 'number' || isNaN(arguments[i])) {
@@ -41,11 +47,21 @@ Smartgraphs.evaluator.defineOperators( function (def) {
 
 
   def('=', function (x, y) {
-    return x === y;
+    // don't coerce the arguments to be numbers if they're *both* strings
+    if (isNumeric(x) && isNumeric(y) && !(typeof x === 'string' && typeof y === 'string') ) {
+      return parseFloat(x, 10) === parseFloat(y, 10);
+    }
+    else {
+      return x === y;
+    }
   }).args(2);
 
   def('!=', function (x, y) {
-    return x != y;
+    // as with =, don't coerce the arguments to be numbers if they're *both* strings
+    if (isNumeric(x) && isNumeric(y) && !(typeof x === 'string' && typeof y === 'string') ) {
+      return parseFloat(x, 10) !== parseFloat(y, 10);
+    }
+    return x !== y;
   }).args(2);
 
   def('>', function (x, y) {
@@ -101,10 +117,7 @@ Smartgraphs.evaluator.defineOperators( function (def) {
   }).args(1);
 
 
-  def('isNumeric', function (val) {
-    // see http://stackoverflow.com/questions/18082/validate-numbers-in-javascript-isnumeric/1830844#1830844
-    return !isNaN(parseFloat(val)) && isFinite(val);
-  }).args(1);
+  def('isNumeric', isNumeric).args(1);
 
 
   // get a response field using 1-based index of response fields
