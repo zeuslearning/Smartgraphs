@@ -51,13 +51,13 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
   x: function () {
     // in IE 8 and 9, parentX is sometimes undefined
     var parentX = this.get('parentX') || 0;
-    return  parentX + this.get('parentMargin');
+    return  parentX + this.get('parentMargin') || 0;
   }.property('parentX', 'parentMargin').cacheable(),
 
   y: function () {
     // in IE 8 and 9, parentX is sometimes undefined
     var parentY = this.get('parentY') || 0;
-    return parentY + this.get('parentMargin');
+    return parentY + this.get('parentMargin') || 0;
   }.property('parentY', 'parentMargin').cacheable(),
 
   raphTextY: function () {
