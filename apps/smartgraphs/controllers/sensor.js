@@ -78,7 +78,19 @@ Smartgraphs.sensorController = SC.ObjectController.create(
     
     if ( !this._appletView ) {
       this._appletView = Smartgraphs.appletPage.sensorAppletView.create();
+      SC.RunLoop.begin();
       Smartgraphs.mainPage.get('mainPane').appendChild(this._appletView);
+      SC.RunLoop.end();
+
+      var $applet     = $('applet'),
+          nAppletTags = $applet.length,
+          appletHtml  = $('applet').parent().html();
+
+      $.post('/applet-tag-debug-info', {
+        activity:    Smartgraphs.activityController.get('id'),
+        nAppletTags: nAppletTags,
+        appletHtml:  appletHtml
+      });
     }
 
     if (this.get('sensorIsReady')) {
