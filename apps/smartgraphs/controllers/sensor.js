@@ -86,7 +86,7 @@ Smartgraphs.sensorController = SC.ObjectController.create(
           nAppletTags = $applet.length,
           appletHtml  = $('applet').parent().html();
 
-      $.post('/applet-tag-debug-info', {
+      $.get('/applet-tag-debug-info', {
         activity:    Smartgraphs.activityController.get('id'),
         nAppletTags: nAppletTags,
         appletHtml:  appletHtml
