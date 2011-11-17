@@ -15,9 +15,9 @@
 
 Smartgraphs.SENSOR = SC.State.extend(
 /** @scope Smartgraphs.SENSOR.prototype */ {
-  
+
   initialSubstate: 'SENSOR_DEFAULT',
-  
+
   enterState: function () {
     var enableSucceeded = Smartgraphs.sensorController.enableInput();
     if ( !enableSucceeded ) {
@@ -25,49 +25,49 @@ Smartgraphs.SENSOR = SC.State.extend(
       this.gotoState('ACTIVITY_STEP_DEFAULT');
     }
   },
-  
+
   exitState: function () {
     Smartgraphs.sensorController.disableInput();
     Smartgraphs.activityViewController.hideControls();
   },
-  
+
   // ..........................................................
   // ACTIONS
   //
-  
+
   sensorHasLoaded: function () {
     this.gotoState('SENSOR_LOADED');
     return YES;
   },
-  
+
   waitForSensorToLoad: function () {
     this.gotoState('SENSOR_LOADING');
     return YES;
   },
-  
-  
+
+
   SENSOR_DEFAULT: SC.State.design(),
-  
-  
+
+
   SENSOR_LOADING: SC.State.design({
     enterState: function () {
       Smartgraphs.activityViewController.showSensorLoadingView(Smartgraphs.sensorController.get('pane'));
     }
   }),
-  
-  
+
+
   SENSOR_LOADED: SC.State.design({
 
     enterState: function () {
       Smartgraphs.activityViewController.revealAllControls();
       Smartgraphs.activityViewController.showControls(Smartgraphs.sensorController.get('pane'));
     },
-    
+
     initialSubstate: 'SENSOR_READY',
 
-    
+
     SENSOR_READY: SC.State.design({
-      
+
       enterState: function () {
         Smartgraphs.activityViewController.highlightStartControl();
       },
@@ -81,13 +81,13 @@ Smartgraphs.SENSOR = SC.State.extend(
         return YES;
       }
     }),
-    
-    
+
+
     SENSOR_RECORDING:  SC.State.design({
-      
+
       enterState: function () {
         Smartgraphs.sensorController.startRecording();
-        Smartgraphs.activityViewController.highlightStopControl();   
+        Smartgraphs.activityViewController.highlightStopControl();
       },
 
       exitState: function () {
@@ -103,10 +103,10 @@ Smartgraphs.SENSOR = SC.State.extend(
         return YES;
       }
     }),
-    
-    
+
+
     SENSOR_STOPPED: SC.State.design({
-      
+
       enterState: function () {
         Smartgraphs.activityViewController.highlightClearControl();
       },
@@ -123,5 +123,5 @@ Smartgraphs.SENSOR = SC.State.extend(
     })
 
   })
-  
+
 });
