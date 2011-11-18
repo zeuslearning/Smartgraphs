@@ -83,7 +83,6 @@ Smartgraphs.sensorTool = Smartgraphs.Tool.create(
   },
 
   clearRecordedData: function () {
-    console.log('clearRecordedData');
     this.get('datadef').clearPoints();
   },
 
