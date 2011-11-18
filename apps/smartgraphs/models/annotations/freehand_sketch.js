@@ -38,13 +38,10 @@ Smartgraphs.FreehandSketch = Smartgraphs.Annotation.extend(
   },
 
   addPoint: function (x, y) {
-    console.log("addPoint(%2f, %2f)", x, y);
     this.get('points').pushObject([x, y]);
   },
 
   updateLatestPoint: function (x, y) {
-    console.log("updateLatestPoint(%2f, %2f)", x, y);
-
     var points = this.get('points'),
         lastIndex = points.get('length') - 1;
 
