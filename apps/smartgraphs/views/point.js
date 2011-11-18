@@ -109,11 +109,9 @@ Smartgraphs.PointView = RaphaelViews.RaphaelView.extend(
     var coords = graphView.coordinatesForPoint(x, y);
 
     if (firstTime) {
-      window.initialRenders++;
       context.callback(this, this.renderCallback, coords.x, coords.y, radius, fill, stroke);
     }
     else {
-      window.reRenders++;
       var circle = context.raphael();
       circle.attr({ cx: coords.x, cy: coords.y, r: radius, fill: fill, stroke: stroke });
     }

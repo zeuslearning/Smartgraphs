@@ -47,13 +47,10 @@ Smartgraphs.UnorderedDataPoints = Smartgraphs.Datadef.extend(
   },
 
   addPoint: function (x, y) {
-    console.log("addPoint(%f, %f)", x, y);
-    if (typeof window.nPoints !== 'undefined') window.nPoints++;
     this.get('points').pushObject([x, y]);
   },
 
   clearPoints: function () {
-    console.log("clearPoints");
     this.set('points', []);
   }
 

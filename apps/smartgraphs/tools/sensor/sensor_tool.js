@@ -24,10 +24,9 @@ Smartgraphs.sensorTool = Smartgraphs.Tool.create(
   xMin: null,
   xMax: null,
 
-  appletView: null,
   sensorIsReady: NO,
   nSamples: 0,
-  downsampleRatio: 1,     // don't adjust for IE...?
+  downsampleRatio: 2,     // don't adjust for IE...?
 
   /**
     The time interval between data points returned by the sensor
@@ -61,8 +60,6 @@ Smartgraphs.sensorTool = Smartgraphs.Tool.create(
     this.set('xMin', SC.none(args.xMin) ? xAxis && xAxis.get('min') : args.xMin);
     this.set('xMax', SC.none(args.xMax) ? xAxis && xAxis.get('max') : args.xMax);
 
-    if (!this.get('appletView')) this.set('appletView', Smartgraphs.appletPage.sensorAppletView.create());
-
     Smartgraphs.statechart.gotoState(this.get('state'));
   },
 
@@ -71,22 +68,21 @@ Smartgraphs.sensorTool = Smartgraphs.Tool.create(
     this.set('datdef', null);
     this.set('controlsPane', null);
     this.set('graphController', null);
-    // don't clear appletView or sensorIsReady!
+    // don't clear sensorIsReady!
   },
 
   startRecording: function () {
     this.setPath('datadef.isStreaming', YES);
     this._nSamples = 0;
-    this.get('appletView').start();
+    Smartgraphs.sensorAppletController.start();
   },
 
   stopRecording: function () {
     this.setPath('datadef.isStreaming', NO);
-    this.get('appletView').stop();
+    Smartgraphs.sensorAppletController.stop();
   },
 
   clearRecordedData: function () {
-    console.log('clearRecordedData');
     this.get('datadef').clearPoints();
   },
 

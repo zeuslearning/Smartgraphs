@@ -90,7 +90,6 @@ Smartgraphs.sessionController = SC.ObjectController.create(
       // hack hack hack ... (permanently disable observers for these records)
       var rec = Smartgraphs.store.materializeRecord(storeKey);
       if (rec) {
-        console.log('destroying record %s of type ', rec.get('id'), Smartgraphs.store.recordTypeFor(storeKey));
         rec.storeDidChangeProperties = function () {};
         rec._notifyPropertyObservers = function () {};
       }
