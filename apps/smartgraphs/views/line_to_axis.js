@@ -31,7 +31,7 @@ Smartgraphs.LineToAxisView = RaphaelViews.RaphaelView.extend(
    even if it is not onscreen and not in the DOM (this will change
    later in the SC framework)
    */
-  displayProperties: 'item.point.x item.point.y'.w(),
+  displayProperties: 'item.x item.y'.w(),
 
   /**
    We are using renderCallback in views to call non-SC render methods like
@@ -69,18 +69,18 @@ Smartgraphs.LineToAxisView = RaphaelViews.RaphaelView.extend(
     /** Collect Raphael attributes for the linePath into attrs */
     var attrs;
     // TODO: Handle points not in the 1st quadrant and handle lines to the x-axis
-    var startingPoint = annotation.get('point');
-    if (startingPoint) {
-      var linePathStartingCoords = graphView.coordinatesForPoint(startingPoint.get('x'), startingPoint.get('y'));
+    var startingPoint = {x: annotation.get('x'), y: annotation.get('y')};
+    if (startingPoint.x != null && startingPoint.y != null) {
+      var linePathStartingCoords = graphView.coordinatesForPoint(startingPoint.x, startingPoint.y);
       if (linePathStartingCoords) {
         var linePathEndingCoords;
         var axis = annotation.get('axis');
         if (axis == "x") {
           // Make a linePathEndingCoords that matches point on the x-axis
-          linePathEndingCoords = graphView.coordinatesForPoint(startingPoint.get('x'), 0);
+          linePathEndingCoords = graphView.coordinatesForPoint(startingPoint.x, 0);
         } else {
           // By default, make a linePathEndingCoords that matches point on the y-axis
-          linePathEndingCoords = graphView.coordinatesForPoint(0, startingPoint.get('y'));
+          linePathEndingCoords = graphView.coordinatesForPoint(0, startingPoint.y);
         }
 
         if (linePathEndingCoords) {

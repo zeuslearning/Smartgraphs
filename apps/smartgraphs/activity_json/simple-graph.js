@@ -43,7 +43,7 @@ Smartgraphs.activityDocs["/shared/simple-graph"] =
           "xAxis": "/shared/simple-graph/axes/12s",
           "yAxis": "/shared/simple-graph/axes/10m",
           "data": ["position-data"],
-          "annotations": []
+          "annotations": ['circled-point-2']
         }
       },
       "beforeText": "<p>Check out this data!</p>",
@@ -104,5 +104,21 @@ Smartgraphs.activityDocs["/shared/simple-graph"] =
       ]
     }
   ],
-  "annotations": []
+  "annotations": [
+     {
+       "type": "LineToAxis",
+       "records": [
+         {
+           "url": "/shared/pick-a-point-sequence/annotations/circled-point-2",
+           "name": "circled-point-2",
+           "activity": "/shared/simple-graph",
+           "datadefName": "position-data",
+           "color": "#ff0000",
+           "axis": "x",
+           "xRecord": 3.25,
+           "yRecord": 0.34
+         }
+       ]
+     }
+   ],
 };
