@@ -93,7 +93,7 @@ Smartgraphs.sensorAppletController = SC.Object.create(
   },
 
   initializeSensorInterface: function() {
-    var listener       = this.get('listenerPath'),
+    var listenerPath   = this.get('listenerPath'),
         appletInstance = this.get('appletInstance'),
         appletIsReady  = false,
         self           = this;
@@ -106,7 +106,7 @@ Smartgraphs.sensorAppletController = SC.Object.create(
     //      IE thinks that it's an error to access a java method as a property instead of calling it.
 
     try {
-      appletIsReady = appletInstance.initSensorInterface(listener);
+      appletIsReady = appletInstance.initSensorInterface(listenerPath);
     } catch (e) {
       // Do nothing--we'll try again in the next timer interval.
     }
