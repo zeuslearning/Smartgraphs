@@ -26,7 +26,7 @@ Smartgraphs.sensorTool = Smartgraphs.Tool.create(
 
   sensorIsReady: NO,
   nSamples: 0,
-  downsampleRatio: 1,     // don't adjust for IE...?
+  downsampleRatio: 2,     // don't adjust for IE...?
 
   /**
     The time interval between data points returned by the sensor
@@ -68,7 +68,7 @@ Smartgraphs.sensorTool = Smartgraphs.Tool.create(
     this.set('datdef', null);
     this.set('controlsPane', null);
     this.set('graphController', null);
-    // don't clear appletView or sensorIsReady!
+    // don't clear sensorIsReady!
   },
 
   startRecording: function () {
