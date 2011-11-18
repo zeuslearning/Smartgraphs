@@ -41,11 +41,7 @@ Smartgraphs.SENSOR_TOOL = SC.State.extend(
   SENSOR_START: SC.State.design({
 
     enterState: function () {
-      Smartgraphs.sensorAppletController.set('listenerPath', 'Smartgraphs.sensorTool');
-
-      if ( ! Smartgraphs.sensorAppletController.get('isAppended') ) {
-        Smartgraphs.sensorAppletController.append();
-      }
+      Smartgraphs.sensorAppletController.append({listenerPath: 'Smartgraphs.sensorTool'});
 
       if (Smartgraphs.sensorTool.get('sensorIsReady')) {
         Smartgraphs.statechart.sendAction('sensorHasLoaded');

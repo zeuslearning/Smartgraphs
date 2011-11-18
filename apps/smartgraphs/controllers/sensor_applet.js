@@ -22,6 +22,12 @@
 Smartgraphs.sensorAppletController = SC.Object.create(
 /** @scope Smartgraphs.sensorAppletController.prototype */ {
 
+  sensorState:  'not loaded',
+  isAppended:   false,
+
+  // Before appending the applet, set this value with the path to an object that will receive applet callbacks.
+  listenerPath: 'Smartgraphs.sensorAppletController',
+
   appletId:     'sg-applet',
   classNames:   'applet sensor-applet',
 
@@ -38,7 +44,6 @@ Smartgraphs.sensorAppletController = SC.Object.create(
   code:         'org.concord.sensor.applet.OTSensorApplet',
   codebase:     '/jnlp',
   resourcePath: '/distance.otml',
-  listenerPath: null,
 
   html: function() {
     return [
@@ -63,12 +68,20 @@ Smartgraphs.sensorAppletController = SC.Object.create(
 		return $('#' + this.get('appletId'))[0];
 	}.property(),
 
-  sensorState: 'not loaded',
-  isAppended: false,
+  _sensorAppletTimer: null,
 
-  _sensorAppletTimer: false,
+  /**
+    Append the applet tag to the DOM, if it hasn't been appended already.
+    Accepts an optional hash argument, 'listenerPath', that will be used to update the listenerPath property before
+    appending the applet.
+  */
+  append: function(args) {
+    if (this.get('isAppended')) return;
 
-  append: function() {
+    if (args && args.listenerPath) {
+      this.set('listenerPath', args.listenerPath);
+    }
+
     $('body').append( this.get('html') );
     this.startSensorAppletInitialization();
     this.set('isAppended', true);
@@ -82,7 +95,7 @@ Smartgraphs.sensorAppletController = SC.Object.create(
   initializeSensorInterface: function() {
     var listener       = this.get('listenerPath'),
         appletInstance = this.get('appletInstance'),
-        appletReady    = false,
+        appletIsReady  = false,
         self           = this;
 
     // Try to call initSensorInterface, but note
@@ -93,15 +106,15 @@ Smartgraphs.sensorAppletController = SC.Object.create(
     //      IE thinks that it's an error to access a java method as a property instead of calling it.
 
     try {
-      appletReady = appletInstance.initSensorInterface(listener);
+      appletIsReady = appletInstance.initSensorInterface(listener);
     } catch (e) {
       // Do nothing--we'll try again in the next timer interval.
     }
 
-    if (appletReady) {
+    if (appletIsReady) {
       if (this._sensorAppletTimer) {
         window.clearInterval(this._sensorAppletTimer);
-        this._sensorAppletTimer = false;
+        this._sensorAppletTimer = null;
       }
       this.set('sensorState', 'ready');
     }
@@ -125,6 +138,32 @@ Smartgraphs.sensorAppletController = SC.Object.create(
   reset: function() {
     this.set('sensorState', 'ready');
     this.get('appletInstance').stopCollecting();
+  },
+
+  /**
+    Dummy applet callback. Implement a method with this signature in the object pointed to by 'listenerPath'.
+  */
+  sensorsReady: function () {
+    this.throwListenerPathError();
+  },
+
+  /**
+    Dummy applet callback. Implement a method with this signature in the object pointed to by 'listenerPath'.
+  */
+  dataReceived: function(type, numPoints, data) {
+    this.throwListenerPathError();
+  },
+
+  /**
+    Dummy applet callback. Implement a method with this signature in the object pointed to by 'listenerPath'.
+    (However, note that the applet does not send useful information to this callback yet.)
+  */
+  dataStreamEvent: function () {
+    this.throwListenerPathError();
+  },
+
+  throwListenerPathError: function() {
+    throw new Error("The sensor applet was appended without setting listenerPath to point to the object that will receive applet callbacks.");
   }
 
 });
