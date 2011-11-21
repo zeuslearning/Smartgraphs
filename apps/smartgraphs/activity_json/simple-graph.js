@@ -113,7 +113,7 @@ Smartgraphs.activityDocs["/shared/simple-graph"] =
            "name": "circled-point-2",
            "activity": "/shared/simple-graph",
            "datadefName": "position-data",
-           "color": "#ff0000",
+           "color": "#00ff00",
            "axis": "x",
            "xRecord": 3.25,
            "yRecord": 0.34

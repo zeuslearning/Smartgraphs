@@ -21,6 +21,7 @@ Smartgraphs.LineToAxisView = RaphaelViews.RaphaelView.extend(
   // TODO: update these defaults (and also displayProperties)
   radius: 8,
   defaultStroke: '#aa0000',
+  strokeBinding: '.item.color',
   defaultStrokeWidth: 2,
   defaultStrokeOpacity: 0.7,
   fill: '#ffffff',
@@ -31,7 +32,7 @@ Smartgraphs.LineToAxisView = RaphaelViews.RaphaelView.extend(
    even if it is not onscreen and not in the DOM (this will change
    later in the SC framework)
    */
-  displayProperties: 'item.x item.y'.w(),
+  displayProperties: 'item.x item.y stroke'.w(),
 
   /**
    We are using renderCallback in views to call non-SC render methods like
@@ -52,7 +53,7 @@ Smartgraphs.LineToAxisView = RaphaelViews.RaphaelView.extend(
     }
     linePath.attr({
       'stroke-width': this.defaultStrokeWidth,
-      'stroke': this.defaultStroke,
+      'stroke': (stroke = this.get('stroke')) != null ? stroke : this.defaultStroke,
       'stroke-opacity': this.defaultStrokeOpacity
     }); //.toBack();
     //    console.log("renderCallback returning linePath:", linePath);
