@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/concord-consortium/capybara-testrunner.git
-  revision: 0a268e37ddd0aabcea237f392744465d5a3d4cd6
+  revision: d8a4e8e66ee3b1d87a9d6295a746cd72c4cbf08c
   branch: gem
   specs:
     sc-testdriver (0.1.1)
