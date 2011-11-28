@@ -211,7 +211,28 @@ Smartgraphs.evaluator.defineOperators( function (def) {
   def('coordinatesInRange', function (name, xMin, yMin, xMax, yMax) {
     var tag = Smartgraphs.activityObjectsController.findTag(name);
 
-    return tag && tag.get('x') >= xMin && tag.get('x') <= xMax && tag.get('y') >= yMin && tag.get('y') <= yMax;
+    var match = true;
+    if (!tag) {
+      match = false;
+    }
+
+    if (match && !!xMin) {
+      match = tag.get('x') >= xMin;
+    }
+
+    if (match && !!yMin) {
+      match = tag.get('y') >= yMin;
+    }
+
+    if (match && !!xMax) {
+      match = tag.get('x') >= xMax;
+    }
+
+    if (match && !!yMax) {
+      match = tag.get('y') >= yMax;
+    }
+
+    return match;
   }).args(5);
 
 
