@@ -208,6 +208,12 @@ Smartgraphs.evaluator.defineOperators( function (def) {
     return tag && tag.get('x') === x && tag.get('y') === y;
   }).args(3);
 
+  def('coordinatesInRange', function (name, xMin, yMin, xMax, yMax) {
+    var tag = Smartgraphs.activityObjectsController.findTag(name);
+
+    return tag && tag.get('x') >= xMin && tag.get('x') <= xMax && tag.get('y') >= yMin && tag.get('y') <= yMax;
+  }).args(5);
+
 
   def('pointInSegment', function (pointTagName, overlaySegmentName) {
     var tag     = Smartgraphs.activityObjectsController.findTag(pointTagName),
