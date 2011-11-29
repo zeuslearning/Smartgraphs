@@ -8,20 +8,20 @@ Smartgraphs.AboutPane = SC.View.extend({
                 "expressed in this material are those of the author(s) "+
                 "and do not necessarily reflect the views of the National "+
                 "Science Foundation. The software is copyrighted by "+
-                "<a target='blank' href='http://www.concord.org/software-license'>"+
+                "<a target='_blank' href='http://www.concord.org/software-license'>"+
                 "the Concord Consortium under the GNU Lesser General Public License</a>, "+
                 "which allows you to use and to distribute this software. " ,
+  
+    authorInfo: "The SmartGraphs team at the Concord Consortium. ",
 
-  activityInfo: "The SmartGraphs team at the Concord Consortium. "+
-                "The activity is copyrighted by the Concord Consortium "+
-                "under the Creative Commons "+
-                "<a target='blank' href='http://creativecommons.org/licenses/by-sa/3.0/'>"+
+  activityInfo: "The activity is available under the Creative Commons "+
+                "<a target='_blank' href='http://creativecommons.org/licenses/by-sa/3.0/'>"+
                 "Attribution-Share Alike 3.0 Unported license</a>, "+
                 "which allows you to use and to distribute this activity.",
 
   render: function(context, firstTime) {
     context.push(
-      "<table width='100%'>",
+      "<table>",
         "<tr>",
           "<td><image src='", sc_static('images/concord.png'), "'/></td>",
           "<td><h2>SmartGraphs</h2><h3>A Project of the Concord Consortium</h3></td>",
@@ -32,7 +32,7 @@ Smartgraphs.AboutPane = SC.View.extend({
         "</tr>",
         "<tr>",
           "<td><image src='", sc_static('images/smartgraphs.png'), "'/></td>",
-          "<td><h3>This SmartGraphs activity was developed by:</h3>", this.get('activityInfo'), "</td>",
+          "<td><h3>This SmartGraphs activity was developed by:</h3>", this.get('authorInfo'), this.get('activityInfo'), "</td>",
         "</tr>",
       "</table>"
     );
