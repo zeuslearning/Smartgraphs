@@ -225,11 +225,11 @@ Smartgraphs.evaluator.defineOperators( function (def) {
     }
 
     if (match && !!xMax) {
-      match = tag.get('x') >= xMax;
+      match = tag.get('x') <= xMax;
     }
 
     if (match && !!yMax) {
-      match = tag.get('y') >= yMax;
+      match = tag.get('y') <= yMax;
     }
 
     return match;
