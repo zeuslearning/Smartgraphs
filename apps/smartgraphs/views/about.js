@@ -51,7 +51,7 @@ Smartgraphs.AboutPane.show  = function(aboutText) {
       layout      : { right: 0, left: 0, top:0, bottom: 0},
       childViews  : 'closeButton'.w(),
       closeButton : SC.ButtonView.design({
-          layout    : { centerX: 0, top: 5, height: 24, width: 80 },
+          layout    : { centerX: 0, bottom: 5, height: 24, width: 80 },
           title     : 'close',
           isVisible : YES,
           isEnabled : YES,
