@@ -17,35 +17,40 @@ Smartgraphs.mainPage = SC.Page.design({
 
     topToolbar: SC.ToolbarView.design({
       anchorLocation: SC.ANCHOR_TOP,
-
-      childViews: ['title', 'editButton', 'runButton', 'saveButton', 'savingMessage'],
-
+      
+      childViews: ['title', 'runButton', 'saveButton', 'savingMessage', 'aboutButton'],
+      
       title: SC.LabelView.design({
         layout: { centerY: 0, height: 24, left: 8, width: 400 },
         controlSize: SC.LARGE_CONTROL_SIZE,
         fontWeight: SC.BOLD_WEIGHT,
         valueBinding:   'Smartgraphs.activityController.title'
       }),
-
-      editButton: SC.ButtonView.design({
+      
+      // editButton: SC.ButtonView.design({
+      //   layout: { right: 20, centerY: 0, height: 24, width: 80 },
+      //   isVisibleBinding: 'Smartgraphs.toolbarController.shouldShowEditButton',
+      //   title: 'Edit',
+      //   action: 'openAuthorView'
+      // }),
+      
+      aboutButton: SC.ButtonView.design({
         layout: { right: 20, centerY: 0, height: 24, width: 80 },
-        shouldShowEditButtonBinding: 'Smartgraphs.toolbarController.shouldShowEditButton',
-        isVisible: function () {
-          return Smartgraphs.toolbarController.get('shouldShowEditButton') && Smartgraphs.get('allowAuthoring');
-        }.property('shouldShowEditButton'),
-        title: 'Edit',
-        action: 'openAuthorView'
+        isVisibleBinding: 'Smartgraphs.toolbarController.shouldShowAboutButton',
+        isEnabled:  'Smartgraphs.toolbarController.shouldShowAboutButton',
+        title: 'Credits',
+        action: 'Smartgraphs.aboutController.showAbout'
       }),
 
       runButton: SC.ButtonView.design({
-        layout: { right: 20, centerY: 0, height: 24, width: 80 },
+        layout: { right: 120, centerY: 0, height: 24, width: 80 },
         isVisibleBinding: 'Smartgraphs.toolbarController.shouldShowRunButton',
         title: 'Run',
         action: 'runActivity'
       }),
 
       saveButton: SC.ButtonView.design({
-        layout: { right: 120, centerY: 0, height: 24, width: 80 },
+        layout: { right: 220, centerY: 0, height: 24, width: 80 },
         isVisibleBinding: 'Smartgraphs.toolbarController.shouldShowSaveButton',
         isEnabledBinding: 'Smartgraphs.activityController.isDirty',
         title: 'Save',
