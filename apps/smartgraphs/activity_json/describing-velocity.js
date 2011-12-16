@@ -63,7 +63,8 @@ Smartgraphs.activityDocs["/shared/describing-velocity"] =
       "index": 3,
       "introText": "<h1>Label the Position-Time Graph</h1>",
       "steps": [
-        "/shared/describing-velocity/page/3/step/1"
+        "/shared/describing-velocity/page/3/step/1",
+        "/shared/describing-velocity/page/3/step/2"
       ],
       "firstStep": "/shared/describing-velocity/page/3/step/1"
     },
@@ -429,20 +430,13 @@ Smartgraphs.activityDocs["/shared/describing-velocity"] =
           "annotations": []
         }
       },
-      "beforeText": "<p>Here is your earlier description of the car's journey:</p><p>&quot;%@&quot;</p><p><b>Start</b> the animation again and <b>observe</b> the resulting position-time graph for the car's motion.</p><p>Using key words from your descriptions, <b>label</b> the motions that occurred during each segment of the position-time graph. You should have three labels, one for each motion.</p><p>To add a label, <b>click</b> where you want to add a label, and <b>start typing</b>.</p>",
+      "beforeText": "<p>Here is your earlier description of the car's journey:</p><p>&quot;%@&quot;</p><p><b>Start</b> the animation again and <b>observe</b> the resulting position-time graph for the car's motion.</p>",
       "substitutedExpressions": ["student-description"],
-      "submissibilityDependsOn": ["annotation", "students-segment-labels"],
-      "submissibilityCriterion": [">", ["numberOfLabels", "students-segment-labels"], 0],
-      "hideSubmitButton": true,
-      "nextButtonShouldSubmit": true,
-      "isFinalStep": true,
+      "submissibilityCriterion": [">", ["playCount"], 0],
+      "hideSubmitButton": false,
+      "submitButtonTitle": "OK",
+      "defaultBranch": "/shared/describing-velocity/page/3/step/2",
       "tools": [
-        { "name": "label",
-          "setup": {
-            "pane": "top",
-            "labelSetName": "students-segment-labels"
-          }
-        },
         { "name": "animation",
           "setup": {
             "pane": "top",
@@ -473,7 +467,38 @@ Smartgraphs.activityDocs["/shared/describing-velocity"] =
       ]
     },
 
-
+    {
+      "url": "/shared/describing-velocity/page/3/step/2",
+      "activityPage": "/shared/describing-velocity/page/3",
+      "paneConfig": "split",
+      "panes": {
+        "top": {
+          "type": "graph",
+          "title": "Position vs. Time",
+          "xAxis": "/shared/describing-velocity/axes/9s",
+          "yAxis": "/shared/describing-velocity/axes/40m",
+          "data": [
+            ["position-data", { "point-type": "none", "line-type": "connected" }]
+          ],
+          "annotations": []
+        }
+      },
+      "beforeText": "<p>Here is your earlier description of the car's journey:</p><p>&quot;%@&quot;</p><p>Using key words from your descriptions, <b>label</b> the motions that occurred during each segment of the position-time graph. You should have three labels, one for each motion.</p><p>To add a label, <b>click</b> where you want to add a label, and <b>start typing</b>.</p>",
+      "substitutedExpressions": ["student-description"],
+      "submissibilityDependsOn": ["annotation", "students-segment-labels"],
+      "submissibilityCriterion": [">", ["numberOfLabels", "students-segment-labels"], 0],
+      "hideSubmitButton": true,
+      "nextButtonShouldSubmit": true,
+      "isFinalStep": true,
+      "tools": [
+        { "name": "label",
+          "setup": {
+            "pane": "top",
+            "labelSetName": "students-segment-labels"
+          }
+        }
+      ]
+    },
 
     {
       "url": "/shared/describing-velocity/page/4/step/1",
