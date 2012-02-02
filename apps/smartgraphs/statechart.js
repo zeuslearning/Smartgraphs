@@ -130,14 +130,7 @@ Smartgraphs.statechartDef = SC.Statechart.extend(
         },
 
         resourcesDidLoad: function () {
-          if (Smartgraphs.loadingActivityController.get('openAuthorViewAfterLoading')) {
-            Smartgraphs.activityPagesController.set('content', Smartgraphs.activityController.get('pages'));
-            Smartgraphs.activityPagesController.selectFirstPage();
-            this.gotoState('AUTHOR');
-          }
-          else {
-            this.gotoState('ACTIVITY');
-          }
+          this.gotoState('ACTIVITY_LOADED');
         },
 
         resourceLoadingError: function () {
@@ -171,13 +164,30 @@ Smartgraphs.statechartDef = SC.Statechart.extend(
         }
       }),
 
+      ACTIVITY_LOADED: SC.State.design({
 
-      ACTIVITY: SC.State.plugin('Smartgraphs.ACTIVITY'),
+        initialSubstate: 'DEFAULT',
 
-      ACTIVITY_DONE: SC.State.design(),
+        enterState: function () {
+          if (Smartgraphs.loadingActivityController.get('openAuthorViewAfterLoading')) {
+            Smartgraphs.activityPagesController.set('content', Smartgraphs.activityController.get('pages'));
+            Smartgraphs.activityPagesController.selectFirstPage();
+            this.gotoState('AUTHOR');
+          }
+          else {
+            this.gotoState('ACTIVITY');
+          }
+        },
 
-      AUTHOR: SC.State.plugin('Smartgraphs.AUTHOR')
+        DEFAULT: SC.State.design(),
 
+        ACTIVITY: SC.State.plugin('Smartgraphs.ACTIVITY'),
+
+        ACTIVITY_DONE: SC.State.design(),
+
+        AUTHOR: SC.State.plugin('Smartgraphs.AUTHOR'),
+
+      })
     })
   })
 });
