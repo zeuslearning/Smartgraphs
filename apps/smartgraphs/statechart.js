@@ -186,6 +186,10 @@ Smartgraphs.statechartDef = SC.Statechart.extend(
         ACTIVITY_DONE: SC.State.design(),
 
         AUTHOR: SC.State.plugin('Smartgraphs.AUTHOR'),
+        
+        showAboutPane: function () {
+          Smartgraphs.aboutController.showAbout();
+        }
 
       })
     })

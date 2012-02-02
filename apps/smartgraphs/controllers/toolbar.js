@@ -15,6 +15,7 @@ Smartgraphs.toolbarController = SC.Object.create(
 
   shouldShowEditButton: NO,
   shouldShowRunButton: NO,
+  shouldShowCreditsButton: YES,
 
   showRunButton: function () {
     this.set('shouldShowEditButton', NO);

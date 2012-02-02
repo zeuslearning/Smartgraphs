@@ -18,7 +18,7 @@ Smartgraphs.mainPage = SC.Page.design({
     topToolbar: SC.ToolbarView.design({
       anchorLocation: SC.ANCHOR_TOP,
 
-      childViews: ['title', 'editButton', 'runButton'],
+      childViews: ['title', 'editButton', 'runButton', 'creditsButton'],
 
       title: SC.LabelView.design({
         layout: { centerY: 0, height: 24, left: 8, width: 400 },
@@ -27,8 +27,15 @@ Smartgraphs.mainPage = SC.Page.design({
         valueBinding:   'Smartgraphs.activityController.title'
       }),
 
-      editButton: SC.ButtonView.design({
+      creditsButton: SC.ButtonView.design({
         layout: { right: 20, centerY: 0, height: 24, width: 80 },
+        isVisibleBinding: 'Smartgraphs.toolbarController.shouldShowCreditsButton',
+        title: 'Credits',
+        action: 'showAboutPane'
+      }),
+      
+      editButton: SC.ButtonView.design({
+        layout: { right: 120, centerY: 0, height: 24, width: 80 },
         shouldShowEditButtonBinding: 'Smartgraphs.toolbarController.shouldShowEditButton',
         isVisible: function () {
           return Smartgraphs.toolbarController.get('shouldShowEditButton') && Smartgraphs.get('allowAuthoring');
@@ -38,7 +45,7 @@ Smartgraphs.mainPage = SC.Page.design({
       }),
 
       runButton: SC.ButtonView.design({
-        layout: { right: 20, centerY: 0, height: 24, width: 80 },
+        layout: { right: 120, centerY: 0, height: 24, width: 80 },
         isVisibleBinding: 'Smartgraphs.toolbarController.shouldShowRunButton',
         title: 'Run',
         action: 'runActivity'
