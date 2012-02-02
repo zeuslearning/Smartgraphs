@@ -1,5 +1,5 @@
 // ==========================================================================
-// Project:   Smartgraphs.CreditsController
+// Project:   Smartgraphs.creditsController
 // Copyright: ©2011 The Concord Consortoum
 // ==========================================================================
 /*globals Smartgraphs */
@@ -10,11 +10,11 @@
 
   @extends SC.Object
 */
-Smartgraphs.aboutController = SC.ObjectController.create(
+Smartgraphs.creditsController = SC.ObjectController.create(
 /** @scope Smartgraphs.creditsController.prototype */ {
 
-  showAbout: function() {
-    Smartgraphs.AboutPane.show();
+  showCredits: function() {
+    Smartgraphs.CreditsPane.show();
   }
 
 }) ;

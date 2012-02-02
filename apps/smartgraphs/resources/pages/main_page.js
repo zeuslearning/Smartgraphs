@@ -31,7 +31,7 @@ Smartgraphs.mainPage = SC.Page.design({
         layout: { right: 20, centerY: 0, height: 24, width: 80 },
         isVisibleBinding: 'Smartgraphs.toolbarController.shouldShowCreditsButton',
         title: 'Credits',
-        action: 'showAboutPane'
+        action: 'showCredits'
       }),
       
       editButton: SC.ButtonView.design({

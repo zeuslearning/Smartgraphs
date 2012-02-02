@@ -187,8 +187,8 @@ Smartgraphs.statechartDef = SC.Statechart.extend(
 
         AUTHOR: SC.State.plugin('Smartgraphs.AUTHOR'),
         
-        showAboutPane: function () {
-          Smartgraphs.aboutController.showAbout();
+        showCredits: function () {
+          Smartgraphs.creditsController.showCredits();
         }
 
       })

@@ -1,4 +1,4 @@
-.sc-view.aboutBox {
+.sc-view.creditsBox {
   font: 12px arial, helvetica, sans-serif;
   background: #fff;
   color: #3f3f3f;
@@ -7,36 +7,36 @@
   margin:     0px;
 }
 
-#about-container {
+#credits-container {
   display:     block;
   background:  #fff;
   margin:      0px;
   padding:     30px;
   padding-bottom: 40px;
 }
-#about-container h2 {
+#credits-container h2 {
   color: #333;
   font: bold 1.35em 'museo-slab', arial, helvetica, sans-serif;
   margin-bottom: 1em;
 }
-#about-container hr {
+#credits-container hr {
   border: none;
   background-color: #bddfdf;
   height: 1px;
   margin-bottom: 1.25em;
 }
-#about-container p {
+#credits-container p {
   font-size: .9em;
   margin-bottom: 1.25em;
 }
 
-#about-projectInfo {
+#credits-projectInfo {
   background: sc_static('nsf.png') no-repeat;
   min-height: 75px;
   padding-left: 75px;
 }
 
-#about-logos                { margin: 0 0 1.5em;       }
-#about-logos img            { margin: 0 40px .5em 3px; }
-#about-logos #about-cc-logo { margin-right: 0;         }
-#about-authorInfo           { font-size: 1.1em;        }
+#credits-logos                  { margin: 0 0 1.5em;       }
+#credits-logos img              { margin: 0 40px .5em 3px; }
+#credits-logos #credits-cc-logo { margin-right: 0;         }
+#credits-authorInfo             { font-size: 1.1em;        }

@@ -1,6 +1,6 @@
-
-Smartgraphs.AboutPane = SC.View.extend({
-  classNames:   "aboutBox".w(),
+/*globals Smartgraphs */
+Smartgraphs.CreditsPane = SC.View.extend({
+  classNames:   "creditsBox".w(),
 
   projectInfo:  "This software is based upon work supported by the "+
                 "National Science Foundation under Grant No. DRL-0918522. "+
@@ -22,21 +22,21 @@ Smartgraphs.AboutPane = SC.View.extend({
 
   render: function(context, firstTime) {
     context.push(
-      "<div id='about-container'>",
+      "<div id='credits-container'>",
         "<h2>SmartGraphs is a project of The Concord Consortium</h2>",
-        "<div id='about-logos'>",
-        "  <img id='about-sg-logo' src='", sc_static('smartgraphs.png'), "' alt='SmartGraphs' title='SmartGraphs' />",
-        "  <img id='about-cc-logo' src='", sc_static('concord.png'), "'alt='The Concord Consortium' title='The Concord Consortium' />",
+        "<div id='credits-logos'>",
+        "  <img id='credits-sg-logo' src='", sc_static('smartgraphs.png'), "' alt='SmartGraphs' title='SmartGraphs' />",
+        "  <img id='credits-cc-logo' src='", sc_static('concord.png'), "'alt='The Concord Consortium' title='The Concord Consortium' />",
         "</div>",
-        "<p id='about-projectInfo'>",
+        "<p id='credits-projectInfo'>",
           this.get('projectInfo'),
         "</p>",
         "<hr />",
         "<h2>This SmartGraphs activity was developed by:</h2>",
-        "<p id='about-authorInfo'>",
+        "<p id='credits-authorInfo'>",
           this.get('authorInfo'),
         "</p>",
-        "<p id='about-licenseInfo'>",
+        "<p id='credits-licenseInfo'>",
           this.get('licenseInfo'),
         "</p>",
       "</div>"
@@ -45,30 +45,30 @@ Smartgraphs.AboutPane = SC.View.extend({
   }
 });
 
-Smartgraphs.AboutPane.show  = function(aboutText) {
-
-  var designHash = {
-      layout      : { right: 0, left: 0, top:0, bottom: 0},
-      childViews  : 'closeButton'.w(),
-      closeButton : SC.ButtonView.design({
-          layout    : { centerX: 0, bottom: 5, height: 24, width: 80 },
-          title     : 'close',
-          isVisible : YES,
-          isEnabled : YES,
-          action    : function () { ret.remove(); }
-        })
-    };
+Smartgraphs.CreditsPane.show  = function(aboutText) {
+  var designHash, ret, show;
+  
+  designHash = {
+    layout      : { right: 0, left: 0, top:0, bottom: 0},
+    childViews  : 'closeButton'.w(),
+    closeButton : SC.ButtonView.design({
+        layout    : { centerX: 0, bottom: 5, height: 24, width: 80 },
+        title     : 'close',
+        isVisible : YES,
+        isEnabled : YES,
+        action    : function () { ret.remove(); }
+      })
+  };
 
   if (aboutText) {
     designHash['licenseInfo'] = aboutText;
   }
 
-  var ret = SC.PanelPane.create({
+  ret = SC.PanelPane.create({
     layout: { centerX:0, centerY: 0, height: 450, width: 580},
-    contentView: Smartgraphs.AboutPane.design(designHash)
+    contentView: Smartgraphs.CreditsPane.design(designHash)
   });
 
-  var show = ret.append() ; // make visible.
+  show = ret.append() ; // make visible.
   return show ;
 };
-
