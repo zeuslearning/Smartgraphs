@@ -49,10 +49,10 @@ Smartgraphs = SC.Application.create(
   },
 
   // DEBUG SETTINGS
-  trace: YES,                   // whether to trace firstResponder changes and app actions
-  logDataSource: YES,           // whether the data source should log
-  showOutline: YES,             // whether to show the outline on the left by default
-  showEditButton: YES           // whether to enable the "Edit" button
+  trace:          YES,           // whether to trace firstResponder changes and app actions
+  logDataSource:  YES,           // whether the data source should log
+  showOutline:    typeof window.show_outline !== 'undefined'       ? window.show_outline :       YES,
+  showEditButton: typeof window.enable_edit_button !== 'undefined' ? window.enable_edit_button : YES
 
 }) ;
 
