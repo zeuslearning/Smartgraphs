@@ -38,7 +38,7 @@ Smartgraphs.mainPage = SC.Page.design({
         layout: { right: 120, centerY: 0, height: 24, width: 80 },
         shouldShowEditButtonBinding: 'Smartgraphs.toolbarController.shouldShowEditButton',
         isVisible: function () {
-          return Smartgraphs.toolbarController.get('shouldShowEditButton') && Smartgraphs.get('allowAuthoring');
+          return Smartgraphs.toolbarController.get('shouldShowEditButton') && Smartgraphs.get('showEditButton');
         }.property('shouldShowEditButton'),
         title: 'Edit',
         action: 'openAuthorView'
