@@ -31,7 +31,7 @@ Smartgraphs.activityDocs["/shared/multiple-choice-1"] =
         "/shared/multiple-choice-1/page/1-first-page/step/3",
         "/shared/multiple-choice-1/page/1-first-page/step/4",
         "/shared/multiple-choice-1/page/1-first-page/step/5",
-        "/shared/multiple-choice-1/page/1-first-page/step/6"                      
+        "/shared/multiple-choice-1/page/1-first-page/step/6"
       ],
       "firstStep": "/shared/multiple-choice-1/page/1-first-page/step/1"
     }
@@ -41,7 +41,7 @@ Smartgraphs.activityDocs["/shared/multiple-choice-1"] =
       "url": "/shared/multiple-choice-1/page/1-first-page/step/1",
       "activityPage": "/shared/multiple-choice-1/page/1-first-page",
       "beforeText": "<p>Which of the following choices is choice \"B\"?</p>",
-      "responseTemplate": "/shared/multiple-choice-1/response-templates/multiple-choice-sequence-1",      
+      "responseTemplate": "/shared/multiple-choice-1/response-templates/multiple-choice-1",
       "paneConfig": "single",
       "panes": {
         "single": {
@@ -58,7 +58,7 @@ Smartgraphs.activityDocs["/shared/multiple-choice-1"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "submissibilityCriterion": ["isNumeric", ["responseField", 1]],      
+      "submissibilityCriterion": ["isNumeric", ["responseField", 1]],
       "responseBranches": [
         {
           "criterion": ["=", ["responseField", 1], 2],
@@ -68,12 +68,12 @@ Smartgraphs.activityDocs["/shared/multiple-choice-1"] =
       "defaultBranch": "/shared/multiple-choice-1/page/1-first-page/step/2",
       "isFinalStep": false
     },
-    
+
     {
       "url": "/shared/multiple-choice-1/page/1-first-page/step/2",
       "activityPage": "/shared/multiple-choice-1/page/1-first-page",
       "beforeText": "<p>You can try harder than that.</p>",
-      "responseTemplate": "/shared/multiple-choice-1/response-templates/multiple-choice-sequence-1",      
+      "responseTemplate": "/shared/multiple-choice-1/response-templates/multiple-choice-1",
       "paneConfig": "single",
       "panes": {
         "single": {
@@ -90,7 +90,7 @@ Smartgraphs.activityDocs["/shared/multiple-choice-1"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "submissibilityCriterion": ["isNumeric", ["responseField", 1]],      
+      "submissibilityCriterion": ["isNumeric", ["responseField", 1]],
       "responseBranches": [
         {
           "criterion": ["=", ["responseField", 1], 2],
@@ -100,12 +100,12 @@ Smartgraphs.activityDocs["/shared/multiple-choice-1"] =
       "defaultBranch": "/shared/multiple-choice-1/page/1-first-page/step/3",
       "isFinalStep": false
     },
-    
+
     {
       "url": "/shared/multiple-choice-1/page/1-first-page/step/3",
       "activityPage": "/shared/multiple-choice-1/page/1-first-page",
       "beforeText": "<p>I'm starting to worry about you.</p>",
-      "responseTemplate": "/shared/multiple-choice-1/response-templates/multiple-choice-sequence-1",      
+      "responseTemplate": "/shared/multiple-choice-1/response-templates/multiple-choice-1",
       "paneConfig": "single",
       "panes": {
         "single": {
@@ -122,7 +122,7 @@ Smartgraphs.activityDocs["/shared/multiple-choice-1"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "submissibilityCriterion": ["isNumeric", ["responseField", 1]],      
+      "submissibilityCriterion": ["isNumeric", ["responseField", 1]],
       "responseBranches": [
         {
           "criterion": ["=", ["responseField", 1], 2],
@@ -132,12 +132,12 @@ Smartgraphs.activityDocs["/shared/multiple-choice-1"] =
       "defaultBranch": "/shared/multiple-choice-1/page/1-first-page/step/4",
       "isFinalStep": false
     },
-    
+
     {
       "url": "/shared/multiple-choice-1/page/1-first-page/step/4",
       "activityPage": "/shared/multiple-choice-1/page/1-first-page",
       "beforeText": "<p>C'mon, you can do it. Or so I used to think.</p>",
-      "responseTemplate": "/shared/multiple-choice-1/response-templates/multiple-choice-sequence-1",      
+      "responseTemplate": "/shared/multiple-choice-1/response-templates/multiple-choice-1",
       "paneConfig": "single",
       "panes": {
         "single": {
@@ -154,7 +154,7 @@ Smartgraphs.activityDocs["/shared/multiple-choice-1"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "submissibilityCriterion": ["isNumeric", ["responseField", 1]],      
+      "submissibilityCriterion": ["isNumeric", ["responseField", 1]],
       "responseBranches": [
         {
           "criterion": ["=", ["responseField", 1], 2],
@@ -164,7 +164,7 @@ Smartgraphs.activityDocs["/shared/multiple-choice-1"] =
       "defaultBranch": "/shared/multiple-choice-1/page/1-first-page/step/5",
       "isFinalStep": false
     },
-    
+
     {
       "url": "/shared/multiple-choice-1/page/1-first-page/step/5",
       "activityPage": "/shared/multiple-choice-1/page/1-first-page",
@@ -187,7 +187,7 @@ Smartgraphs.activityDocs["/shared/multiple-choice-1"] =
       "isFinalStep": true,
       "nextButtonShouldSubmit": true
     },
-    
+
     {
       "url": "/shared/multiple-choice-1/page/1-first-page/step/6",
       "activityPage": "/shared/multiple-choice-1/page/1-first-page",
@@ -208,13 +208,13 @@ Smartgraphs.activityDocs["/shared/multiple-choice-1"] =
         }
       },
       "isFinalStep": true,
-      "nextButtonShouldSubmit": true      
+      "nextButtonShouldSubmit": true
     }
 
   ],
   "responseTemplates": [
     {
-      "url": "/shared/multiple-choice-1/response-templates/multiple-choice-sequence-1",
+      "url": "/shared/multiple-choice-1/response-templates/multiple-choice-1",
       "templateString": "",
       "fieldTypes": [
         "multiplechoice"
