@@ -13,7 +13,7 @@ Smartgraphs.CreditsPane = SC.View.extend({
                 "Concord Consortium under the GNU Lesser General Public License</a>, "+
                 "which allows you to use and to distribute this software. ",
     
-    authorInfo: "The SmartGraphs team at the Concord Consortium. ",
+    authorName: "The SmartGraphs team at the Concord Consortium. ",
 
   licenseInfo: "The activity is available under the Creative Commons "+
                 "<a target='_blank' href='http://creativecommons.org/licenses/by-sa/3.0/' title='Creative Commons Attribution-ShareAlike 3.0 Unported License'>"+
@@ -33,8 +33,8 @@ Smartgraphs.CreditsPane = SC.View.extend({
         "</p>",
         "<hr />",
         "<h2>This SmartGraphs activity was developed by:</h2>",
-        "<p id='credits-authorInfo'>",
-          this.get('authorInfo'),
+        "<p id='credits-authorName'>",
+          this.get('authorName'),
         "</p>",
         "<p id='credits-licenseInfo'>",
           this.get('licenseInfo'),
