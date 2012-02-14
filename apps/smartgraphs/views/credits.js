@@ -46,7 +46,7 @@ Smartgraphs.CreditsPane = SC.View.extend({
 });
 
 Smartgraphs.CreditsPane.show  = function(aboutText) {
-  var designHash, ret, show;
+  var designHash, ret, show, authorName;
   
   designHash = {
     layout      : { right: 0, left: 0, top:0, bottom: 0},
@@ -64,6 +64,11 @@ Smartgraphs.CreditsPane.show  = function(aboutText) {
     designHash['licenseInfo'] = aboutText;
   }
 
+  
+  authorName = Smartgraphs.activityController.get('authorName');
+  if (authorName) {
+    designHash['authorName'] = authorName;
+  }
   ret = SC.PanelPane.create({
     layout: { centerX:0, centerY: 0, height: 450, width: 580},
     contentView: Smartgraphs.CreditsPane.design(designHash)
