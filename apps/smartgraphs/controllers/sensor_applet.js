@@ -126,18 +126,21 @@ Smartgraphs.sensorAppletController = SC.Object.create(
   },
 
   start: function() {
+    var appletInstance = this.get('appletInstance');
     this.set('sensorState', 'running');
-    this.get('appletInstance').startCollecting();
+    if (appletInstance && appletInstance.startCollecting) appletInstance.startCollecting();
   },
 
   stop: function() {
+    var appletInstance = this.get('appletInstance');    
     this.set('sensorState', 'stopped');
-    this.get('appletInstance').stopCollecting();
+    if (appletInstance && appletInstance.stopCollecting) appletInstance.stopCollecting();
   },
 
   reset: function() {
+    var appletInstance = this.get('appletInstance');    
     this.set('sensorState', 'ready');
-    this.get('appletInstance').stopCollecting();
+    if (appletInstance && appletInstance.stopCollecting) appletInstance.stopCollecting();
   },
 
   /**
