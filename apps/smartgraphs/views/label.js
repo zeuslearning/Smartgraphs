@@ -93,7 +93,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   }.observes('xCoord', 'yCoord', 'xOffset', 'yOffset', 'labelBodyWidth', 'labelBodyHeight'),
 
   didCreateLayer: function () {
-    sc_super();
     this.$().css('cursor', 'default');
   },
 
