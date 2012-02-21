@@ -1,0 +1,9 @@
+1. Image in image pane doesn't display due to "0%" width/height (Possibly a CSS issue after removal of "pig" theme)
+2. Text area hints don't display correctly
+3. Typing into text area doesn't enable submission.
+4. Some table cells were blank in first use of slope tool in "Gravity" activity (page 10). Possibly these cells were supposed to display "0".
+5. <sup> style is overwritten by SC css (!)
+6. Some <rects> (label tool) have x, y, width, height = (the string) "NaN"
+7. "Check my answer" button too small when enabled; label becomes "Check my ans...".
+8. In general, styles are off since 'pig' is removed.
+9. Can't run tests (visting test urls, e.g., http://localhost:4020/static/smartgraphs/en/current/tests/jasmine/integration.html, throws NoMethodError in sc_server
