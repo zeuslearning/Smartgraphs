@@ -9,7 +9,6 @@
 Smartgraphs.mainPage = SC.Page.design({
 
   mainPane: SC.MainPane.design({
-    theme: 'pig',
 
     defaultResponder: 'Smartgraphs.statechart',
 
