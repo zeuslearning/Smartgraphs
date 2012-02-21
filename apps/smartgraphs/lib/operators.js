@@ -261,7 +261,7 @@ Smartgraphs.evaluator.defineOperators( function (def) {
   // than is (> 0 (strip (responseField 0)))
 
   def('textLengthIsAtLeast', function (minLength, text) {
-    return (text || '').strip().length >= minLength;
+    return SC.String.trim(text || '').length >= minLength;
   }).args(2);
 
 
