@@ -36,3 +36,7 @@
 .safari .ace.sc-text-field-view .border {
   -webkit-appearance: none;
 }
+
+.sc-text-field-view .sc-hint, .sc-text-field-view .hint {
+  position: relative;
+}
