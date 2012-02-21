@@ -21,6 +21,6 @@ Smartgraphs.User = SC.Record.extend(
 
   name: SC.Record.attr(String),
 
-  sessions: SC.Record.toMany(Smartgraphs.Session, { inverse: 'user' })
+  sessions: SC.Record.toMany('Smartgraphs.Session', { inverse: 'user' })
 
 }) ;
