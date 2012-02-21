@@ -97,18 +97,23 @@ Smartgraphs.ImageView = SC.View.extend(
       }
     },
 
-    // Even when this.get('status') reports SC.IMAGE_STATE_LOADED
-    // the image dimensions are often reported incorrectly as
-    // 1x1 pixels.
+    // Even when this.get('status') reports SC.IMAGE_STATE_LOADED, the image dimensions may be reported as 1x1 pixels.
+    // This means the image is, for our purposes, still loading.
     stillLoading: function(imgWidth,imgHeight) {
-      if (this.get('status') != (SC.IMAGE_STATE_LOADED || SC.IMAGE_STATE_FAILED)) {
-        return true; // no point resizing unless we are ready
+      var status = this.get('status');
+
+      if (status === SC.IMAGE_STATE_FAILED) {
+        return false;
       }
-      // TODO: Safeguard for instances of very small pixels.
-      if (imgWidth < 2 && imgHeight < 2) {
-        return true;
+      // TODO: Safeguard for instances of very small pixels.      
+      if (status === SC.IMAGE_STATE_LOADED && (imgWidth >= 2 || imgWidth >= 2))  {
+        return false;
       }
-      return false;
+      // status is not yet one of {SC.IMAGE_STATE_LOADED, SC.IMAGE_STATE_FAILED}
+      // - or -
+      // status *is* SC.IMAGE_STATE_LOADED but image is being reported as 1x1 or smaller, meaning it's not *actually*
+      // loaded
+      return true;
     }
   })
 });
