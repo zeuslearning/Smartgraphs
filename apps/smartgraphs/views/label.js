@@ -408,7 +408,15 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       return YES;
     },
 
-    mouseUp: function(evt) {
+    touchStart: function (evt) {
+      this.startDrag(evt);
+      return YES;
+    },
+    
+    mouseUp: function (evt)  { return this._mouseUpOrTouchEnd(evt); },
+    touchEnd: function (evt) { return this._mouseUpOrTouchEnd(evt); },
+        
+    _mouseUpOrTouchEnd: function(evt) {
       this.endDrag(evt);
       var now      = new Date().getTime(),// ms
           interval = 202,                 // ms
@@ -430,6 +438,11 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     },
 
     mouseDragged: function (evt) {
+      this.drag(evt);
+      return YES;
+    },
+    
+    touchesDragged: function (evt) {
       this.drag(evt);
       return YES;
     },
@@ -549,6 +562,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
         }
       },
 
+      touchStart: function () { 
+        this.get('labelView').remove();
+      },
+      
       mouseDown: function () {
         this.get('labelView').remove();
       },
