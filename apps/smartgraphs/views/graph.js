@@ -675,7 +675,10 @@ Smartgraphs.GraphView = SC.View.extend(
           return { x: x, y: y };
         },
 
-        mouseDown: function (evt) {
+        touchStart: function (evt) { this._mouseDownOrTouchStart(evt); },
+        mouseDown:  function (evt) { this._mouseDownOrTouchStart(evt); },
+
+        _mouseDownOrTouchStart: function (evt) {
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
 
@@ -683,14 +686,20 @@ Smartgraphs.GraphView = SC.View.extend(
           return this._graphController.inputAreaMouseDown(point.x, point.y);
         },
 
-        mouseDragged: function (evt) {
+        touchesDragged: function (evt) { this._mouseOrTouchesDragged(evt); },
+        mouseDragged:   function (evt) { this._mouseOrTouchesDragged(evt); },
+
+        _mouseOrTouchesDragged: function (evt) {
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
 
           return this._graphController.inputAreaMouseDragged(point.x, point.y);
         },
 
-        mouseUp: function (evt) {
+        touchEnd: function (evt) { this._mouseUpOrTouchEnd(evt); },
+        mouseUp:  function (evt) { this._mouseUpOrTouchEnd(evt); },
+
+        _mouseUpOrTouchEnd: function (evt) {
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
 
