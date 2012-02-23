@@ -79,13 +79,16 @@ Smartgraphs.PointView = RaphaelViews.RaphaelView.extend(
     this.set('isHovered', NO);
   },
 
-  mouseDown: function () {
-    this.get('controller').dataPointSelected(this.get('dataRepresentation'), this.getPath('content.x'), this.getPath('content.y'));
-    // 'tee' the dataPointSelected event, but don't consider the mouseDown handled; let the parent collection view
-    // also handle it
-    return NO;
+  mouseDown: function () { return this._mouseDownOrTouchStart(); },
+  touchStart: function () { return this._mouseDownOrTouchStart(); },
+  
+  _mouseDownOrTouchStart: function () {
+      this.get('controller').dataPointSelected(this.get('dataRepresentation'), this.getPath('content.x'), this.getPath('content.y'));
+      // 'tee' the dataPointSelected event, but don't consider the mouseDown handled; let the parent collection view
+      // also handle it
+      return NO;
   },
-
+  
   renderCallback: function (raphaelCanvas, x, y, radius, fill, stroke) {
     return raphaelCanvas.circle(x, y, radius).attr({ fill: fill, stroke: stroke });
   },
