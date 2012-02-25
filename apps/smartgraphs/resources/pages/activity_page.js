@@ -65,11 +65,11 @@ Smartgraphs.activityPageDef = SC.Page.extend({
               }),
 
               responseTemplate: Smartgraphs.ResponseTemplateView.design({
-                fieldTypesBinding: 'Smartgraphs.responseTemplateController.fieldTypes',
-                fieldChoicesListBinding: 'Smartgraphs.responseTemplateController.fieldChoicesList',
-                valuesBinding: 'Smartgraphs.responseTemplateController.values',
+                fieldTypesBinding:             'Smartgraphs.responseTemplateController.fieldTypes',
+                fieldChoicesListBinding:       'Smartgraphs.responseTemplateController.fieldChoicesList',
+                valuesBinding:                 'Smartgraphs.responseTemplateController.values',
                 editingShouldBeEnabledBinding: 'Smartgraphs.responseTemplateController.editingShouldBeEnabled',
-                viewShouldResetBinding: 'Smartgraphs.responseTemplateController.viewShouldReset'
+                viewShouldResetBinding:        'Smartgraphs.responseTemplateController.viewShouldReset'
               }),
 
               afterText: SC.StaticContentView.design({
@@ -92,11 +92,13 @@ Smartgraphs.activityPageDef = SC.Page.extend({
                   width: 180,
                   right: 0
                 },
-                titleBinding: 'Smartgraphs.activityStepController.submitButtonTitle',
+
+                action: 'submitStep',
+
+                titleBinding:     'Smartgraphs.activityStepController.submitButtonTitle',
                 isVisibleBinding: 'Smartgraphs.activityViewController.showSubmitButton',
                 isEnabledBinding: 'Smartgraphs.activityViewController.enableSubmitButton',
                 isDefaultBinding: 'Smartgraphs.activityViewController.enableSubmitButton',
-                action: 'submitStep',
 
                 titleDidChange: function () {
                   var metrics = SC.metricsForString(this.get('title'), 'label', ['sc-button-label', 'text-wrapper']);
@@ -118,12 +120,12 @@ Smartgraphs.activityPageDef = SC.Page.extend({
                    button do not click it.
                 */
                 _touchBoundaryFrame: function () {
-                  var ret    = this.get('frame'),
+                  var frame  = this.get('frame'),
                       offset = this.$().offset();
 
-                  ret.x = offset.left;
-                  ret.y = offset.top;
-                  return ret;
+                  frame.x = offset.left;
+                  frame.y = offset.top;
+                  return frame;
                 }.property()
 
               })
