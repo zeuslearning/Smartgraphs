@@ -175,6 +175,8 @@ Smartgraphs.GraphView = SC.View.extend(
 
     delete this._viewsByClassAndItem[classKey][itemKey];
 
+    if (view.didRemoveFromGraphView) view.didRemoveFromGraphView();
+
     view.removeFromParent();
   },
 
