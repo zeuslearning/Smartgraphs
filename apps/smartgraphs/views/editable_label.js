@@ -17,13 +17,12 @@
 Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
 /** @scope Smartgraphs.EditableLabelView.prototype */
 
-  childViews: ['editBoxView'],
-
   isEditing:           NO,
-  isAllSelected:       NO,
+  $textarea:            $('<textarea>').css('position', 'absolute'),
 
   fontSize:            12,
-  displayProperties:   'displayText textColor displayText x raphTextY isEditing'.w(),
+  
+  displayProperties:   'displayText textColor displayText x raphTextY isEditing width height'.w(),
 
   labelBodyView:       SC.outlet('parentView'),
 
@@ -94,12 +93,27 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
           'font-size':   this.get('fontSize'),
           'text-anchor': 'start'
         },
-        editing = this.get('isEditing'),
+        isEditing = this.get('isEditing'),
+        graphCanvasView = this.getPath('labelBodyView.parentView.graphView.graphCanvasView'),
+        offset,
         raphaelText;
 
+    if (isEditing) {
+      offset = graphCanvasView.$().offset();
+      
+      this.$textarea.
+        css('left', offset.left + this.get('x')).
+        css('top',  offset.top  + this.get('y')).
+        height(this.get('height')).
+        width( this.get('width')).
+        appendTo('body');
+    }
+    else {
+      this.$textarea.detach();
+    }
+    
     if (firstTime) {
       context.callback(this, this.renderCallback, attrs);
-      this.renderChildViews(context,firstTime);
     }
     else {
       raphaelText = this.get('raphaelObject');
@@ -227,76 +241,6 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
     }
     this.updateText(newText);
     return YES;
-  },
+  }
 
-  // @see frameworks/sproutcore/frameworks/desktop/system/key_bindings.js
-  // only problem is that deleteForward seems bound to "."
-  // deleteForward: function () {
-  //   return this.deleteBackward();
-  // },
-
-  editBoxView: RaphaelViews.RaphaelView.design({
-    displayProperties:    'parentsX parentsY width height isVisible isAllSelected'.w(),
-    textLabelView:        SC.outlet('parentView'),
-    isVisibleBinding:     '.textLabelView.isEditing',
-    parentsWidthBinding:  '.textLabelView.width',
-    parentsHeightBinding: '.textLabelView.height',
-    parentsXBinding:      '.textLabelView.x',
-    parentsYBinding:      '.textLabelView.y',
-    isAllSelectedBinding: '.textLabelView.isAllSelected',
-    fill:                 '#FF5',
-    strokeWidth:          1,
-    stroke:               '#CCC',
-    editingOpacity:       0.3,
-    normalOpacity:        0.05,
-    margin:               3,
-
-    twoMargin: function () {
-      return this.get('margin') * 2;
-    }.property().cacheable(),
-
-    x: function () {
-      return this.get('parentsX') - this.get('margin');
-    }.property('parentsX').cacheable(),
-
-    y: function () {
-      return this.get('parentsY') - this.get('margin');
-    }.property('parentsY').cacheable(),
-
-    width: function () {
-      return this.get('parentsWidth') + this.get('twoMargin');
-    }.property('parentsWidth').cacheable(),
-
-    height: function () {
-      return this.get('parentsHeight') + this.get('twoMargin');
-    }.property('parentsHeight').cacheable(),
-
-    renderCallback: function (raphaelCanvas, attrs) {
-      return raphaelCanvas.rect().attr(attrs);
-    },
-
-    render: function (context, firstTime) {
-      var raphaelRect,
-          opacity = this.get('isAllSelected') ? this.get('editingOpacity') : this.get('normalOpacity'),
-          attrs = {
-             'fill':    this.get('fill'),
-             'fill-opacity': opacity,
-             'stroke-width': this.get('strokeWidth'),
-             'stroke':       this.get('stroke'),
-             'x':       this.get('x'),
-             'y':       this.get('y'),
-             'width':   this.get('width'),
-             'height':  this.get('height')
-          };
-
-      if (firstTime) {
-        context.callback(this, this.renderCallback, attrs);
-      }
-      else {
-        raphaelRect = this.get('raphaelObject');
-        raphaelRect.attr(attrs);
-      }
-    } // render
-
-  })
 });
