@@ -2,6 +2,7 @@
 // Project:   Smartgraphs.EditableLabelView
 // Copyright: ©2011 Concord Consortium
 // Author:    Noah Paessel <knowuh@gmail.com>
+// Author:    Richard Klancer <rpk@pobox.com> (revised to use TextFieldView, 25-Feb-2012)
 // ==========================================================================
 /*globals Smartgraphs, RaphaelViews */
 
@@ -9,16 +10,14 @@
 
   RaphaelView for an editable label.
 
-
   @extends SC.View
   @extends RaphaelViews.RenderSupport
-  @extends SC.Editable
 */
-Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
+Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
 /** @scope Smartgraphs.EditableLabelView.prototype */
 
   isEditing:           NO,
-  $textarea:            $('<textarea>').css('position', 'absolute'),
+  textFieldView:       null,  // defined on init
   fontSize:            12,
 
   displayProperties:   'displayText textColor displayText x y raphTextY isEditing width height'.w(),
@@ -37,12 +36,13 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
   parentMarginBinding: '.labelBodyView.margin',
 
   // Bounds need to be calculated by Raphael:
-  minHeight: 18,
-  minWidth: 80,
+  minHeight: function () {
+    return this.get('isEditing') ? this.get('fontSize') * 1.2 * 3 : 18;
+  }.property('isEditing').cacheable(),
 
-  isEditingDidChange: function () {
-    if ( ! this.get('isEditing')) debugger;
-  }.observes('isEditing'),
+  minWidth: function () {
+    return this.get('isEditing') ? this.get('fontSize') * 1.2 * 10 : 80;
+  }.property('isEditing').cacheable(),
 
   // our parent view is going to modify our position
   // but we will modify our parents width and height
@@ -65,13 +65,19 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
   }.property('y', 'height').cacheable(),
 
   displayText: function () {
-    var txt = this.get('text');
-    return txt;
-  }.property('text', 'isEditing').cacheable(),
+    return this.get('text');
+  }.property('text').cacheable(),
 
-  renderCallback: function (raphaelCanvas, attrs, adjustTextarea) {
+  init: function () {
+    sc_super();
+    this.textFieldView = SC.TextFieldView.create({
+      isTextArea: YES
+    });
+  },
+
+  renderCallback: function (raphaelCanvas, attrs, adjustTextFieldView) {
     var ret = raphaelCanvas.text().attr(attrs);
-    adjustTextarea();
+    adjustTextFieldView();
     return ret;
   },
 
@@ -81,12 +87,13 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
         raphTextY       = this.get('raphTextY'),
         width           = this.get('width'),
         height          = this.get('height'),
+        text            = this.get('displayText'),
 
         attrs = {
           x:             x,
           y:             raphTextY,
           fill:          this.get('textColor'),
-          text:          this.get('displayText'),
+          text:          text,
           'font-size':   this.get('fontSize'),
           'text-anchor': 'start'
         },
@@ -94,83 +101,102 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
         isEditing       = this.get('isEditing'),
 
         graphCanvasView = this.get('graphCanvasView'),
-        $textarea       = this.$textarea,
+        textFieldView       = this.textFieldView,
+        pane            = this.get('pane'),
 
-        adjustTextarea = function () {
+        adjustTextFieldView = function () {
           var offset;
+
           if (isEditing) {
+            textFieldView.set('value', text);
             offset = graphCanvasView.$().offset();
-            $textarea.
-              css('left', offset.left + x).
-              css('top',  offset.top + y).
-              height(height).
-              width(width).
-              appendTo('body');
+            textFieldView.set('layout', {
+              top:    offset.top + y,
+              left:   offset.left + x,
+              width:  width,
+              height: height
+            });
+            SC.run();
+            pane.appendChild(textFieldView);
+            textFieldView.becomeFirstResponder();
           }
-          else {
-            $textarea.detach();
+          else if (pane.get('childViews').contains(textFieldView)) {
+            pane.removeChild(textFieldView);
           }
         },
 
         raphaelText;
 
     if (firstTime) {
-      context.callback(this, this.renderCallback, attrs, adjustTextarea);
+      context.callback(this, this.renderCallback, attrs, adjustTextFieldView);
     }
     else {
       raphaelText = this.get('raphaelObject');
       raphaelText.attr(attrs);
-      adjustTextarea();
+      adjustTextFieldView();
     }
   },
 
   didRemoveFromGraphView: function () {
-    this.$textarea.detach();
+    var pane = this.get('pane');
+
+    if (pane.get('childViews').contains(this.textFieldView)) {
+      pane.removeChild(this.textFieldView);
+    }
   },
 
   adjustMetrics: function () {
-    var editing = this.get('isEditing'),
-        raphaelText = this.get('raphaelObject'),
+    var raphaelText = this.get('raphaelObject'),
+        minWidth    = this.get('minWidth'),
+        minHeight   = this.get('minHeight'),
         bounds,
-        minWidth = this.get('minWidth'),
-        minHeight = this.get('minHeight'),
         width,
         height;
 
     if (raphaelText) {
-      raphaelText.attr('text',this.get('displayText'));
+      raphaelText.attr('text', this.get('displayText'));
       bounds = raphaelText.getBBox();
       width  = bounds.width  < minWidth  ? minWidth  : bounds.width;
       height = bounds.height < minHeight ? minHeight : bounds.height;
 
       this.beginPropertyChanges();
-      this.set('width'  , width);
-      this.set('height' , height);
+      this.set('width',  width);
+      this.set('height', height);
       this.endPropertyChanges();
     }
-  }.observes('displayText'),
+  }.observes('displayText', 'minWidth', 'minHeight'),
 
   beginEditing: function () {
+    var self = this;
+
+    this.mousedownHandler = this.mousedownHandler || function (evt) {
+      self._mousedownHandler(evt);
+    };
+
     if (this.get('isEditable')) {
       this.set('isEditing', YES);
+      $('body').bind('mousedown', this.mousedownHandler);
       return YES;
     }
     return NO;
   },
 
-  discardEditing: function () {
-    return this.commitEditing();
+  _mousedownHandler: function (evt) {
+    var labelViewLayer = this.getPath('labelView.layer');
+
+    if ( evt.target !== this.textFieldView.$().find('textarea')[0] &&
+         evt.target !== labelViewLayer &&
+         !$.contains(labelViewLayer, evt.target) )
+    {
+      $('body').unbind('mousedown', this.mousedownHandler);
+      this.commitEditing();
+    }
   },
 
   commitEditing: function () {
-    this.set('isEditing', NO) ;
-    return YES ;
-  },
-
-  updateText: function (newtext) {
-    this.beginPropertyChanges();
-    this.set('text', newtext);
-    this.endPropertyChanges();
+    this.set('text', this.textFieldView.get('value'));
+    this.set('isEditing', NO);
+    return YES;
   }
 
 });
