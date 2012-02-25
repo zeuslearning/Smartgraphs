@@ -19,23 +19,18 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
 
   isEditing:           NO,
   $textarea:            $('<textarea>').css('position', 'absolute'),
-
   fontSize:            12,
-  
-  displayProperties:   'displayText textColor displayText x raphTextY isEditing width height'.w(),
+
+  displayProperties:   'displayText textColor displayText x y raphTextY isEditing width height'.w(),
 
   labelBodyView:       SC.outlet('parentView'),
+  labelView:           SC.outlet('labelBodyView.parentLabelView'),
+  graphView:           SC.outlet('labelView.graphView'),
+  graphCanvasView:     SC.outlet('graphView.graphCanvasView'),
 
   textBinding:         '.labelBodyView.text',
   textColorBinding:    '.labelBodyView.textColor',
   itemBinding:         '.labelBodyView.item',
-
-  createdByLabelToolBinding: '*item.createdByLabelTool',
-  hasEditedFirstTimeBinding: '*item.hasEditedFirstTime',
-
-  isEditFirstTimePending: function () {
-    return this.get('createdByLabelTool') && !this.get('hasEditedFirstTime');
-  }.property('createdByLabelTool', 'hasEditedFirstTime'),
 
   parentXBinding:      '.labelBodyView.bodyXCoord',
   parentYBinding:      '.labelBodyView.bodyYCoord',
@@ -44,6 +39,10 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
   // Bounds need to be calculated by Raphael:
   minHeight: 18,
   minWidth: 80,
+
+  isEditingDidChange: function () {
+    if ( ! this.get('isEditing')) debugger;
+  }.observes('isEditing'),
 
   // our parent view is going to modify our position
   // but we will modify our parents width and height
@@ -65,60 +64,68 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
     return this.get('y') + (h / 2);
   }.property('y', 'height').cacheable(),
 
-  acceptsFirstResponder: function () {
-    return this.get('isEnabled');
-  }.property('isEnabled').cacheable(),
-
-  willLoseFirstResponder: function () {
-    this.set('isEditing', NO);
-    this.set('isAllSelected', NO);
-  },
-
-  renderCallback: function (raphaelCanvas, attrs) {
-    return raphaelCanvas.text().attr(attrs);
-  },
-
   displayText: function () {
     var txt = this.get('text');
-    if (this.get('isEditing')) { txt = txt + "_"; }
     return txt;
   }.property('text', 'isEditing').cacheable(),
 
+  renderCallback: function (raphaelCanvas, attrs, adjustTextarea) {
+    var ret = raphaelCanvas.text().attr(attrs);
+    adjustTextarea();
+    return ret;
+  },
+
   render: function (context, firstTime) {
-    var attrs = {
-          x:             this.get('x'),
-          y:             this.get('raphTextY'),
+    var x               = this.get('x'),
+        y               = this.get('y'),
+        raphTextY       = this.get('raphTextY'),
+        width           = this.get('width'),
+        height          = this.get('height'),
+
+        attrs = {
+          x:             x,
+          y:             raphTextY,
           fill:          this.get('textColor'),
           text:          this.get('displayText'),
           'font-size':   this.get('fontSize'),
           'text-anchor': 'start'
         },
-        isEditing = this.get('isEditing'),
-        graphCanvasView = this.getPath('labelBodyView.parentView.graphView.graphCanvasView'),
-        offset,
+
+        isEditing       = this.get('isEditing'),
+
+        graphCanvasView = this.get('graphCanvasView'),
+        $textarea       = this.$textarea,
+
+        adjustTextarea = function () {
+          var offset;
+          if (isEditing) {
+            offset = graphCanvasView.$().offset();
+            $textarea.
+              css('left', offset.left + x).
+              css('top',  offset.top + y).
+              height(height).
+              width(width).
+              appendTo('body');
+          }
+          else {
+            $textarea.detach();
+          }
+        },
+
         raphaelText;
 
-    if (isEditing) {
-      offset = graphCanvasView.$().offset();
-      
-      this.$textarea.
-        css('left', offset.left + this.get('x')).
-        css('top',  offset.top  + this.get('y')).
-        height(this.get('height')).
-        width( this.get('width')).
-        appendTo('body');
-    }
-    else {
-      this.$textarea.detach();
-    }
-    
     if (firstTime) {
-      context.callback(this, this.renderCallback, attrs);
+      context.callback(this, this.renderCallback, attrs, adjustTextarea);
     }
     else {
       raphaelText = this.get('raphaelObject');
       raphaelText.attr(attrs);
+      adjustTextarea();
     }
+  },
+
+  didRemoveFromGraphView: function () {
+    this.$textarea.detach();
   },
 
   adjustMetrics: function () {
@@ -143,30 +150,12 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
     }
   }.observes('displayText'),
 
-  toggle: function (paramName) {
-    this.set(paramName, (! this.get(paramName)));
-  },
-
-  editFirstTime: function () {
-    var item = this.get('item');
-
-    if (this.get('isEditFirstTimePending')) {
-      this.beginEditing();
-      this.beginEditing(); // call twice to force selectAll
-      this.set('hasEditedFirstTime', YES);
-    }
-  }.observes('isEditFirstTimePending'),
-
   beginEditing: function () {
-    if (!this.get('isEditable')) { return NO ; }
-    this.becomeFirstResponder();
-    if (this.get('isEditing')) {
-      this.toggle('isAllSelected');
-    }
-    else {
+    if (this.get('isEditable')) {
       this.set('isEditing', YES);
+      return YES;
     }
-    return YES ;
+    return NO;
   },
 
   discardEditing: function () {
@@ -174,73 +163,14 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend(SC.Editable, {
   },
 
   commitEditing: function () {
-    this.resignFirstResponder();
     this.set('isEditing', NO) ;
     return YES ;
   },
 
   updateText: function (newtext) {
     this.beginPropertyChanges();
-    this.set('isAllSelected', NO);
-    this.set('text',newtext);
+    this.set('text', newtext);
     this.endPropertyChanges();
-  },
-
-  keyDown: function (evt) {
-    var chr = null;
-    if (this.interpretKeyEvents(evt)) {
-      return YES;
-    }
-    if (evt.type === 'keypress') {
-      chr = evt.getCharString();
-      if (chr) {
-        this.appendText(chr);
-        return YES;
-      }
-    }
-    return NO;
-  },
-
-  appendText: function (chr) {
-    if (this.get('isAllSelected')) {
-      this.updateText(chr);
-    }
-    else {
-      this.updateText(this.get('text') + chr);
-    }
-    return YES;
-  },
-
-  // @see frameworks/sproutcore/frameworks/desktop/system/key_bindings.js
-  insertNewline: function () {
-    this.appendText("\n");
-  },
-
-  // @see frameworks/sproutcore/frameworks/desktop/system/key_bindings.js
-  insertTab: function () {
-    this.commitEditing();
-  },
-
-  // @see frameworks/sproutcore/frameworks/desktop/system/key_bindings.js
-  cancel: function () {
-    this.discardEditing();
-  },
-
-  // @see frameworks/sproutcore/frameworks/desktop/system/key_bindings.js
-  selectAll: function() {
-    this.set('isAllSelected', YES);
-  },
-
-  // @see frameworks/sproutcore/frameworks/desktop/system/key_bindings.js
-  deleteBackward: function () {
-    var t       = this.get('text'),
-        newText = t.substr(0,t.length-1);
-
-    if (this.get('isAllSelected')) {
-      newText = "";
-    }
-    this.updateText(newText);
-    return YES;
   }
 
 });

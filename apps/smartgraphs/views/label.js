@@ -75,6 +75,12 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   anchorXCoord: null,
   anchorYCoord: null,
 
+  labelTextView: SC.outlet('labelBodyView.labelTextView'),
+
+  didRemoveFromGraphView: function () {
+    this.get('labelTextView').didRemoveFromGraphView();
+  },
+
   coordsDidChange: function () {
     var xCoord  = this.get('xCoord'),
         yCoord  = this.get('yCoord'),
@@ -388,18 +394,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       }
     },
 
-    mouseEntered: function () { return YES; },
-
-    mouseExited: function (evt) {
-      if (evt.toElement != this.labelTextView) {
-        if (this.labelTextView.get('isEditing')) {
-          this.labelTextView.commitEditing();
-        }
-        return YES;
-      }
-      return NO;
-    },
-
     // Dragging. Note that dragging is 'stateless' in the sense that you can always drag a label view. So we won't hook
     // into states or the controller layer. We also assume until proven otherwise that we can modify our own cursor
     // without consequence.
@@ -412,10 +406,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       this.startDrag(evt);
       return YES;
     },
-    
+
     mouseUp: function (evt)  { return this._mouseUpOrTouchEnd(evt); },
     touchEnd: function (evt) { return this._mouseUpOrTouchEnd(evt); },
-        
+
     _mouseUpOrTouchEnd: function(evt) {
       this.endDrag(evt);
       var now      = new Date().getTime(),// ms
@@ -441,7 +435,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       this.drag(evt);
       return YES;
     },
-    
+
     touchesDragged: function (evt) {
       this.drag(evt);
       return YES;
@@ -562,10 +556,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
         }
       },
 
-      touchStart: function () { 
+      touchStart: function () {
         this.get('labelView').remove();
       },
-      
+
       mouseDown: function () {
         this.get('labelView').remove();
       },
