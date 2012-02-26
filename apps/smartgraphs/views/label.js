@@ -336,14 +336,16 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     highlightedStrokeBinding: '.parentLabelView.highlightedStroke',
     defaultStrokeWidth:       1,
     highlightedStrokeWidth:   2,
-    margin:                   12,
-    topRightMargin:           SC.platform.touch ? 20 : 12,
+    leftMargin:               12,
+    topMargin:                12, 
+    rightMargin:              SC.platform.touch ? 30 : 20,
+    bottomMargin:             12,
     isHighlightedBinding:     '.parentLabelView.isBodyDragging',
 
     width: function () {
       var textWidth = this.get('textWidth');
       if (textWidth) {
-        return this.get('textWidth') + this.get('margin') + this.get('topRightMargin');
+        return this.get('textWidth') + this.get('leftMargin') + this.get('rightMargin');
       }
       return 100;
     }.property('textWidth').cacheable(),
@@ -351,7 +353,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     height: function () {
       var textHeight = this.get('textHeight');
       if (textHeight) {
-        return this.get('textHeight') + this.get('margin') + this.get('topRightMargin');
+        return this.get('textHeight') + this.get('bottomMargin') + this.get('topMargin');
       }
       return 30;
     }.property('textHeight').cacheable(),
@@ -512,6 +514,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       xStroke: function () {
         return this.get('isHighlighted') ? this.get('highlightedXStroke') : this.get('notHighlightedXStroke');
       }.property('isHighlighted', 'highlightedXStroke', 'notHighlightedXStroke').cacheable(),
+      
+      xStrokeWidth: SC.platform.touch ? 3 : 2,
 
       renderCallback: function (raphaelCanvas, circleAttrs, xAttrs) {
         return raphaelCanvas.set().push(
@@ -539,7 +543,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
             xAttrs = {
               path:           xPath,
-              'stroke-width': 2,
+              'stroke-width': this.get('xStrokeWidth'),
               stroke:         this.get('xStroke')
             },
 

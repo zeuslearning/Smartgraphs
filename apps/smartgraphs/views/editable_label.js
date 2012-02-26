@@ -33,8 +33,8 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
 
   parentXBinding:      '.labelBodyView.bodyXCoord',
   parentYBinding:      '.labelBodyView.bodyYCoord',
-  parentMarginBinding: '.labelBodyView.margin',
-  parentTopRightMarginBinding: '.labelBodyView.topRightMargin',  
+  leftMarginBinding:   '.labelBodyView.leftMargin',
+  topMarginBinding:    '.labelBodyView.topMargin',
 
   // Bounds need to be calculated by Raphael:
   minHeight: function () {
@@ -50,14 +50,14 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
   x: function () {
     // in IE 8 and 9, parentX is sometimes undefined
     var parentX = this.get('parentX') || 0;
-    return  parentX + this.get('parentMargin') || 0;
-  }.property('parentX', 'parentMargin').cacheable(),
+    return  parentX + this.get('leftMargin') || 0;
+  }.property('parentX', 'leftMargin').cacheable(),
 
   y: function () {
     // in IE 8 and 9, parentX is sometimes undefined
     var parentY = this.get('parentY') || 0;
-    return parentY + this.get('parentTopRightMargin') || 0;
-  }.property('parentY', 'parentTopRightMargin').cacheable(),
+    return parentY + this.get('topMargin') || 0;
+  }.property('parentY', 'topMargin').cacheable(),
 
   raphTextY: function () {
     // in IE 8 and 9, height is sometimes undefined
