@@ -487,6 +487,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
       labelBodyView: SC.outlet('parentView'),
       labelView:     SC.outlet('parentView.parentLabelView'),
+      graphView:     SC.outlet('labelView.graphView'),
+      graphCanvasView: SC.outlet('graphView.graphCanvasView'),
 
       widthBinding:      '.labelBodyView.width',
       bodyXCoordBinding: '.labelBodyView.bodyXCoord',
@@ -496,6 +498,14 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       
       radius: SC.platform.touch ? 10 : 6,
 
+      centerX: function () {
+        return this.get('bodyXCoord') + this.get('width') - 4 - this.get('radius') || 0;
+      }.property(),
+      
+      centerY: function () {
+        return this.get('bodyYCoord') + 4 + this.get('radius') || 0;
+      }.property(),
+      
       isVisible: function () {
         return this.get('isRemovalEnabled');
       }.property('isRemovalEnabled'),
@@ -527,8 +537,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       render: function (context, firstTime) {
         var radius  = this.get('radius'),
             t       = radius / 2,
-            centerX = this.get('bodyXCoord') + this.get('width') - 4 - radius || 0,
-            centerY = this.get('bodyYCoord') + 4 + radius || 0,
+            centerX = this.get('centerX'),
+            centerY = this.get('centerY'),
 
             circleAttrs = {
               r:      radius,
@@ -551,6 +561,9 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
             raphaelCircle,
             raphaelX;
 
+        this.set('centerX', centerX);
+        this.set('centerY', centerY);
+        
         if (firstTime) {
           context.callback(this, this.renderCallback, circleAttrs, xAttrs);
         }
@@ -565,7 +578,21 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       },
 
       touchStart: function () {
-        this.get('labelView').remove();
+        this.set('isHighlighted', YES);
+        return YES;
+      },
+      
+      touchEnd: function (evt) {
+        var offset = this.get('graphCanvasView').$().offset();
+        
+        this.set('isHighlighted', NO);
+        
+        if (   Math.abs(evt.pageX - this.get('centerX') - offset.left) < 50 
+            && Math.abs(evt.pageY - this.get('centerY') - offset.top)  < 50)
+        {
+          this.get('labelView').remove();
+        }
+        return YES;
       },
 
       mouseDown: function () {
