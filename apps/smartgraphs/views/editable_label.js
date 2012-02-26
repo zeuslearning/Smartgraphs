@@ -71,7 +71,20 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
   init: function () {
     sc_super();
     this.textFieldView = SC.TextFieldView.create({
-      isTextArea: YES
+      isTextArea: YES,
+      
+      // For some reason, SC.TextFieldView doesn't implement touchStart and touchEnd. In this particular case,
+      // the result is that the Mobile Safari keyboard does not show up in response to touches. The touchStart and
+      // touchEnd implementations below seem to fix this. 
+      touchStart: function (evt) {
+        sc_super();
+        this.mouseDown(evt);
+      },
+      
+      touchEnd: function (evt) {
+        sc_super();
+        this.mouseUp(evt);
+      }
     });
   },
 
@@ -119,6 +132,16 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
             SC.run();
             pane.appendChild(textFieldView);
             textFieldView.becomeFirstResponder();
+
+            // Perhaps because Mobile Safari won't bring up the keyboard in response to a script-initiated focus(),
+            // unless the code executes in response to a touch on the textarea, TextFieldView.becomeFirstResponder
+            // returns without trying to focus when running on touch browsers.
+            //
+            // HOWEVER, this code path only ever seems to execute in response to a user-initiated touch. Therefore,
+            // go ahead and use focus() event in touch browsers. This forces the keyboard to come up.
+            if (SC.platform.touch) {
+              textFieldView.$().find('textarea').focus();
+            }
           }
           else if (pane.get('childViews').contains(textFieldView)) {
             pane.removeChild(textFieldView);
@@ -175,7 +198,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
 
     if (this.get('isEditable')) {
       this.set('isEditing', YES);
-      $('body').bind('mousedown', this.mousedownHandler);
+      $('body').bind('mousedown', this.mousedownHandler).bind('touchstart', this.mousedownHandler);
       return YES;
     }
     return NO;
@@ -188,7 +211,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
          evt.target !== labelViewLayer &&
          !$.contains(labelViewLayer, evt.target) )
     {
-      $('body').unbind('mousedown', this.mousedownHandler);
+      $('body').unbind('mousedown', this.mousedownHandler).unbind('touchstart', this.mousedownHandler);
       this.commitEditing();
     }
   },
