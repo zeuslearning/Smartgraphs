@@ -338,12 +338,13 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     defaultStrokeWidth:       1,
     highlightedStrokeWidth:   2,
     margin:                   12,
+    topRightMargin:           SC.platform.touch ? 20 : 12,
     isHighlightedBinding:     '.parentLabelView.isBodyDragging',
 
     width: function () {
       var textWidth = this.get('textWidth');
       if (textWidth) {
-        return this.get('textWidth') + (this.get('margin') * 2);
+        return this.get('textWidth') + this.get('margin') + this.get('topRightMargin');
       }
       return 100;
     }.property('textWidth').cacheable(),
@@ -351,7 +352,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     height: function () {
       var textHeight = this.get('textHeight');
       if (textHeight) {
-        return this.get('textHeight') + (this.get('margin') * 2);
+        return this.get('textHeight') + this.get('margin') + this.get('topRightMargin');
       }
       return 30;
     }.property('textHeight').cacheable(),
@@ -491,6 +492,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       bodyYCoordBinding: '.labelBodyView.bodyYCoord',
 
       isRemovalEnabledBinding: '.labelView.isRemovalEnabled',
+      
+      radius: SC.platform.touch ? 10 : 6,
 
       isVisible: function () {
         return this.get('isRemovalEnabled');
@@ -519,19 +522,21 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       },
 
       render: function (context, firstTime) {
-        var centerX = this.get('bodyXCoord') + this.get('width') - 10 || 0,
-            centerY = this.get('bodyYCoord') + 10 || 0,
+        var radius  = this.get('radius'),
+            t       = radius / 2,
+            centerX = this.get('bodyXCoord') + this.get('width') - 4 - radius || 0,
+            centerY = this.get('bodyYCoord') + 4 + radius || 0,
 
             circleAttrs = {
-              r:      6,
+              r:      radius,
               cx:     centerX,
               cy:     centerY,
               stroke: this.get('circleColor'),
               fill:   this.get('circleColor')
             },
 
-            xPath = ['M', centerX - 3, centerY - 3, 'L', centerX + 3, centerY + 3,
-                     'M', centerX - 3, centerY + 3, 'L', centerX + 3, centerY - 3].join(' '),
+            xPath = ['M', centerX - t, centerY - t, 'L', centerX + t, centerY + t,
+                     'M', centerX - t, centerY + t, 'L', centerX + t, centerY - t].join(' '),
 
             xAttrs = {
               path:           xPath,
