@@ -262,7 +262,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       return this.get('isHighlighted') ? this.get('highlightedStrokeWidth') : this.get('defaultStrokeWidth');
     }.property('isHighlighted', 'highlightedStrokeWidth', 'defaultStrokeWidth').cacheable(),
 
-
     // How far from the targetPointView's center to start drawing the connecting line
     startRadius: 9,
 
@@ -293,8 +292,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
         pathString = 'M 0 0';
       }
       else {
-        startX     = xCoord;// + (startRadius / length) * dx;
-        startY     = yCoord;// + (startRadius / length) * dy;
+        startX     = xCoord + (startRadius / length) * dx;
+        startY     = yCoord  + (startRadius / length) * dy;
         pathString = ['M', startX, startY, 'L', anchorXCoord, anchorYCoord].join(' ');
       }
 
