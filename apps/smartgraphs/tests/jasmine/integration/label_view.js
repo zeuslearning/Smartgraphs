@@ -501,16 +501,18 @@ describe("LabelView behavior", function () {
         var leftX,
             topY;
 
-            function fireEvent(el, eventName, x, y) {
-              var evt = SC.Event.simulateEvent(el, eventName, { pageX: leftX + x, pageY: topY + y });
-              SC.Event.trigger(el, eventName, evt);
-            }
+        function fireEvent(el, eventName, x, y) {
+          var evt = SC.Event.simulateEvent(el, eventName, { pageX: leftX + x, pageY: topY + y });
+          SC.Event.trigger(el, eventName, evt);
+        }
 
         describe("when the user mouses down on the label body at (10, 20)", function () {
 
           var target,
               xOffset,
-              yOffset;
+              yOffset,
+              initialTextAreaLeftOffset,
+              initialTextAreaTopOffset;
 
           beforeEach( function () {
             var offset;
@@ -519,7 +521,14 @@ describe("LabelView behavior", function () {
             offset = $(target.get('layer')).offset();
             leftX  = offset.left;
             topY   = offset.top;
-
+            
+            SC.run( function () {
+              labelView.get('labelTextView').set('isEditing', YES);
+            });
+            
+            initialTextAreaLeftOffset = $('textarea').offset().left;
+            initialTextAreaTopOffset = $('textarea').offset().top;
+            
             // start by clearing any possible stale drag state
             fireEvent(target.get('layer'), 'mouseup', 0, 0);
 
@@ -559,7 +568,13 @@ describe("LabelView behavior", function () {
               expect(labelRecord.get('xOffset')).toEqual(xOffset);
               expect(labelRecord.get('yOffset')).toEqual(yOffset);
             });
-
+            
+            it("should not affect the textarea offset", function () {
+              var offset = $('textarea').offset();
+              
+              expect(initialTextAreaLeftOffset).toEqual(offset.left);
+              expect(initialTextAreaTopOffset).toEqual(offset.top);
+            });
           });
 
           describe("and the mouse is moved to (15, 25)", function () {
@@ -571,6 +586,13 @@ describe("LabelView behavior", function () {
             it("should update (xOffset, yOffset) of the label record by (+5, +5)", function () {
               expect(labelRecord.get('xOffset')).toEqual(xOffset + 5);
               expect(labelRecord.get('yOffset')).toEqual(yOffset + 5);
+            });
+            
+            it("should update the textarea offset by (+5, +5)", function () {
+              var offset = $('textarea').offset();
+              
+              expect(offset.left).toEqual(initialTextAreaLeftOffset + 5);
+              expect(offset.top).toEqual(initialTextAreaTopOffset + 5);
             });
 
             describe("and the mouse is released at (20, 30)", function () {
@@ -590,6 +612,13 @@ describe("LabelView behavior", function () {
               it("should update (xOffset, yOffset) of the label record by (+10, +10)", function () {
                 expect(labelRecord.get('xOffset')).toEqual(xOffset + 10);
                 expect(labelRecord.get('yOffset')).toEqual(yOffset + 10);
+              });
+              
+              it("should update the textarea offset by (+10, +10)", function () {
+                var offset = $('textarea').offset();
+
+                expect(offset.left).toEqual(initialTextAreaLeftOffset + 10);
+                expect(offset.top).toEqual(initialTextAreaTopOffset + 10);
               });
             });
           });
