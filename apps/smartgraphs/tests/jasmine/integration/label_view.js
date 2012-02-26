@@ -431,12 +431,13 @@ describe("LabelView behavior", function () {
               it("should start at a point on the line between (xCoord, yCoord) and (anchorXCoord, anchorYCoord)", function () {
                 var m = (yCoord - anchorYCoord) / (xCoord - anchorXCoord),
                     b = yCoord - m * xCoord;
-
+                
                 expect( y ).toApproximatelyEqual( m*x+b );
               });
 
-              it("should be at the labeled point", function () {
-                expect(Math.sqrt( (x-xCoord)*(x-xCoord) + (y-yCoord)*(y-yCoord) )).toApproximatelyEqual(0, 1);
+              it("should be distance 'startRadius' from the labeled point", function () {
+                expect(Math.sqrt( (x-xCoord)*(x-xCoord) + (y-yCoord)*(y-yCoord) )).
+                  toApproximatelyEqual(connectingLineView.get('startRadius'), 1);
               });
             });
 
@@ -669,146 +670,6 @@ describe("LabelView behavior", function () {
         });
 
       });
-
-      describe("editing the label", function () {
-        var leftX,
-            topY,
-            offset,
-            labelTextView,
-            target;
-
-        function fireEvent(el, eventName, x, y) {
-          var evt = SC.Event.simulateEvent(el, eventName, { pageX: leftX + x, pageY: topY + y });
-          SC.Event.trigger(el, eventName, evt);
-        }
-
-        function simulateKeyPress(el, letter) {
-          var evt = SC.Event.simulateEvent(el, 'keydown', { charCode: letter, which: letter });
-          SC.Event.trigger(el, 'keydown', evt);
-          evt = SC.Event.simulateEvent(el, 'keypress', { charCode: letter, which: letter });
-          SC.Event.trigger(el, 'keypress', evt);
-          evt = SC.Event.simulateEvent(el, 'keyup', { charCode: letter, which: letter });
-          SC.Event.trigger(el, 'keyup', evt);
-        }
-
-        beforeEach( function () {
-          target = labelView.get('labelBodyView');
-          offset = $(target.get('layer')).offset();
-          leftX  = offset.left;
-          topY   = offset.top;
-        });
-
-        describe("when not being edited", function () {
-          beforeEach(function () {
-            labelTextView = labelView.getPath('labelBodyView.labelTextView');
-            fireEvent(target.get('layer'), 'mouseExited', 0, 0);
-            SC.run( function () { labelTextView.commitEditing(); });
-          });
-          it("should not be in the edit mode", function () {
-            expect(labelView.getPath('labelBodyView.labelTextView.isEditing')).toEqual(NO);
-          });
-
-          it("should not have a highlighted background", function () {
-            expect(labelView.getPath('labelBodyView.labelTextView.editBoxView.isVisible')).toEqual(NO);
-          });
-        });
-
-        describe("after a double click", function () {
-          beforeEach(function () {
-            labelTextView = labelView.getPath('labelBodyView.labelTextView');
-            // ensure that we aren't editing at the outset
-            SC.run( function () { labelTextView.commitEditing(); });
-            fireEvent(target.get('layer'), 'mousedown', 10,10);
-            fireEvent(target.get('layer'), 'mouseup', 10,10);
-            fireEvent(target.get('layer'), 'mousedown', 10,10);
-            fireEvent(target.get('layer'), 'mouseup', 10,10);
-          });
-
-          it("should be in the edit mode", function () {
-            expect(labelView.getPath('labelBodyView.labelTextView.isEditing')).toEqual(YES);
-          });
-
-          it("should have a highlighted background", function () {
-            expect(labelView.getPath('labelBodyView.labelTextView.editBoxView.isVisible')).toEqual(YES);
-          });
-
-          describe("entering some text", function () {
-            var existingText,
-                textToEnter,
-                expectedText,
-                i;
-
-            beforeEach( function () {
-              existingText = labelTextView.get('text');
-              textToEnter  = "testing testing\n 1 2 3";
-            });
-
-            describe("when the label is all selected", function () {
-              beforeEach( function () {
-                labelView.setPath('labelBodyView.labelTextView.isAllSelected', YES);
-                expectedText = textToEnter;
-                for (i = 0; i < textToEnter.length; i++) {
-                  simulateKeyPress(target.get('layer'),textToEnter.charCodeAt(i));
-                }
-              });
-
-              it("should now have the new text in the label", function () {
-                expect(labelTextView.get('text')).toEqual(expectedText);
-              });
-            });
-
-            describe("when the label is not all selected", function () {
-              beforeEach( function () {
-                labelView.setPath('labelBodyView.labelTextView.isAllSelected', NO);
-                expectedText = existingText + textToEnter;
-                for (i = 0; i < textToEnter.length; i++) {
-                  simulateKeyPress(target.get('layer'),textToEnter.charCodeAt(i));
-                }
-              });
-
-              it("should now have the new text in the label", function () {
-                expect(labelTextView.get('text')).toEqual(expectedText);
-              });
-
-            });
-
-            describe("leaving editing mode", function () {
-              var x,
-                  y;
-
-              beforeEach( function () {
-                x = labelTextView.get("x");
-                y = labelTextView.get("y");
-                SC.run( function () { labelTextView.commitEditing(); });
-              });
-
-              it ("the label text should not change its position after editing", function () {
-                expect(labelTextView.get("x")).toBeWithinOneUnitOf(x);
-                expect(labelTextView.get("y")).toBeWithinOneUnitOf(y);
-              });
-
-              describe("after re-adding the annotation", function () {
-                beforeEach( function () {
-                  x = labelTextView.get('x');
-                  y = labelTextView.get('y');
-                  SC.run( function () {
-                    graphController.removeAnnotation(labelRecord);
-                    graphController.addAnnotation(labelRecord);
-                  });
-                  labelView = graphView.getPath('annotationsHolder.childViews').objectAt(0);
-                  labelTextView = labelView.getPath('labelBodyView.labelTextView');
-                });
-
-                it ("the label text should not change its position after adding a new record", function () {
-                  expect(labelTextView.get("x")).toBeWithinOneUnitOf(x);
-                  expect(labelTextView.get("y")).toBeWithinOneUnitOf(y);
-                });
-              });
-            });
-
-          });
-        });
-      }); // editing the label
 
     });
   });
