@@ -700,6 +700,101 @@ describe("LabelView behavior", function () {
 
       });
 
+
+      describe("editing the label", function () {
+
+        var labelTextView,
+            labelBodyView,
+            textFieldView;
+
+        beforeEach( function () {
+          labelTextView = labelView.get('labelTextView');
+          textFieldView = labelTextView.get('textFieldView');
+          labelBodyView = labelView.get('labelBodyView');
+        });
+
+        describe("before setting isEditing to YES", function () {
+
+          it("should not have an associated textarea", function () {
+            expect( $('textarea').length ).toEqual( 0 );
+          });
+
+        });
+
+        describe("after double clicking the label view, to edit it", function () {
+
+          runBeforeEach( function () {
+            labelBodyView.doubleClick();
+          });
+
+          it("should have an associated textarea", function () {
+            expect( $('textarea').length ).toEqual( 1 );
+          });
+
+
+          describe("the textarea", function () {
+            var $textarea;
+
+            beforeEach( function () {
+              $textarea = $('textarea');
+            });
+
+            it('should be within the boundaries of the labelBodyView', function () {
+              var taOffset = $textarea.offset(),
+                  taWidth  = $textarea.width(),
+                  taHeight = $textarea.height(),
+                  lbvOffset = labelBodyView.$().offset();
+
+              expect( taOffset.left ).toBeGreaterThan( lbvOffset.left );
+              expect( taOffset.top  ).toBeGreaterThan( lbvOffset.top );
+              expect( taOffset.left + taWidth ).toBeLessThan( lbvOffset.left + labelBodyView.get('width') );
+              expect( taOffset.top + taHeight ).toBeLessThan( lbvOffset.top  + labelBodyView.get('height') );
+            });
+
+            it("should have initial text equal to the value of the label record's 'text' property", function () {
+              expect( $textarea.val() ).toEqual( labelRecord.get('text') );
+            });
+
+          }); // "the textarea"
+
+
+          describe("after the textarea is edited, and loses focus", function () {
+
+            runBeforeEach( function () {
+              textFieldView.set('value', 'new text');
+
+              // Looks like we have to trust that SC will do this right when a user clicks away from the textarea;
+              // putting $('textarea').blur() here does nothing.
+              textFieldView.resignFirstResponder();
+            });
+
+            it("should cause the textarea be removed from the DOM", function () {
+              expect( $('textarea').length ).toEqual( 0 );
+            });
+
+            it("should update the label record with the new text", function () {
+              expect( labelRecord.get('text') ).toEqual( 'new text' );
+            });
+
+          }); // "after the textarea is edited, and loses focus"
+
+        });
+
+
+        describe("after the label view is removed", function () {
+
+          runBeforeEach( function () {
+            labelRecord.enableRemoval();
+            graphController.labelViewRemoveLabel( labelRecord );
+          });
+
+          it("should cause the textarea be removed from the DOM", function () {
+            expect( $('textarea').length ).toEqual( 0 );
+          });
+
+        });
+
+      });
     });
   });
 });
