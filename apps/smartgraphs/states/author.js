@@ -21,13 +21,11 @@ Smartgraphs.AUTHOR = SC.State.extend(
   enterState: function () {
     Smartgraphs.appWindowController.showAuthorView();
     Smartgraphs.toolbarController.showRunButton();
-    Smartgraphs.toolbarController.showSaveButton();
     Smartgraphs.activityOutlineController.set('isSelectable', YES);
     Smartgraphs.activityViewController.set('enableBackAndForward', YES);
   },
 
   exitState: function () {
-    Smartgraphs.toolbarController.hideSaveButton();
     Smartgraphs.activityOutlineController.set('isSelectable', NO);
     Smartgraphs.activityViewController.set('enableBackAndForward', NO);
   },

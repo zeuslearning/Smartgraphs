@@ -63,6 +63,9 @@ Smartgraphs.ImageView = SC.View.extend(
     },
 
     resizeImage: function () {
+      if (!this.getPath('parentView.parentView')){
+        return;
+      }
       var $pane = this.getPath('parentView.parentView').$(),
           $pv = this.get('parentView').$(),
           paneHeight = $pane.innerHeight(),
@@ -70,12 +73,16 @@ Smartgraphs.ImageView = SC.View.extend(
           imgHeight,
           imgWidth;
 
-      // reset width and height to unscaled dimensions, then read them out. Seems to work without flicker.
-      this.$().height('');
-      this.$().width('');
       imgHeight = this.$().height();
       imgWidth  = this.$().width();
 
+      if (this.stillLoading(imgWidth,imgHeight)) {
+        this.invokeLater(this.resizeImage);
+        return;
+      }
+      // reset width and height to unscaled dimensions, then read them out. Seems to work without flicker.
+      this.$().width('');
+      this.$().height('');
       if (imgHeight / imgWidth > paneHeight / paneWidth) {
         this.$().height('');
         this.$().width('100%');
@@ -88,6 +95,25 @@ Smartgraphs.ImageView = SC.View.extend(
         this.$().css('left', (paneWidth - imgWidth * (paneHeight / imgHeight)) / 2 );
         this.$().css('top', '0');
       }
+    },
+
+    // Even when this.get('status') reports SC.IMAGE_STATE_LOADED, the image dimensions may be reported as 1x1 pixels.
+    // This means the image is, for our purposes, still loading.
+    stillLoading: function(imgWidth,imgHeight) {
+      var status = this.get('status');
+
+      if (status === SC.IMAGE_STATE_FAILED) {
+        return false;
+      }
+      // TODO: Safeguard for instances of very small pixels.      
+      if (status === SC.IMAGE_STATE_LOADED && (imgWidth >= 2 || imgWidth >= 2))  {
+        return false;
+      }
+      // status is not yet one of {SC.IMAGE_STATE_LOADED, SC.IMAGE_STATE_FAILED}
+      // - or -
+      // status *is* SC.IMAGE_STATE_LOADED but image is being reported as 1x1 or smaller, meaning it's not *actually*
+      // loaded
+      return true;
     }
   })
 });

@@ -12,8 +12,8 @@
   However, we found that, on *some* computers, instantiating an applet by appending an SC.View that renders to an
   <applet> tag fails mysteriously in IE8. Appending the <applet> tag via jQuery appears to work on those machines, so
   that is what is done here. This may have to do with the fact that <applet> tags really represent "host objects", not
-  DOM objects, and apparently-normal access or modification of certain of their properties create problems. jQuery may
-  handle this more carefully than SC.View.
+  native objects, and apparently-normal access or modification of certain of their properties create problems. jQuery
+  may handle this more carefully than SC.View.
 
   (Sensor applets aren't really a view concern, anyway.)
 
@@ -126,18 +126,21 @@ Smartgraphs.sensorAppletController = SC.Object.create(
   },
 
   start: function() {
+    var appletInstance = this.get('appletInstance');
     this.set('sensorState', 'running');
-    this.get('appletInstance').startCollecting();
+    if (appletInstance && appletInstance.startCollecting) appletInstance.startCollecting();
   },
 
   stop: function() {
+    var appletInstance = this.get('appletInstance');    
     this.set('sensorState', 'stopped');
-    this.get('appletInstance').stopCollecting();
+    if (appletInstance && appletInstance.stopCollecting) appletInstance.stopCollecting();
   },
 
   reset: function() {
+    var appletInstance = this.get('appletInstance');    
     this.set('sensorState', 'ready');
-    this.get('appletInstance').stopCollecting();
+    if (appletInstance && appletInstance.stopCollecting) appletInstance.stopCollecting();
   },
 
   /**

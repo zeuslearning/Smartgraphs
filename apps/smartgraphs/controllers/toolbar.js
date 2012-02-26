@@ -15,9 +15,8 @@ Smartgraphs.toolbarController = SC.Object.create(
 
   shouldShowEditButton: NO,
   shouldShowRunButton: NO,
-  shouldShowSaveButton: NO,
-  shouldShowAboutButton: YES,
-  
+  shouldShowCreditsButton: YES,
+
   showRunButton: function () {
     this.set('shouldShowEditButton', NO);
     this.set('shouldShowRunButton', YES);
@@ -26,14 +25,6 @@ Smartgraphs.toolbarController = SC.Object.create(
   showEditButton: function () {
     this.set('shouldShowEditButton', YES);
     this.set('shouldShowRunButton', NO);
-  },
-
-  showSaveButton: function () {
-    this.set('shouldShowSaveButton', YES);
-  },
-
-  hideSaveButton: function () {
-    this.set('shouldShowSaveButton', NO);
   }
 
 }) ;
