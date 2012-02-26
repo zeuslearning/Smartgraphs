@@ -431,7 +431,7 @@ describe("LabelView behavior", function () {
               it("should start at a point on the line between (xCoord, yCoord) and (anchorXCoord, anchorYCoord)", function () {
                 var m = (yCoord - anchorYCoord) / (xCoord - anchorXCoord),
                     b = yCoord - m * xCoord;
-                
+
                 expect( y ).toApproximatelyEqual( m*x+b );
               });
 
@@ -521,14 +521,14 @@ describe("LabelView behavior", function () {
             offset = $(target.get('layer')).offset();
             leftX  = offset.left;
             topY   = offset.top;
-            
+
             SC.run( function () {
               labelView.get('labelTextView').set('isEditing', YES);
             });
-            
+
             initialTextAreaLeftOffset = $('textarea').offset().left;
             initialTextAreaTopOffset = $('textarea').offset().top;
-            
+
             // start by clearing any possible stale drag state
             fireEvent(target.get('layer'), 'mouseup', 0, 0);
 
@@ -568,10 +568,10 @@ describe("LabelView behavior", function () {
               expect(labelRecord.get('xOffset')).toEqual(xOffset);
               expect(labelRecord.get('yOffset')).toEqual(yOffset);
             });
-            
+
             it("should not affect the textarea offset", function () {
               var offset = $('textarea').offset();
-              
+
               expect(initialTextAreaLeftOffset).toEqual(offset.left);
               expect(initialTextAreaTopOffset).toEqual(offset.top);
             });
@@ -587,10 +587,10 @@ describe("LabelView behavior", function () {
               expect(labelRecord.get('xOffset')).toEqual(xOffset + 5);
               expect(labelRecord.get('yOffset')).toEqual(yOffset + 5);
             });
-            
+
             it("should update the textarea offset by (+5, +5)", function () {
               var offset = $('textarea').offset();
-              
+
               expect(offset.left).toEqual(initialTextAreaLeftOffset + 5);
               expect(offset.top).toEqual(initialTextAreaTopOffset + 5);
             });
@@ -613,7 +613,7 @@ describe("LabelView behavior", function () {
                 expect(labelRecord.get('xOffset')).toEqual(xOffset + 10);
                 expect(labelRecord.get('yOffset')).toEqual(yOffset + 10);
               });
-              
+
               it("should update the textarea offset by (+10, +10)", function () {
                 var offset = $('textarea').offset();
 
