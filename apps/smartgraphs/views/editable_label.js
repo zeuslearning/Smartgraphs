@@ -70,21 +70,28 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
   }.property('text').cacheable(),
 
   init: function () {
+    var labelView = this;
+
     sc_super();
+
     this.textFieldView = SC.TextFieldView.create({
       isTextArea: YES,
-      
+
       // For some reason, SC.TextFieldView doesn't implement touchStart and touchEnd. In this particular case,
       // the result is that the Mobile Safari keyboard does not show up in response to touches. The touchStart and
-      // touchEnd implementations below seem to fix this. 
+      // touchEnd implementations below seem to fix this.
       touchStart: function (evt) {
         sc_super();
         this.mouseDown(evt);
       },
-      
+
       touchEnd: function (evt) {
         sc_super();
         this.mouseUp(evt);
+      },
+
+      willLoseFirstResponder: function () {
+        labelView.textFieldViewLostFocus();
       }
     });
   },
@@ -193,6 +200,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
   beginEditing: function () {
     var self = this;
 
+    // without the following, _mouseDownHandler will have 'this' bound to the target of the mousedown/touchstart event.
     this.mousedownHandler = this.mousedownHandler || function (evt) {
       self._mousedownHandler(evt);
     };
@@ -205,6 +213,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
     return NO;
   },
 
+  /** Use this to allow user to click or tap away from the label in order to force loss of focus. */
   _mousedownHandler: function (evt) {
     var labelViewLayer = this.getPath('labelView.layer');
 
@@ -213,14 +222,17 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
          !$.contains(labelViewLayer, evt.target) )
     {
       $('body').unbind('mousedown', this.mousedownHandler).unbind('touchstart', this.mousedownHandler);
-      this.commitEditing();
+      this.textFieldView.resignFirstResponder(); // see if this works better than jQuery's blur or focusout...
     }
+  },
+
+  textFieldViewLostFocus: function () {
+    if (this.get('isEditing')) this.commitEditing();
   },
 
   commitEditing: function () {
     this.set('text', this.textFieldView.get('value'));
     this.set('isEditing', NO);
-    return YES;
   }
 
 });
