@@ -123,6 +123,20 @@ Smartgraphs.Datadef = SC.Record.extend(
   isStreaming: false,
 
   /**
+    X-value of the data point most recently streamed into the datadef. Transient.
+
+    @property {Number|null}
+  */
+  latestX: null,
+
+  /**
+    Y-value of the data point most recently streamed into the datadef. Transient.
+
+    @property {Number|null}
+  */
+  latestY: null,
+
+  /**
     Return a new DataRepresentation tied to an appropriate SampleSet for objects of this Datadef class. Options will
     eventually allow you to customize the DataRepresentation and reuse SampleSets.
 

@@ -14,6 +14,12 @@ Smartgraphs.LabelSetView = RaphaelViews.RaphaelCollectionView.extend({
   exampleView: Smartgraphs.LabelView,
   // unfortunately, the current CollectionViewFastPath implementation confuses labels
   useFastPath: NO,
-  contentBinding: '.item.labels'
+  contentBinding: '.item.labels',
+
+  didRemoveFromGraphView: function () {
+    this.get('childViews').forEach(function (view) {
+      if (view.didRemoveFromGraphView) view.didRemoveFromGraphView();
+    });
+  }
 
 });

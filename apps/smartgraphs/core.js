@@ -48,11 +48,19 @@ Smartgraphs = SC.Application.create(
     return ret;
   },
 
+  // FEATURE DETECTION
+  support: SC.Object.create({
+    placeholder: function () {
+        var el = document.createElement('textarea');
+        return typeof el.placeholder !== 'undefined';
+    }()
+  }),
+
   // DEBUG SETTINGS
-  trace: YES,                   // whether to trace firstResponder changes and app actions
-  logDataSource: YES,           // whether the data source should log
-  showOutline: YES,             // whether to show the outline on the left by default
-  allowAuthoring: YES           // whether to enable the "Edit" button
+  trace:          YES,           // whether to trace firstResponder changes and app actions
+  logDataSource:  YES,           // whether the data source should log
+  showOutline:    typeof window.showOutline    !== 'undefined' ? window.showOutline    : YES,
+  showEditButton: typeof window.showEditButton !== 'undefined' ? window.showEditButton : YES
 
 }) ;
 

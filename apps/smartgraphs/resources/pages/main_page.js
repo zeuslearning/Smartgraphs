@@ -17,29 +17,31 @@ Smartgraphs.mainPage = SC.Page.design({
 
     topToolbar: SC.ToolbarView.design({
       anchorLocation: SC.ANCHOR_TOP,
-      
-      childViews: ['title', 'runButton', 'saveButton', 'savingMessage', 'aboutButton'],
-      
+
+      childViews: ['title', 'editButton', 'runButton', 'creditsButton'],
+
       title: SC.LabelView.design({
         layout: { centerY: 0, height: 24, left: 8, width: 400 },
         controlSize: SC.LARGE_CONTROL_SIZE,
         fontWeight: SC.BOLD_WEIGHT,
         valueBinding:   'Smartgraphs.activityController.title'
       }),
-      
-      // editButton: SC.ButtonView.design({
-      //   layout: { right: 20, centerY: 0, height: 24, width: 80 },
-      //   isVisibleBinding: 'Smartgraphs.toolbarController.shouldShowEditButton',
-      //   title: 'Edit',
-      //   action: 'openAuthorView'
-      // }),
-      
-      aboutButton: SC.ButtonView.design({
+
+      creditsButton: SC.ButtonView.design({
         layout: { right: 20, centerY: 0, height: 24, width: 80 },
-        isVisibleBinding: 'Smartgraphs.toolbarController.shouldShowAboutButton',
-        isEnabled:  'Smartgraphs.toolbarController.shouldShowAboutButton',
+        isVisibleBinding: 'Smartgraphs.toolbarController.shouldShowCreditsButton',
         title: 'Credits',
-        action: 'Smartgraphs.aboutController.showAbout'
+        action: 'showCredits'
+      }),
+      
+      editButton: SC.ButtonView.design({
+        layout: { right: 120, centerY: 0, height: 24, width: 80 },
+        shouldShowEditButtonBinding: 'Smartgraphs.toolbarController.shouldShowEditButton',
+        isVisible: function () {
+          return Smartgraphs.toolbarController.get('shouldShowEditButton') && Smartgraphs.get('showEditButton');
+        }.property('shouldShowEditButton'),
+        title: 'Edit',
+        action: 'openAuthorView'
       }),
 
       runButton: SC.ButtonView.design({
@@ -47,23 +49,6 @@ Smartgraphs.mainPage = SC.Page.design({
         isVisibleBinding: 'Smartgraphs.toolbarController.shouldShowRunButton',
         title: 'Run',
         action: 'runActivity'
-      }),
-
-      saveButton: SC.ButtonView.design({
-        layout: { right: 220, centerY: 0, height: 24, width: 80 },
-        isVisibleBinding: 'Smartgraphs.toolbarController.shouldShowSaveButton',
-        isEnabledBinding: 'Smartgraphs.activityController.isDirty',
-        title: 'Save',
-        action: 'saveActivity'
-      }),
-
-      // eventually, we can let the toolbar controller handle message choice & visibility
-
-      savingMessage: SC.LabelView.design({
-        layout: { right: 200, centerY: 0, height: 16, width: 80 },
-        classNames: ['toolbar-message'],
-        value: "saving...",
-        isVisibleBinding: 'Smartgraphs.activityController.isSaving'
       })
     }),
 

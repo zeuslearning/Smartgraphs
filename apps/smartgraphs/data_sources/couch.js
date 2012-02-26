@@ -271,16 +271,11 @@ Smartgraphs.CouchDataSource = SC.DataSource.extend(
 
   log: function() {
     if (Smartgraphs.get('logDataSource')) {
-      if (console.log.apply) {
-        console.log.apply(console, arguments);
-      }
-      else {
-        // IE Dev tools debug mode provides a console.log which throws an error when you try to call the 'apply'
-        // method. In that case, just replace ourself outright with console.log (after this happens, this.log() will
-        // of course no longer check the 'logDataSource' property. This should only be a problem on the off chance
-        // someone attempts to turn off datasource logging mid-session.
-        this.log = console.log;
-      }
+      // console.log.apply won't work because, when IE dev tools are open, the 'console' is a host object whose
+      // 'log' method does not have an 'apply' method. Thus console.log.apply throws an error.
+      // The solution below is from
+      // http://stackoverflow.com/questions/1433697/javascript-problem-with-a-activex-object-and-the-apply-function/1435562#1435562
+      Function.prototype.apply.call(console.log, console, arguments);
     }
   }
 

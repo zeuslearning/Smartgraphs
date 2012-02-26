@@ -435,8 +435,9 @@ describe("LabelView behavior", function () {
                 expect( y ).toApproximatelyEqual( m*x+b );
               });
 
-              it("should be at the labeled point", function () {
-                expect(Math.sqrt( (x-xCoord)*(x-xCoord) + (y-yCoord)*(y-yCoord) )).toApproximatelyEqual(0, 1);
+              it("should be distance 'startRadius' from the labeled point", function () {
+                expect(Math.sqrt( (x-xCoord)*(x-xCoord) + (y-yCoord)*(y-yCoord) )).
+                  toApproximatelyEqual(connectingLineView.get('startRadius'), 1);
               });
             });
 
@@ -500,16 +501,18 @@ describe("LabelView behavior", function () {
         var leftX,
             topY;
 
-            function fireEvent(el, eventName, x, y) {
-              var evt = SC.Event.simulateEvent(el, eventName, { pageX: leftX + x, pageY: topY + y });
-              SC.Event.trigger(el, eventName, evt);
-            }
+        function fireEvent(el, eventName, x, y) {
+          var evt = SC.Event.simulateEvent(el, eventName, { pageX: leftX + x, pageY: topY + y });
+          SC.Event.trigger(el, eventName, evt);
+        }
 
         describe("when the user mouses down on the label body at (10, 20)", function () {
 
           var target,
               xOffset,
-              yOffset;
+              yOffset,
+              initialTextAreaLeftOffset,
+              initialTextAreaTopOffset;
 
           beforeEach( function () {
             var offset;
@@ -518,6 +521,13 @@ describe("LabelView behavior", function () {
             offset = $(target.get('layer')).offset();
             leftX  = offset.left;
             topY   = offset.top;
+
+            SC.run( function () {
+              labelView.get('labelTextView').set('isEditing', YES);
+            });
+
+            initialTextAreaLeftOffset = $('textarea').offset().left;
+            initialTextAreaTopOffset = $('textarea').offset().top;
 
             // start by clearing any possible stale drag state
             fireEvent(target.get('layer'), 'mouseup', 0, 0);
@@ -559,6 +569,12 @@ describe("LabelView behavior", function () {
               expect(labelRecord.get('yOffset')).toEqual(yOffset);
             });
 
+            it("should not affect the textarea offset", function () {
+              var offset = $('textarea').offset();
+
+              expect(initialTextAreaLeftOffset).toEqual(offset.left);
+              expect(initialTextAreaTopOffset).toEqual(offset.top);
+            });
           });
 
           describe("and the mouse is moved to (15, 25)", function () {
@@ -570,6 +586,13 @@ describe("LabelView behavior", function () {
             it("should update (xOffset, yOffset) of the label record by (+5, +5)", function () {
               expect(labelRecord.get('xOffset')).toEqual(xOffset + 5);
               expect(labelRecord.get('yOffset')).toEqual(yOffset + 5);
+            });
+
+            it("should update the textarea offset by (+5, +5)", function () {
+              var offset = $('textarea').offset();
+
+              expect(offset.left).toEqual(initialTextAreaLeftOffset + 5);
+              expect(offset.top).toEqual(initialTextAreaTopOffset + 5);
             });
 
             describe("and the mouse is released at (20, 30)", function () {
@@ -589,6 +612,13 @@ describe("LabelView behavior", function () {
               it("should update (xOffset, yOffset) of the label record by (+10, +10)", function () {
                 expect(labelRecord.get('xOffset')).toEqual(xOffset + 10);
                 expect(labelRecord.get('yOffset')).toEqual(yOffset + 10);
+              });
+
+              it("should update the textarea offset by (+10, +10)", function () {
+                var offset = $('textarea').offset();
+
+                expect(offset.left).toEqual(initialTextAreaLeftOffset + 10);
+                expect(offset.top).toEqual(initialTextAreaTopOffset + 10);
               });
             });
           });
@@ -670,146 +700,101 @@ describe("LabelView behavior", function () {
 
       });
 
+
       describe("editing the label", function () {
-        var leftX,
-            topY,
-            offset,
-            labelTextView,
-            target;
 
-        function fireEvent(el, eventName, x, y) {
-          var evt = SC.Event.simulateEvent(el, eventName, { pageX: leftX + x, pageY: topY + y });
-          SC.Event.trigger(el, eventName, evt);
-        }
-
-        function simulateKeyPress(el, letter) {
-          var evt = SC.Event.simulateEvent(el, 'keydown', { charCode: letter, which: letter });
-          SC.Event.trigger(el, 'keydown', evt);
-          evt = SC.Event.simulateEvent(el, 'keypress', { charCode: letter, which: letter });
-          SC.Event.trigger(el, 'keypress', evt);
-          evt = SC.Event.simulateEvent(el, 'keyup', { charCode: letter, which: letter });
-          SC.Event.trigger(el, 'keyup', evt);
-        }
+        var labelTextView,
+            labelBodyView,
+            textFieldView;
 
         beforeEach( function () {
-          target = labelView.get('labelBodyView');
-          offset = $(target.get('layer')).offset();
-          leftX  = offset.left;
-          topY   = offset.top;
+          labelTextView = labelView.get('labelTextView');
+          textFieldView = labelTextView.get('textFieldView');
+          labelBodyView = labelView.get('labelBodyView');
         });
 
-        describe("when not being edited", function () {
-          beforeEach(function () {
-            labelTextView = labelView.getPath('labelBodyView.labelTextView');
-            fireEvent(target.get('layer'), 'mouseExited', 0, 0);
-            SC.run( function () { labelTextView.commitEditing(); });
-          });
-          it("should not be in the edit mode", function () {
-            expect(labelView.getPath('labelBodyView.labelTextView.isEditing')).toEqual(NO);
+        describe("before setting isEditing to YES", function () {
+
+          it("should not have an associated textarea", function () {
+            expect( $('textarea').length ).toEqual( 0 );
           });
 
-          it("should not have a highlighted background", function () {
-            expect(labelView.getPath('labelBodyView.labelTextView.editBoxView.isVisible')).toEqual(NO);
-          });
         });
 
-        describe("after a double click", function () {
-          beforeEach(function () {
-            labelTextView = labelView.getPath('labelBodyView.labelTextView');
-            // ensure that we aren't editing at the outset
-            SC.run( function () { labelTextView.commitEditing(); });
-            fireEvent(target.get('layer'), 'mousedown', 10,10);
-            fireEvent(target.get('layer'), 'mouseup', 10,10);
-            fireEvent(target.get('layer'), 'mousedown', 10,10);
-            fireEvent(target.get('layer'), 'mouseup', 10,10);
+        describe("after double clicking the label view, to edit it", function () {
+
+          runBeforeEach( function () {
+            labelBodyView.doubleClick();
           });
 
-          it("should be in the edit mode", function () {
-            expect(labelView.getPath('labelBodyView.labelTextView.isEditing')).toEqual(YES);
+          it("should have an associated textarea", function () {
+            expect( $('textarea').length ).toEqual( 1 );
           });
 
-          it("should have a highlighted background", function () {
-            expect(labelView.getPath('labelBodyView.labelTextView.editBoxView.isVisible')).toEqual(YES);
-          });
 
-          describe("entering some text", function () {
-            var existingText,
-                textToEnter,
-                expectedText,
-                i;
+          describe("the textarea", function () {
+            var $textarea;
 
             beforeEach( function () {
-              existingText = labelTextView.get('text');
-              textToEnter  = "testing testing\n 1 2 3";
+              $textarea = $('textarea');
             });
 
-            describe("when the label is all selected", function () {
-              beforeEach( function () {
-                labelView.setPath('labelBodyView.labelTextView.isAllSelected', YES);
-                expectedText = textToEnter;
-                for (i = 0; i < textToEnter.length; i++) {
-                  simulateKeyPress(target.get('layer'),textToEnter.charCodeAt(i));
-                }
-              });
+            it('should be within the boundaries of the labelBodyView', function () {
+              var taOffset = $textarea.offset(),
+                  taWidth  = $textarea.width(),
+                  taHeight = $textarea.height(),
+                  lbvOffset = labelBodyView.$().offset();
 
-              it("should now have the new text in the label", function () {
-                expect(labelTextView.get('text')).toEqual(expectedText);
-              });
+              expect( taOffset.left ).toBeGreaterThan( lbvOffset.left );
+              expect( taOffset.top  ).toBeGreaterThan( lbvOffset.top );
+              expect( taOffset.left + taWidth ).toBeLessThan( lbvOffset.left + labelBodyView.get('width') );
+              expect( taOffset.top + taHeight ).toBeLessThan( lbvOffset.top  + labelBodyView.get('height') );
             });
 
-            describe("when the label is not all selected", function () {
-              beforeEach( function () {
-                labelView.setPath('labelBodyView.labelTextView.isAllSelected', NO);
-                expectedText = existingText + textToEnter;
-                for (i = 0; i < textToEnter.length; i++) {
-                  simulateKeyPress(target.get('layer'),textToEnter.charCodeAt(i));
-                }
-              });
-
-              it("should now have the new text in the label", function () {
-                expect(labelTextView.get('text')).toEqual(expectedText);
-              });
-
+            it("should have initial text equal to the value of the label record's 'text' property", function () {
+              expect( $textarea.val() ).toEqual( labelRecord.get('text') );
             });
 
-            describe("leaving editing mode", function () {
-              var x,
-                  y;
+          }); // "the textarea"
 
-              beforeEach( function () {
-                x = labelTextView.get("x");
-                y = labelTextView.get("y");
-                SC.run( function () { labelTextView.commitEditing(); });
-              });
 
-              it ("the label text should not change its position after editing", function () {
-                expect(labelTextView.get("x")).toBeWithinOneUnitOf(x);
-                expect(labelTextView.get("y")).toBeWithinOneUnitOf(y);
-              });
+          describe("after the textarea is edited, and loses focus", function () {
 
-              describe("after re-adding the annotation", function () {
-                beforeEach( function () {
-                  x = labelTextView.get('x');
-                  y = labelTextView.get('y');
-                  SC.run( function () {
-                    graphController.removeAnnotation(labelRecord);
-                    graphController.addAnnotation(labelRecord);
-                  });
-                  labelView = graphView.getPath('annotationsHolder.childViews').objectAt(0);
-                  labelTextView = labelView.getPath('labelBodyView.labelTextView');
-                });
+            runBeforeEach( function () {
+              textFieldView.set('value', 'new text');
 
-                it ("the label text should not change its position after adding a new record", function () {
-                  expect(labelTextView.get("x")).toBeWithinOneUnitOf(x);
-                  expect(labelTextView.get("y")).toBeWithinOneUnitOf(y);
-                });
-              });
+              // Looks like we have to trust that SC will do this right when a user clicks away from the textarea;
+              // putting $('textarea').blur() here does nothing.
+              textFieldView.resignFirstResponder();
             });
 
-          });
+            it("should cause the textarea be removed from the DOM", function () {
+              expect( $('textarea').length ).toEqual( 0 );
+            });
+
+            it("should update the label record with the new text", function () {
+              expect( labelRecord.get('text') ).toEqual( 'new text' );
+            });
+
+          }); // "after the textarea is edited, and loses focus"
+
         });
-      }); // editing the label
 
+
+        describe("after the label view is removed", function () {
+
+          runBeforeEach( function () {
+            labelRecord.enableRemoval();
+            graphController.labelViewRemoveLabel( labelRecord );
+          });
+
+          it("should cause the textarea be removed from the DOM", function () {
+            expect( $('textarea').length ).toEqual( 0 );
+          });
+
+        });
+
+      });
     });
   });
 });

@@ -65,11 +65,11 @@ Smartgraphs.activityPageDef = SC.Page.extend({
               }),
 
               responseTemplate: Smartgraphs.ResponseTemplateView.design({
-                fieldTypesBinding: 'Smartgraphs.responseTemplateController.fieldTypes',
-                fieldChoicesListBinding: 'Smartgraphs.responseTemplateController.fieldChoicesList',
-                valuesBinding: 'Smartgraphs.responseTemplateController.values',
+                fieldTypesBinding:             'Smartgraphs.responseTemplateController.fieldTypes',
+                fieldChoicesListBinding:       'Smartgraphs.responseTemplateController.fieldChoicesList',
+                valuesBinding:                 'Smartgraphs.responseTemplateController.values',
                 editingShouldBeEnabledBinding: 'Smartgraphs.responseTemplateController.editingShouldBeEnabled',
-                viewShouldResetBinding: 'Smartgraphs.responseTemplateController.viewShouldReset'
+                viewShouldResetBinding:        'Smartgraphs.responseTemplateController.viewShouldReset'
               }),
 
               afterText: SC.StaticContentView.design({
@@ -92,16 +92,41 @@ Smartgraphs.activityPageDef = SC.Page.extend({
                   width: 180,
                   right: 0
                 },
-                titleBinding: 'Smartgraphs.activityStepController.submitButtonTitle',
+
+                action: 'submitStep',
+
+                titleBinding:     'Smartgraphs.activityStepController.submitButtonTitle',
                 isVisibleBinding: 'Smartgraphs.activityViewController.showSubmitButton',
                 isEnabledBinding: 'Smartgraphs.activityViewController.enableSubmitButton',
                 isDefaultBinding: 'Smartgraphs.activityViewController.enableSubmitButton',
-                action: 'submitStep',
 
                 titleDidChange: function () {
                   var metrics = SC.metricsForString(this.get('title'), 'label', ['sc-button-label', 'text-wrapper']);
                   this.adjust('width', metrics.width + 48);
-                }.observes('title')
+                }.observes('title'),
+
+                /** The default implementation of this private property does not correctly account for changes to the
+                   vertical position of this button resulting from the growing/shrinking of the StaticContentView in
+                   flow above us. This a problem because the parent class SC.Button's touchEnd uses _touchBoundaryFrame
+                   to calculate whether the touch ended on this button or off of it (and therefore whether the touch
+                   should be counted as a "click" on this button, or not.).
+
+                   Attempting to notifyPropertyChange('_touchBoundaryFrame') in touchStart did not correct the
+                   incorrect behavior; the fix here is to use jQuery's offset() function, although we lose the benefit
+                   of caching by doing so.
+
+                   Without this fix, whenever the activityStepDialog view grows or shrinks between steps by an amount
+                   greater than (the button height + the 50px 'slop' specified by touchBoundary), then touches to the
+                   button do not click it.
+                */
+                _touchBoundaryFrame: function () {
+                  var frame  = this.get('frame'),
+                      offset = this.$().offset();
+
+                  frame.x = offset.left;
+                  frame.y = offset.top;
+                  return frame;
+                }.property()
 
               })
             })

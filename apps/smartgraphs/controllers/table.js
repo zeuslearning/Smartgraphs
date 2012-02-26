@@ -132,7 +132,7 @@ Smartgraphs.TableController = SC.ArrayController.extend( Smartgraphs.AnnotationS
     this.set('datadef', datadef);
     this.set('dataRepresentation', rep);
     this.set('pointset', rep.get('pointset'));
-    this.set('content', this.getPath('pointset.points'));
+    this.bind('content', '.pointset.points');
 
     this.addAnnotationsByName(config.annotations);
   },
