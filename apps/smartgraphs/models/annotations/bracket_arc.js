@@ -91,6 +91,11 @@ Smartgraphs.BracketArc = Smartgraphs.Annotation.extend(
 
   p2y: Smartgraphs.Tag.valueFrom('p2Tag', 'y', 'y2Record'),
 
+  init: function () {
+    sc_super();
+    this._pointIndicesDidChange();
+  },
+  
   _pointIndicesDidChange: function () {
     var p1x = this.get('p1x'),
         p1y = this.get('p1y'),

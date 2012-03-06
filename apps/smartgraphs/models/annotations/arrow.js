@@ -76,6 +76,12 @@ Smartgraphs.Arrow = Smartgraphs.Annotation.extend(
   */
   label: SC.Record.attr(String),
 
+
+  init: function () {
+    sc_super();
+    this._startAndEndDidChange();
+  },
+
   _startAndEndDidChange: function () {
     var p1x = this.get('p1x'),
         p1y = this.get('p1y'),
