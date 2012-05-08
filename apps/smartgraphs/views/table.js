@@ -79,7 +79,7 @@ Smartgraphs.TableView = SC.View.extend(
 
       xLabel: SC.LabelView.design({
         classNames: ['smartgraph-numeric-view-label'],
-        layout: { top: 0, height: 25 },
+        layout: { top: 0, height: 50 },
         textAlign: SC.ALIGN_RIGHT,
         valueBinding: '.parentView.parentView.parentView.xLabel'
       }),
@@ -100,7 +100,7 @@ Smartgraphs.TableView = SC.View.extend(
 
       yLabel: SC.LabelView.design({
         classNames: ['smartgraph-numeric-view-label'],
-        layout: { top: 0, height: 25 },
+        layout: { top: 0, height: 50 },
         textAlign: SC.ALIGN_RIGHT,
         valueBinding: '.parentView.parentView.parentView.yLabel'
       }),
@@ -122,16 +122,16 @@ Smartgraphs.TableView = SC.View.extend(
     labelsView: SC.View.design({
       classNames: ['table-background', 'table-background-top'],
 
-      layout: { left: 40, top: 0, width: 250, height: 25 },
+      layout: { left: 40, top: 0, width: 250, height: 50 },
       childViews: ['xsLabel', 'ysLabel'],
 
       xsLabel: SC.LabelView.design({
-        layout: { left: 15, top: 7, width: 90, height: 18 },
+        layout: { left: 15, top: 7, width: 90, height: 50 },
         valueBinding: '.parentView.parentView.parentView.xLabel'
       }),
 
       ysLabel: SC.LabelView.design({
-        layout: { left: 105, top: 7, width: 90, height: 18 },
+        layout: { left: 105, top: 7, width: 90, height: 50 },
         valueBinding: '.parentView.parentView.parentView.yLabel'
       })
     }),
