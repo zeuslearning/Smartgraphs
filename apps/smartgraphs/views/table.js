@@ -137,7 +137,7 @@ Smartgraphs.TableView = SC.View.extend(
     }),
 
     scrollView: SC.ScrollView.design({
-      layout: { left: 0, top: 25, width: 290 },
+      layout: { left: 0, top: 50, width: 290 },
       classNames: ['table-background'],
 
       borderStyle: SC.BORDER_NONE,
