@@ -100,7 +100,7 @@ Smartgraphs.activityDocs["/shared/marias-run"] =
       ],
       "name": "Where did Maria stop?",
       "firstStep": "/shared/marias-run/page/5/step/1",
-      "introText": "<p>Now you that you\u2019ve had a chance to create position versus time graphs from your own motions, let\u2019s look at some graphs that were created by someone running.</p><p>Maria ran practice laps around the school track. Her coach recorded the distances she ran after each minute. These data are shown in the graph and the table at right. Remember that the time was recorded in minutes rather than seconds.</p>",
+      "introText": "<p>Now that you\u2019ve had a chance to create position versus time graphs from your own motions, let\u2019s look at some graphs that were created by someone running.</p><p>Maria ran practice laps around the school track. Her coach recorded the distances she ran after each minute. These data are shown in the graph and the table at right. Remember that the time was recorded in minutes rather than seconds.</p>",
       "url": "/shared/marias-run/page/5",
       "activity": "/shared/marias-run",
       "index": 5
