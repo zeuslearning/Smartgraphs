@@ -56,6 +56,18 @@ Smartgraphs.activityController = SC.ObjectController.create(
     if (this.get('isSaving') && this.get('isError')) {
       Smartgraphs.statechart.sendAction('errorSavingActivity');
     }
-  }.observes('isSaving', 'isError')
+  }.observes('isSaving', 'isError'),
 
+  // For google analytics, track activity launching.
+  _sendAnalytics: function() {
+    var activityName = this.getPath('title');
+    if (!!_gaq) {
+      _gaq.push(["_trackEvent", "SmartGraphs Activities", "Launch", activityName]);
+      console.log("sent analytics request for %s", activityName);
+    }
+    else {
+      console.log("couldn't send analytics request for %s", activityName);
+    }
+  }.observes('title')
+    
 }) ;
