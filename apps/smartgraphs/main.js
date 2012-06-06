@@ -50,4 +50,24 @@ Smartgraphs.preloadFixtures = function () {
   }
 };
 
+//
+// Send Google Analytics Data.
+Smartgraphs.sendGaEvent = function(key,value) {
+  var hash_key = "" + key + " = " + value;
+  if (typeof Smartgraphs.sendGAEvent_last_hash_key === 'undefined') {
+    Smartgraphs.sendGAEvent_last_hash_key = "";
+  } 
+  if (Smartgraphs.sendGAEvent_last_hash_key === hash_key) { 
+    return;
+  }
+  Smartgraphs.sendGAEvent_last_hash_key = hash_key;
+  if (!!_gaq) {
+    _gaq.push(["_trackEvent", "SmartGraphs Activities", key, value]);
+    console.log("sent analytics %s", hash_key);
+  }
+  else {
+    console.log("couldn't send analytics %s", hash_key);
+  }
+};
+
 function main() { Smartgraphs.main(); }
