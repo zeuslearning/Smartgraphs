@@ -58,16 +58,10 @@ Smartgraphs.activityController = SC.ObjectController.create(
     }
   }.observes('isSaving', 'isError'),
 
-  // For google analytics, track activity launching.
+  // Send GA event for activity launch.
   _sendAnalytics: function() {
     var activityName = this.getPath('title');
-    if (!!_gaq) {
-      _gaq.push(["_trackEvent", "SmartGraphs Activities", "Launch", activityName]);
-      console.log("sent analytics request for %s", activityName);
-    }
-    else {
-      console.log("couldn't send analytics request for %s", activityName);
-    }
+    Smartgraphs.sendGaEvent('Launch',activityName);
   }.observes('title')
     
 }) ;

@@ -66,6 +66,9 @@ Smartgraphs.activityStepController = SC.ObjectController.create(
     this.setupTriggers();
     this.processSubstitutions(this.get('substitutedExpressions'));
 
+    // submit GA event:
+    Smartgraphs.sendGaEvent('Step Change', "(" + this.get('url') + ")");
+    
     // does the step goes "straight through"?
     if (this.get('shouldFinishImmediately')) {
       Smartgraphs.statechart.sendAction('submitStep');
