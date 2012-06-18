@@ -28,7 +28,9 @@ Smartgraphs.activityPagesController = SC.ArrayController.create(
       this.selectObject(page);
     }
     // Send GA event:
-    Smartgraphs.sendGaEvent('Page Change', "(" + page.get("index") + ") " + page.get("name"));
+    if (!!page) {
+      Smartgraphs.sendGaEvent('Page Change', "(" + page.get("index") + ") " + page.get("name"));
+    }
   }.observes('Smartgraphs.activityPageController.content'),
   
   currentPageNumber: function () {
