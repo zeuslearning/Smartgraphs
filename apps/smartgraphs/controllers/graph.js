@@ -9,6 +9,7 @@ sc_require('mixins/annotation_support');
 sc_require('tools/label/label_state');
 sc_require('tools/animation/animation_state');
 sc_require('tools/prediction/prediction_state');
+sc_require('tools/graphing/graphing_state');
 
 /** @class
 
@@ -43,6 +44,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       LABEL_TOOL:      Smartgraphs.LABEL_TOOL.design(),
       ANIMATION_TOOL:  Smartgraphs.ANIMATION_TOOL.design(),
       PREDICTION_TOOL: Smartgraphs.PREDICTION_TOOL.design(),
+      GRAPHING_TOOL:   Smartgraphs.GRAPHING_TOOL.design(),
 
       /** forward these to the main statechart */
       startControlWasClicked: function () {
@@ -118,6 +120,16 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     The title of the graph.
   */
   title: null,
+
+  /**
+   
+   @property String
+   
+   Wheather to show the grid line or not
+   
+   */
+  
+  showGraphGrid : null,
 
   /**
     @property {SC.Object}
@@ -266,6 +278,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set('title', null);
     this.set('xAxis', null);
     this.set('yAxis', null);
+    this.set('showGraphGrid', null);
     this.set('graphableDataObjects', []);
     this.set('dataRepresentations', []);
     this.clearAnnotations();
@@ -292,6 +305,10 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set('title', config.title);
     this.set('xAxis', this.getAxis(config.xAxis));
     this.set('yAxis', this.getAxis(config.yAxis));
+    this.set('showGraphGrid', config.showGraphGrid);
+    this.set('showCrossHairs', config.showCrossHairs);
+    this.set('showToolTipCoords', config.showToolTipCoords);
+    
 
     dataSpecs.forEach( function (dataSpec) {
       var datadefName,
@@ -392,6 +409,19 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     var statechart = this.get('statechart');
     return statechart.sendAction.apply(statechart, arguments);
   },
+  
+  graphingToolStartTool: function (args) {
+    this.sendAction('graphingToolStartTool', this, args);
+  },
+
+	graphingToolGraphingStarting: function () {
+		this.set('requestedCursorStyle', 'crosshair');
+	},
+
+  graphingToolGraphingFinished: function () {
+    this.set('requestedCursorStyle', 'default');
+  },
+
 
   predictionToolStartTool: function (args) {
     this.sendAction('predictionToolStartTool', this, args);

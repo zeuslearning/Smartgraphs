@@ -357,5 +357,9 @@ Smartgraphs.evaluator.defineOperators( function (def) {
   def("playCount", function () {
     return Smartgraphs.animationTool.get('playCount');
   }).args(0).dependsOn('Smartgraphs.animationTool.playCount');
+  
+  def('lineCount', function () {
+    return Smartgraphs.graphingTool.get('lineCount');
+  }).dependsOn('Smartgraphs.graphingTool.lineCount');
 
 });
