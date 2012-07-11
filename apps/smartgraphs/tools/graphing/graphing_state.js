@@ -47,11 +47,11 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
       if (!SC.kindOf(annotation, Smartgraphs.FreehandSketch)) {
         throw SC.Error.desc("Graphing tool was started with a non-FreehandSketch annotation name '%@'".fmt(annotationName));
       }
+			
+			if (!datadef) {
+        throw SC.Error.desc("Graphing tool was started with a bogus datadef name '%@'".fmt(datadefName));
+      }			
 
-      this.get('owner').showControls();
-      this.get('owner').revealOnlyClearControl();
-
-      annotation.clear();
       Smartgraphs.graphingTool.graphingStarting(this);
 
       toolRoot.set('annotation', annotation);

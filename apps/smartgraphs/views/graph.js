@@ -16,6 +16,7 @@ Smartgraphs.GraphView = SC.View.extend(
 
   xAxisBinding: '*graphController.xAxis',
   yAxisBinding: '*graphController.yAxis',
+  showGraphGridBinding : '*graphController.showGraphGrid',
   graphableDataObjectsBinding: '*graphController.graphableDataObjects',
   annotationListBinding: '*graphController.annotationList',
   requestedCursorStyleBinding: '*graphController.requestedCursorStyle',
@@ -260,6 +261,7 @@ Smartgraphs.GraphView = SC.View.extend(
 
     graphView: SC.outlet('parentView'),
 
+		showGraphGrid: '.graphView.showGraphGrid',
     xAxisBinding: '.graphView.xAxis',
     yAxisBinding: '.graphView.yAxis',
     requestedCursorStyleBinding: '.graphView.requestedCursorStyle',
@@ -269,6 +271,17 @@ Smartgraphs.GraphView = SC.View.extend(
 
     childViews: 'axesView dataHolder annotationsHolder overlayAnnotationsHolder animationView'.w(),
 
+		touchStart: function (evt) {
+			this._mouseDownOrTouchStart(evt);
+		},
+		mouseDown:  function (evt) {
+			this._mouseDownOrTouchStart(evt);
+		},
+
+	  _mouseDownOrTouchStart: function (evt) {
+	        this.get('axesView').get('inputAreaView').mouseDown(evt);
+				},
+				
     _animationIsPaused: NO,
 
     _getScreenBounds: function () {
@@ -628,7 +641,236 @@ Smartgraphs.GraphView = SC.View.extend(
       yAxisBinding: '.graphView.yAxis',
       paddingBinding: '.graphView.padding',
 
-      childViews: 'inputAreaView xAxisView yAxisView'.w(),
+      childViews: 'inputAreaView xAxisView yAxisView gridView'.w(),
+      
+			gridView: RaphaelViews.RaphaelView.design({
+			
+			  graphCanvasView: SC.outlet('parentView'),
+			  graphView: SC.outlet('graphCanvasView.graphView'),
+				
+				_y: function (x, m, b) {
+			    return (m * x) + b;
+			  },
+				
+				_x: function (y, m, b) {
+			    if (m === 0) { // If the slope is 0, line is horizontal. We don't want to try division by 0.
+			      return b;
+			    } else {
+			      return (y - b) / m;
+			    }
+			  },
+			  
+			  getEndPoints: function (x1, y1, x2, y2, xAxis, yAxis) {
+			    var xMax = xAxis.get('max');
+			    var xMin = xAxis.get('min');
+			    var yMax = yAxis.get('max');
+			    var yMin = yAxis.get('min');
+			
+			    var points = [];
+			
+			    // case 1: vertical line
+			    if (x1 === x2) {
+			      points.push({x: x1, y: yMin});
+			      points.push({x: x1, y: yMax});
+			
+			      return points;
+			    }
+			
+			    // Use y = mx + b
+			    var m = (y2 - y1) / (x2 - x1);
+			    // => b = y - mx
+			    var b = y2 - (m * x2);
+			
+			    // case 2: leftmost point is on the bottom border
+			    if (this._y(xMin, m, b) < yMin) {
+			      // start point is on bottom border
+			      points.push({ 'y': yMin, 'x': this._x(yMin, m, b) });
+			      if (this._y(xMax, m, b) > yMax) {
+			        // end point is on top border
+			        points.push({ 'y': yMax, 'x': this._x(yMax, m, b) });
+			      } else {
+			        // end point is on right border
+			        points.push({ 'x': xMax, 'y': this._y(xMax, m, b) });
+			      } // Because we started at the bottom and are going left/right, end point can't be on left
+			
+			      return points;
+			    }
+			
+			    // case 3: leftmost point is on the left border
+			    if ((yMin <= this._y(xMin, m, b)) && (this._y(xMin, m, b) <= yMax)) {
+			      points.push({ 'x': xMin, 'y': this._y(xMin, m, b) });
+			      if (this._y(xMax, m, b) < yMin) {
+			        // end point on bottom border
+			        points.push({ 'y': yMin, 'x': this._x(yMin, m, b) });
+			      } else if (this._y(xMax, m, b) <= yMax) {
+			        // end point on right border
+			        points.push({ 'x': xMax, 'y': this._y(xMax, m, b) });
+			      } else {
+			        // end point is on top border
+			        points.push({ 'y': yMax, 'x': this._x(yMax, m, b) });
+			      }
+			
+			      return points;
+			    }
+			
+			    // case 4: leftmost point is on the top border
+			    if (yMax < this._y(xMin, m, b)) {
+			      points.push({ 'y': yMax, 'x': this._x(yMax, m, b) });
+			      if (this._y(xMax, m, b) < yMin) {
+			        // end point is on bottom border
+			        points.push({ 'y': yMin, 'x': this._x(yMin, m, b) });
+			      } else {
+			        // end point is on right border
+			        points.push({ 'x': xMax, 'y': this._y(xMax, m, b) });
+			      } // Because we started at the top and are going left/right, end point can't be on left
+			
+			      return points;
+			    }
+			
+			    // oops
+			    return null;
+			  },
+			  
+			  coordsForEvent: function (evt) {
+			    var graphOffset = this._$graphView.offset(),
+			        bounds      = this._screenBounds,
+			        x           = evt.pageX - graphOffset.left,
+			        y           = evt.pageY - graphOffset.top,
+			        fraction;
+			
+			    // clip the event to the inputArea boundaries. Simple clipping seems to work fine
+			    x = (x < bounds.xLeft) ? bounds.xLeft : (x > bounds.xRight)  ? bounds.xRight  : x;
+			    y = (y < bounds.yTop)  ? bounds.yTop  : (y > bounds.yBottom) ? bounds.yBottom : y;
+			
+			    return { x: x, y: y };
+			  },
+				
+				renderCallback: function (raphaelCanvas, attrs) {
+					for (var iCounter = 0; iCounter < attrs.length; iCounter++)
+					{
+						raphaelCanvas.path(attrs[iCounter].d).attr(attrs[iCounter]);
+					}
+					return;
+			  },
+				
+				render: function (context, firstTime) {
+						var graphView  = this.get('graphView');
+			      var xAxis      = graphView.get('xAxis');
+			      var yAxis      = graphView.get('yAxis');
+			      
+			      //return if xAxis and yAxis is undefined
+			      if (!xAxis || !yAxis)
+			      {
+							return;
+			      }
+			      
+			      var logicalBounds = graphView.graphCanvasView._getLogicalBounds();
+			      var nXSteps = xAxis.get("nSteps");
+			      var nYSteps = yAxis.get("nSteps");
+			      var attrs = [];
+			      
+			      var nXDifference = Math.abs((logicalBounds.xMax - logicalBounds.xMin) / nXSteps);
+			      var nyDifference = Math.abs((logicalBounds.yMax - logicalBounds.yMin) / nYSteps);
+			      var iCurrentX = logicalBounds.xMin;
+			      var points;
+			      var i, coords, point, pathComponents = [], pathString;
+			      
+						for (var iCounter = 0 ; iCounter < nXSteps; iCounter++)
+						{
+						  points = this.getEndPoints((nXDifference + iCurrentX), logicalBounds.yMin, (nXDifference + iCurrentX), logicalBounds.yMax, xAxis, yAxis);
+						    
+						  for (i = 0; i < points.length; i++) {
+						    pathComponents.push(i === 0 ? 'M' : 'L');
+						    point = points[i];
+						    coords = graphView.coordinatesForPoint(point.x, point.y);
+						    pathComponents.push(coords.x);
+						    pathComponents.push(coords.y);
+						  }
+						  pathString = pathComponents.join(' ');
+						
+						  attrs.push({
+						    'd':              pathString,
+						    'stroke':         '#C2CCE0',
+						    'stroke-width':   1,
+						    'stroke-opacity': 0.5
+						  });
+						    
+						  iCurrentX = iCurrentX + nXDifference;
+            }
+						
+						var iCurrentY = logicalBounds.yMin;
+						
+						for (iCounter = 0 ; iCounter < nYSteps; iCounter++)
+			      {
+			        points = this.getEndPoints(logicalBounds.xMin, (nyDifference + iCurrentY), logicalBounds.xMax, (nyDifference + iCurrentY), xAxis, yAxis);
+			        pathComponents = [];
+				        
+							for (i = 0; i < points.length; i++) {
+							  pathComponents.push(i === 0 ? 'M' : 'L');
+							  point = points[i];
+							  coords = graphView.coordinatesForPoint(point.x, point.y);
+							  pathComponents.push(coords.x);
+							  pathComponents.push(coords.y);
+							}
+							pathString = pathComponents.join(' ');
+						
+					    attrs.push({
+					      'd':              pathString,
+					      'stroke':         '#C2CCE0',
+					      'stroke-width':   1,
+					      'stroke-opacity': 0.5
+					    });
+					    
+					    iCurrentY = iCurrentY + nyDifference;
+						}
+						
+						context.callback(this, this.renderCallback, attrs);
+			
+					},
+				
+				touchStart: function (evt) {
+					this._mouseDownOrTouchStart(evt);
+				},
+			  mouseDown:  function (evt) {
+					this._mouseDownOrTouchStart(evt);
+			  },
+			
+			  _mouseDownOrTouchStart: function (evt) {
+			    var coords = this.coordsForEvent(evt),
+			        point = this._graphView.pointForCoordinates(coords.x, coords.y);
+			
+			    this._graphController = this._graphView.get('graphController');
+					return this._graphController.inputAreaMouseDown(point.x, point.y);
+			  },
+			
+		    touchesDragged: function (evt) { 
+					this._mouseOrTouchesDragged(evt);
+		    },
+		    mouseDragged: function (evt) {
+					this._mouseOrTouchesDragged(evt);
+		    },
+			
+		    _mouseOrTouchesDragged: function (evt) {
+		      var coords = this.coordsForEvent(evt),
+		          point = this._graphView.pointForCoordinates(coords.x, coords.y);
+		
+		      return this._graphController.inputAreaMouseDragged(point.x, point.y);
+		    },
+		
+		    touchEnd: function (evt) {
+					this._mouseUpOrTouchEnd(evt);
+		    },
+		    mouseUp:  function (evt) {
+					this._mouseUpOrTouchEnd(evt);
+				},
+			
+		    _mouseUpOrTouchEnd: function (evt) {
+		      var coords = this.coordsForEvent(evt),
+		          point = this._graphView.pointForCoordinates(coords.x, coords.y);
+		
+		      return this._graphController.inputAreaMouseUp(point.x, point.y);
+		    }
+			}),
 
       inputAreaView: RaphaelViews.RaphaelView.design({
 

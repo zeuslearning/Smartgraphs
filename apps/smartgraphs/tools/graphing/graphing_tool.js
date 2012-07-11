@@ -15,7 +15,7 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
 
   setup: function (args) {
     var controller = this.graphControllerForPane(args.pane);
-    controller.graphingToolStartTool({ annotationName: args.annotationName, shape: args.shape, datadefName: args.datadefName});
+    controller.graphingToolStartTool({ annotationName: args.annotationName, shape: args.shape, datadefName: args.data});
   },
 
   appendSketch: function (state, sketch) {
@@ -24,7 +24,7 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
 
   graphingStarting: function (state) {
     var controller = this.graphControllerForState(state);
-    if (controller.showCrossHairs == "true") {
+    if (controller.showCrossHairs === true) {
 			if (controller && controller.graphingToolGraphingStarting)
 			{ 
 				controller.graphingToolGraphingStarting();
