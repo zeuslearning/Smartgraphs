@@ -39,6 +39,14 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
 			this.lineCount = 0;
 			controller.graphingToolGraphingFinished();
 		}
+  },
+  
+  graphViewForPane: function (pane) {
+    return Smartgraphs.activityPage.getPath(Smartgraphs.activityViewController.firstOrSecondFor(pane) + 'GraphPane.graphView');
+  },
+  
+  graphViewFromState: function (state) {
+    return this.graphViewForPane(this.paneForState(state));
   }
 
 });

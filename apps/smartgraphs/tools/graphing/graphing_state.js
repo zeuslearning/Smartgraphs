@@ -113,11 +113,11 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
 					var datadef = this.getPath('toolRoot.datadef');   
 					if (datadef.get("points").length < 2)
 					{
-						this.getPath('toolRoot.annotation').addPoint(args.x, args.y);
 						datadef.addPoint(args.x, args.y);
 						Smartgraphs.taggingTool.setPoint(args.x, args.y);
 						if (datadef.get("points").length == 2)
 						{
+							this.getPath('toolRoot.ON').drawLineThroughPoints(datadef.get("points")[0], [args.x, args.y]);
 							Smartgraphs.graphingTool.set('lineCount', 1);
 						}
 					}
@@ -169,6 +169,72 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
           this.gotoState(this.getPath('parentState.START'));
         }
       })
-    })
+    }),
+    
+    drawLineThroughPoints: function (point1, point2) {
+      var m, c, ptPlotted1, ptPlotted2, screenBounds, pointLogical1, pointLogical2;
+      
+      if (point1[0] > point2[0]) {
+				var point3 = point2;
+				point2 = point1;
+				point1 = point3;
+      }
+      
+      screenBounds = Smartgraphs.graphingTool.graphViewFromState(this).graphCanvasView._getLogicalBounds();
+      
+      pointLogical1 = [];
+      pointLogical2 = [];
+      
+      if ((point2[0] === point1[0])) {
+				pointLogical1 = [point1[0], screenBounds.yMin];
+				pointLogical2 = [point1[0], screenBounds.yMax];
+      } else {
+				m = (point2[1] - point1[1]) / (point2[0] - point1[0]);
+				c = point2[1] - m * point2[0];
+				
+				if (m === 0) {
+					pointLogical1 = [screenBounds.xMin, point1[1]];
+					pointLogical2 = [screenBounds.xMax, point1[1]];
+				} else {
+					pointLogical1[0] = screenBounds.xMin;
+					pointLogical1[1] = m * pointLogical1[0] + c;
+					
+					pointLogical1 = this.getLinePointWithinLogicalBounds(pointLogical1, m, c);
+					
+					pointLogical2[1] = m > 0 ? screenBounds.yMax : screenBounds.yMin;
+					pointLogical2[0] = (pointLogical2[1] - c) / m;
+										
+					pointLogical2 = this.getLinePointWithinLogicalBounds(pointLogical2, m, c);
+				}
+      }
+			
+			this.getPath('toolRoot.annotation').addPoint(pointLogical1[0], pointLogical1[1]);
+			this.getPath('toolRoot.annotation').addPoint(pointLogical2[0], pointLogical2[1]);
+    },
+    
+    getLinePointWithinLogicalBounds: function (point, m, c) {
+			var pointCalculated, screenBounds;
+			
+			pointCalculated = [point[0], point[1]];
+			screenBounds = Smartgraphs.graphingTool.graphViewFromState(this).graphCanvasView._getLogicalBounds();
+			
+			if (point[0] < screenBounds.xMin) {
+				pointCalculated[0] = screenBounds.xMin;
+				pointCalculated[1] = m * pointCalculated[0] + c;
+			} else if (point[0] > screenBounds.xMax) {
+				pointCalculated[0] = screenBounds.xMax;
+				pointCalculated[1] = m * pointCalculated[0] + c;
+			}
+			
+			if (point[1] < screenBounds.yMin) {
+				pointCalculated[1] = screenBounds.yMin;
+				pointCalculated[0] = (pointCalculated[1] - c) / m;
+			} else if (point[1] > screenBounds.yMax) {
+				pointCalculated[1] = screenBounds.yMax;
+				pointCalculated[0] = (pointCalculated[1] - c) / m;
+			}
+			
+			return pointCalculated;
+    }
   })
 });
