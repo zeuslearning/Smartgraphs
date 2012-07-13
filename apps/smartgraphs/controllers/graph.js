@@ -279,6 +279,8 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set('xAxis', null);
     this.set('yAxis', null);
     this.set('showGraphGrid', null);
+    this.set('showCrossHairs', null);
+    this.set('showToolTipCoords', null);
     this.set('graphableDataObjects', []);
     this.set('dataRepresentations', []);
     this.clearAnnotations();

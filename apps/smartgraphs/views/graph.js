@@ -16,7 +16,6 @@ Smartgraphs.GraphView = SC.View.extend(
 
   xAxisBinding: '*graphController.xAxis',
   yAxisBinding: '*graphController.yAxis',
-  showGraphGridBinding : '*graphController.showGraphGrid',
   graphableDataObjectsBinding: '*graphController.graphableDataObjects',
   annotationListBinding: '*graphController.annotationList',
   requestedCursorStyleBinding: '*graphController.requestedCursorStyle',
@@ -261,7 +260,6 @@ Smartgraphs.GraphView = SC.View.extend(
 
     graphView: SC.outlet('parentView'),
 
-		showGraphGrid: '.graphView.showGraphGrid',
     xAxisBinding: '.graphView.xAxis',
     yAxisBinding: '.graphView.yAxis',
     requestedCursorStyleBinding: '.graphView.requestedCursorStyle',
@@ -277,10 +275,28 @@ Smartgraphs.GraphView = SC.View.extend(
 		mouseDown:  function (evt) {
 			this._mouseDownOrTouchStart(evt);
 		},
-
-	  _mouseDownOrTouchStart: function (evt) {
-	        this.get('axesView').get('inputAreaView').mouseDown(evt);
-				},
+		
+		_checkInputAreaScreenBounds: function (x, y)
+		{
+				var inputAreaOffset = this.get("graphView").get("inputAreaView").$().offset();
+				var bounds = this._getScreenBounds();
+				if ((x >= inputAreaOffset.left && x <= inputAreaOffset.left + bounds.plotWidth)	&& (y >= inputAreaOffset.top  && y <= inputAreaOffset.top + bounds.plotHeight))
+				{
+					return true;		
+				}
+				else
+				{
+					return false;
+				}
+			},
+		
+	  _mouseDownOrTouchStart: function (evt) 
+		{
+			if (this._checkInputAreaScreenBounds(evt.pageX, evt.pageY))
+			{
+				this.get('axesView').get('inputAreaView').mouseDown(evt);
+			}
+		},
 				
     _animationIsPaused: NO,
 
@@ -643,10 +659,24 @@ Smartgraphs.GraphView = SC.View.extend(
 
       childViews: 'inputAreaView xAxisView yAxisView gridView'.w(),
       
+      touchStart: function (evt) {
+				this._mouseDownOrTouchStart(evt);
+			},
+			mouseDown:  function (evt) {
+				this._mouseDownOrTouchStart(evt);
+			},
+
+			_mouseDownOrTouchStart: function (evt)
+			{
+			  this.get('axesView').get('inputAreaView').mouseDown(evt);
+			},
+      
+      
+      
 			gridView: RaphaelViews.RaphaelView.design({
 			
-			  graphCanvasView: SC.outlet('parentView'),
-			  graphView: SC.outlet('graphCanvasView.graphView'),
+				graphCanvasView: SC.outlet('parentView.graphCanvasView'),
+        graphView: SC.outlet('parentView.graphView'),
 				
 				_y: function (x, m, b) {
 			    return (m * x) + b;
@@ -764,6 +794,11 @@ Smartgraphs.GraphView = SC.View.extend(
 							return;
 			      }
 			      
+			      if (this.get("graphView").get("graphController").showGraphGrid === undefined || this.get("graphView").get("graphController").showGraphGrid === false)
+			      {
+							return;
+			      }
+			      
 			      var logicalBounds = graphView.graphCanvasView._getLogicalBounds();
 			      var nXSteps = xAxis.get("nSteps");
 			      var nYSteps = yAxis.get("nSteps");
@@ -777,8 +812,16 @@ Smartgraphs.GraphView = SC.View.extend(
 			      
 						for (var iCounter = 0 ; iCounter < nXSteps; iCounter++)
 						{
-						  points = this.getEndPoints((nXDifference + iCurrentX), logicalBounds.yMin, (nXDifference + iCurrentX), logicalBounds.yMax, xAxis, yAxis);
-						    
+							if (nXDifference + iCurrentX === 0)
+							{
+								continue;
+							}
+							points = [];
+							points.push({ 'y': logicalBounds.yMin, 'x': (nXDifference + iCurrentX) });
+							points.push({ 'y': logicalBounds.yMax, 'x': (nXDifference + iCurrentX) });
+						  //points = this.getEndPoints((nXDifference + iCurrentX), logicalBounds.yMin, (nXDifference + iCurrentX), logicalBounds.yMax, xAxis, yAxis);
+						  pathComponents = [];
+						  
 						  for (i = 0; i < points.length; i++) {
 						    pathComponents.push(i === 0 ? 'M' : 'L');
 						    point = points[i];
@@ -792,7 +835,7 @@ Smartgraphs.GraphView = SC.View.extend(
 						    'd':              pathString,
 						    'stroke':         '#C2CCE0',
 						    'stroke-width':   1,
-						    'stroke-opacity': 0.5
+						    'stroke-opacity': 0.7
 						  });
 						    
 						  iCurrentX = iCurrentX + nXDifference;
@@ -802,7 +845,15 @@ Smartgraphs.GraphView = SC.View.extend(
 						
 						for (iCounter = 0 ; iCounter < nYSteps; iCounter++)
 			      {
-			        points = this.getEndPoints(logicalBounds.xMin, (nyDifference + iCurrentY), logicalBounds.xMax, (nyDifference + iCurrentY), xAxis, yAxis);
+							if (nyDifference + iCurrentY === 0)
+							{
+								continue;
+							}
+							
+							points = [];
+							points.push({ 'y': (nyDifference + iCurrentY), 'x': logicalBounds.xMin });
+							points.push({ 'y': (nyDifference + iCurrentY), 'x': logicalBounds.xMax });
+			        //points = this.getEndPoints(logicalBounds.xMin, (nyDifference + iCurrentY), logicalBounds.xMax, (nyDifference + iCurrentY), xAxis, yAxis);
 			        pathComponents = [];
 				        
 							for (i = 0; i < points.length; i++) {
@@ -818,7 +869,7 @@ Smartgraphs.GraphView = SC.View.extend(
 					      'd':              pathString,
 					      'stroke':         '#C2CCE0',
 					      'stroke-width':   1,
-					      'stroke-opacity': 0.5
+					      'stroke-opacity': 0.7
 					    });
 					    
 					    iCurrentY = iCurrentY + nyDifference;
