@@ -123,13 +123,42 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
 
   /**
    
-   @property String
+   @property Bool
    
    Wheather to show the grid line or not
    
    */
   
   showGraphGrid : null,
+  
+  /**
+   @property Bool
+   
+   Wheather to show the tooltip  or not
+   
+  */
+  
+  showToolTipCoords : null,
+
+	/**
+   
+   @property String
+   
+   Text of the Tooltip
+   
+   */
+  
+  tooltipText : null,
+  
+  /**
+   
+   @property Object
+   
+   Layout of the Tooltip
+   
+   */
+  
+  tooltipLayout : { width: 100, height: 20, centerX: 0, centerY: 0, zIndex: -1 },
 
   /**
     @property {SC.Object}
@@ -279,6 +308,8 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set('xAxis', null);
     this.set('yAxis', null);
     this.set('showGraphGrid', null);
+    this.set('showCrossHairs', null);
+    this.set('showToolTipCoords', null);
     this.set('graphableDataObjects', []);
     this.set('dataRepresentations', []);
     this.clearAnnotations();
@@ -310,7 +341,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set('showToolTipCoords', config.showToolTipCoords);
     
 
-    dataSpecs.forEach( function (dataSpec) {
+    dataSpecs.forEach(function (dataSpec) {
       var datadefName,
           options = {},
           datadef,
@@ -402,6 +433,27 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
   unDimRepresentations: function () {
     this.get('dataRepresentations').setEach('isDimmed', NO);
   },
+  
+  updateToolTip: function (point, coords)
+  {
+			var newPoint = Smartgraphs.Point.create();
+			newPoint.set('x', point.x);
+			newPoint.set('y', point.y);
+			var xRounded = newPoint.xRounded();
+			var yRounded = newPoint.yRounded();
+			var strTooltipText = xRounded + ', ' + yRounded;
+			this.set("tooltipText", strTooltipText);
+			var layout = this.get('tooltipLayout');
+			var newLayout = { height: layout.height, width: layout.width, top: coords.y + layout.height / 2, left: coords.x, zIndex: 1 }; 
+			this.set("tooltipLayout", newLayout);
+		},
+	
+	hideToolTip : function ()
+	{
+		var layout = this.get('tooltipLayout');
+		var newLayout = { height: layout.height, width: layout.width, top: layout.top, left: layout.left, zIndex: -1 }; 
+		this.set("tooltipLayout", newLayout);
+	},
 
   // Events
 
@@ -461,6 +513,10 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
 
   inputAreaMouseUp: function (x, y) {
     return !!this.sendAction('mouseUpAtPoint', this, {x: x, y: y});
+  },
+	
+	inputAreaMouseMove: function (x, y) {
+		return !!this.sendAction('mouseMoveAtPoint', this, {x: x, y: y});
   },
 
   dataPointSelected: function (dataRepresentation, x, y) {
