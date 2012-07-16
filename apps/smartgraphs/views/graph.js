@@ -837,7 +837,8 @@ Smartgraphs.GraphView = SC.View.extend(
 		      var coords = this.coordsForEvent(evt),
 		          point = this._graphView.pointForCoordinates(coords.x, coords.y);
 		
-		      return this._graphController.inputAreaMouseDragged(point.x, point.y);
+					var graphController = this._graphView.get('graphController');
+		      return graphController.inputAreaMouseDragged(point.x, point.y);
 		    },
 		
 		    touchEnd: function (evt) {
@@ -850,7 +851,8 @@ Smartgraphs.GraphView = SC.View.extend(
 		    _mouseUpOrTouchEnd: function (evt) {
 		      var coords = this.coordsForEvent(evt),
 		          point = this._graphView.pointForCoordinates(coords.x, coords.y);
-		
+					
+					this._graphController = this._graphView.get('graphController');
 		      return this._graphController.inputAreaMouseUp(point.x, point.y);
 		    }
 			}),
@@ -919,15 +921,16 @@ Smartgraphs.GraphView = SC.View.extend(
 						coords.x = bounds.xRight - layout.width;
 					}
 					
-          var graphController = this._graphView.get('graphController');
-          if (graphController.showToolTipCoords)
-          {
+					var graphController = this._graphView.get('graphController');
+					if (graphController.showToolTipCoords && Smartgraphs.graphingTool.get('showTooltip') == true)
+					{
 						graphController.updateToolTip(point, coords);
-          }
-          else
-          {
+					}
+					else
+					{
 						graphController.hideToolTip();
-          }
+					}
+					
           return graphController.inputAreaMouseMove(point.x, point.y);
         },
 
@@ -961,8 +964,9 @@ Smartgraphs.GraphView = SC.View.extend(
         _mouseUpOrTouchEnd: function (evt) {
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
-
-          return this._graphController.inputAreaMouseUp(point.x, point.y);
+					
+					var graphController = this._graphView.get('graphController');
+          return graphController.inputAreaMouseUp(point.x, point.y);
         },
         
         

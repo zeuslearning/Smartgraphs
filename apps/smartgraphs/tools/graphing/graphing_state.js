@@ -119,6 +119,10 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
 						if (datadef.get("points").length == 2)
 						{
 							Smartgraphs.graphingTool.drawLineThroughPoints(datadef.get("points")[0], [args.x, args.y], this);
+							Smartgraphs.graphingTool.set('requestedCursorStyle', this.get('owner').get('requestedCursorStyle'));
+							this.get('owner').set('requestedCursorStyle', 'default');
+							Smartgraphs.graphingTool.set('showTooltip', false);
+							this.get('owner').hideToolTip();
 						}
 					}
         },
@@ -129,6 +133,11 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
         
         mouseDraggedToPoint: function (context, args) {
 					var points = this.getPath('toolRoot.annotation').get('points');
+					if (Smartgraphs.graphingTool.get("lineCount") == 2)
+					{
+						this.get('owner').set('requestedCursorStyle', Smartgraphs.graphingTool.get('requestedCursorStyle'));
+					}
+				  this.get('owner').set('requestedCursorStyle', 'default');
 					for (var i = 0; i < points.length; i++)
 					{
 						if (Math.round(args.x) == Math.round(points[i][0]) && Math.round(args.y) == Math.round(points[i][1], 2))
@@ -139,6 +148,11 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
         },
 
         mouseUpAtPoint: function (context, args) {
+					if (Smartgraphs.graphingTool.get("lineCount") == 2)
+					{
+						this.get('owner').set('requestedCursorStyle', 'default');
+						//Smartgraphs.graphingTool.set('showRequestedCursorStyle', false);
+					}
           return;
         }
 

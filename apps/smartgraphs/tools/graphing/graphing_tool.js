@@ -14,6 +14,8 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
   lineCount : 0,
   annotationName : null,
   datadefName : null,
+  requestedCursorStyle : 'default',
+  showTooltip : true,
 
   setup: function (args) {
     var controller = this.graphControllerForPane(args.pane);
@@ -97,7 +99,7 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
 		this.getAnnotation(this.get('annotationName')).addPoint(pointLogical1[0], pointLogical1[1]);
 		this.getAnnotation(this.get('annotationName')).addPoint(pointLogical2[0], pointLogical2[1]);
 		
-		this.set('lineCount', this.get('lineCount' + 1));
+		this.set('lineCount', this.get('lineCount') + 1);
   },
   
   getLinePointWithinLogicalBounds: function (point, m, c, screenBounds) {
