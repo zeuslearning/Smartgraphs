@@ -19,7 +19,7 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
     var controller = this.graphControllerForPane(args.pane);
     controller.graphingToolStartTool({ annotationName: args.annotationName, shape: args.shape, datadefName: args.data});
     this.set('annotationName', args.annotationName);
-    this.set('datadefName', args.datadefName);
+    this.set('datadefName', args.data);
   },
 
   appendSketch: function (state, sketch) {

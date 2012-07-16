@@ -123,8 +123,8 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
 					}
         },
         
-        mouseMoveToPoint: function (context, args) {
-					var i = 0;
+        mouseMoveAtPoint: function (context, args) {
+					//Kept this event for future use for of graphing tool
         },
         
         mouseDraggedToPoint: function (context, args) {

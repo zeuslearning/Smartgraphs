@@ -33,7 +33,7 @@ Smartgraphs.GraphView = SC.View.extend(
 
   padding: { top: 15, right: 15, bottom: 45, left: 45 },
 
-  childViews: 'titleView graphCanvasView'.w(),
+  childViews: 'titleView  tooltipView graphCanvasView'.w(),
 
   init: function () {
     sc_super();
@@ -245,7 +245,22 @@ Smartgraphs.GraphView = SC.View.extend(
     layout: { width: 400, centerX: 0, height: 20, top: 20, zIndex: 1 },
     textAlign: SC.ALIGN_CENTER
   }),
-
+	
+	tooltipView: SC.LabelView.design({
+		textAlign: SC.ALIGN_CENTER,
+		classNames: 'toolTipLabel',
+		valueBinding: '.parentView*graphController.tooltipText',
+		layoutBinding: '.parentView*graphController.tooltipLayout',
+   
+	  valueDidChange: function () {
+	    var value = this.get('tooltipText');
+	    var layout = this.get('tooltipLayout');
+	    this.adjust('value', value);
+	    this.adjust('layout', layout);
+	  }.observes('tooltipText')
+ 
+  }),
+	
   graphCanvasView: RaphaelViews.RaphaelCanvasView.design({
 
     init: function () {
@@ -268,13 +283,6 @@ Smartgraphs.GraphView = SC.View.extend(
     displayProperties: 'xAxis.min xAxis.max yAxis.min yAxis.max'.w(),
 
     childViews: 'axesView dataHolder annotationsHolder overlayAnnotationsHolder animationView'.w(),
-
-		touchStart: function (evt) {
-			this._mouseDownOrTouchStart(evt);
-		},
-		mouseDown:  function (evt) {
-			this._mouseDownOrTouchStart(evt);
-		},
 		
 		_checkInputAreaScreenBounds: function (x, y)
 		{
@@ -289,6 +297,30 @@ Smartgraphs.GraphView = SC.View.extend(
 					return false;
 				}
 			},
+		
+		mouseMoved: function (evt) {
+			this._mouseMoved(evt);
+		},
+		
+		_mouseMoved: function (evt)
+		{
+			if (this._checkInputAreaScreenBounds(evt.pageX, evt.pageY))
+			{
+				this.get('axesView').get('inputAreaView').mouseMoved(evt);
+			}
+			else
+			{
+				var graphController = this.get("graphView").get('graphController');
+				graphController.hideToolTip();
+			}
+		},
+		
+		touchStart: function (evt) {
+			this._mouseDownOrTouchStart(evt);
+		},
+		mouseDown:  function (evt) {
+			this._mouseDownOrTouchStart(evt);
+		},
 		
 	  _mouseDownOrTouchStart: function (evt) 
 		{
@@ -671,109 +703,10 @@ Smartgraphs.GraphView = SC.View.extend(
 			  this.get('axesView').get('inputAreaView').mouseDown(evt);
 			},
       
-      
-      
 			gridView: RaphaelViews.RaphaelView.design({
 			
 				graphCanvasView: SC.outlet('parentView.graphCanvasView'),
         graphView: SC.outlet('parentView.graphView'),
-				
-				_y: function (x, m, b) {
-			    return (m * x) + b;
-			  },
-				
-				_x: function (y, m, b) {
-			    if (m === 0) { // If the slope is 0, line is horizontal. We don't want to try division by 0.
-			      return b;
-			    } else {
-			      return (y - b) / m;
-			    }
-			  },
-			  
-			  getEndPoints: function (x1, y1, x2, y2, xAxis, yAxis) {
-			    var xMax = xAxis.get('max');
-			    var xMin = xAxis.get('min');
-			    var yMax = yAxis.get('max');
-			    var yMin = yAxis.get('min');
-			
-			    var points = [];
-			
-			    // case 1: vertical line
-			    if (x1 === x2) {
-			      points.push({x: x1, y: yMin});
-			      points.push({x: x1, y: yMax});
-			
-			      return points;
-			    }
-			
-			    // Use y = mx + b
-			    var m = (y2 - y1) / (x2 - x1);
-			    // => b = y - mx
-			    var b = y2 - (m * x2);
-			
-			    // case 2: leftmost point is on the bottom border
-			    if (this._y(xMin, m, b) < yMin) {
-			      // start point is on bottom border
-			      points.push({ 'y': yMin, 'x': this._x(yMin, m, b) });
-			      if (this._y(xMax, m, b) > yMax) {
-			        // end point is on top border
-			        points.push({ 'y': yMax, 'x': this._x(yMax, m, b) });
-			      } else {
-			        // end point is on right border
-			        points.push({ 'x': xMax, 'y': this._y(xMax, m, b) });
-			      } // Because we started at the bottom and are going left/right, end point can't be on left
-			
-			      return points;
-			    }
-			
-			    // case 3: leftmost point is on the left border
-			    if ((yMin <= this._y(xMin, m, b)) && (this._y(xMin, m, b) <= yMax)) {
-			      points.push({ 'x': xMin, 'y': this._y(xMin, m, b) });
-			      if (this._y(xMax, m, b) < yMin) {
-			        // end point on bottom border
-			        points.push({ 'y': yMin, 'x': this._x(yMin, m, b) });
-			      } else if (this._y(xMax, m, b) <= yMax) {
-			        // end point on right border
-			        points.push({ 'x': xMax, 'y': this._y(xMax, m, b) });
-			      } else {
-			        // end point is on top border
-			        points.push({ 'y': yMax, 'x': this._x(yMax, m, b) });
-			      }
-			
-			      return points;
-			    }
-			
-			    // case 4: leftmost point is on the top border
-			    if (yMax < this._y(xMin, m, b)) {
-			      points.push({ 'y': yMax, 'x': this._x(yMax, m, b) });
-			      if (this._y(xMax, m, b) < yMin) {
-			        // end point is on bottom border
-			        points.push({ 'y': yMin, 'x': this._x(yMin, m, b) });
-			      } else {
-			        // end point is on right border
-			        points.push({ 'x': xMax, 'y': this._y(xMax, m, b) });
-			      } // Because we started at the top and are going left/right, end point can't be on left
-			
-			      return points;
-			    }
-			
-			    // oops
-			    return null;
-			  },
-			  
-			  coordsForEvent: function (evt) {
-			    var graphOffset = this._$graphView.offset(),
-			        bounds      = this._screenBounds,
-			        x           = evt.pageX - graphOffset.left,
-			        y           = evt.pageY - graphOffset.top,
-			        fraction;
-			
-			    // clip the event to the inputArea boundaries. Simple clipping seems to work fine
-			    x = (x < bounds.xLeft) ? bounds.xLeft : (x > bounds.xRight)  ? bounds.xRight  : x;
-			    y = (y < bounds.yTop)  ? bounds.yTop  : (y > bounds.yBottom) ? bounds.yBottom : y;
-			
-			    return { x: x, y: y };
-			  },
 				
 				renderCallback: function (raphaelCanvas, attrs) {
 					for (var iCounter = 0; iCounter < attrs.length; iCounter++)
@@ -800,6 +733,11 @@ Smartgraphs.GraphView = SC.View.extend(
 			      }
 			      
 			      var logicalBounds = graphView.graphCanvasView._getLogicalBounds();
+			      var layout = this.get("graphView").get("graphController").get('tooltipLayout');
+			      var itoolTipLength = (logicalBounds.xMax + "," + logicalBounds.yMax).length * 8;
+			      var newLayout = { height: layout.height, width: layout.width, top: layout.top, left: layout.left, zIndex: -1 }; 
+						this.get("graphView").get("graphController").set("tooltipLayout", newLayout);
+			      
 			      var nXSteps = xAxis.get("nSteps");
 			      var nYSteps = yAxis.get("nSteps");
 			      var attrs = [];
@@ -810,7 +748,7 @@ Smartgraphs.GraphView = SC.View.extend(
 			      var points;
 			      var i, coords, point, pathComponents = [], pathString;
 			      
-						for (var iCounter = 0 ; iCounter < nXSteps; iCounter++)
+						for (var iCounter = 0 ; iCounter < nXSteps; iCounter++, iCurrentX = iCurrentX + nXDifference)
 						{
 							if (nXDifference + iCurrentX === 0)
 							{
@@ -819,7 +757,6 @@ Smartgraphs.GraphView = SC.View.extend(
 							points = [];
 							points.push({ 'y': logicalBounds.yMin, 'x': (nXDifference + iCurrentX) });
 							points.push({ 'y': logicalBounds.yMax, 'x': (nXDifference + iCurrentX) });
-						  //points = this.getEndPoints((nXDifference + iCurrentX), logicalBounds.yMin, (nXDifference + iCurrentX), logicalBounds.yMax, xAxis, yAxis);
 						  pathComponents = [];
 						  
 						  for (i = 0; i < points.length; i++) {
@@ -837,13 +774,11 @@ Smartgraphs.GraphView = SC.View.extend(
 						    'stroke-width':   1,
 						    'stroke-opacity': 0.7
 						  });
-						    
-						  iCurrentX = iCurrentX + nXDifference;
             }
 						
 						var iCurrentY = logicalBounds.yMin;
 						
-						for (iCounter = 0 ; iCounter < nYSteps; iCounter++)
+						for (iCounter = 0 ; iCounter < nYSteps; iCounter++, iCurrentY = iCurrentY + nyDifference)
 			      {
 							if (nyDifference + iCurrentY === 0)
 							{
@@ -853,7 +788,6 @@ Smartgraphs.GraphView = SC.View.extend(
 							points = [];
 							points.push({ 'y': (nyDifference + iCurrentY), 'x': logicalBounds.xMin });
 							points.push({ 'y': (nyDifference + iCurrentY), 'x': logicalBounds.xMax });
-			        //points = this.getEndPoints(logicalBounds.xMin, (nyDifference + iCurrentY), logicalBounds.xMax, (nyDifference + iCurrentY), xAxis, yAxis);
 			        pathComponents = [];
 				        
 							for (i = 0; i < points.length; i++) {
@@ -871,8 +805,6 @@ Smartgraphs.GraphView = SC.View.extend(
 					      'stroke-width':   1,
 					      'stroke-opacity': 0.7
 					    });
-					    
-					    iCurrentY = iCurrentY + nyDifference;
 						}
 						
 						context.callback(this, this.renderCallback, attrs);
@@ -969,37 +901,76 @@ Smartgraphs.GraphView = SC.View.extend(
 
           return { x: x, y: y };
         },
+        
+        mouseMoved:  function (evt)
+        { 
+					this._mouseMoved(evt);
+        },
 
-        touchStart: function (evt) { this._mouseDownOrTouchStart(evt); },
-        mouseDown:  function (evt) { this._mouseDownOrTouchStart(evt); },
+        _mouseMoved: function (evt) {
+          var coords = this.coordsForEvent(evt),
+              point = this._graphView.pointForCoordinates(coords.x, coords.y);
+					
+					var bounds = this.get("graphView").get("graphCanvasView")._getScreenBounds();
+					
+					var layout = this._graphView.get('graphController').get("tooltipLayout");
+					if (coords.x + layout.width >= bounds.xRight)
+					{
+						coords.x = bounds.xRight - layout.width;
+					}
+					
+          var graphController = this._graphView.get('graphController');
+          if (graphController.showToolTipCoords)
+          {
+						graphController.updateToolTip(point, coords);
+          }
+          else
+          {
+						graphController.hideToolTip();
+          }
+          return graphController.inputAreaMouseMove(point.x, point.y);
+        },
+
+        touchStart: function (evt)
+        {
+					this._mouseDownOrTouchStart(evt);
+        },
+        mouseDown:  function (evt)
+        {
+					this._mouseDownOrTouchStart(evt);
+        },
 
         _mouseDownOrTouchStart: function (evt) {
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
 
-          this._graphController = this._graphView.get('graphController');
-          return this._graphController.inputAreaMouseDown(point.x, point.y);
+          var graphController = this._graphView.get('graphController');
+          return graphController.inputAreaMouseDown(point.x, point.y);
         },
 
-        touchesDragged: function (evt) { this._mouseOrTouchesDragged(evt); },
-        mouseDragged:   function (evt) { this._mouseOrTouchesDragged(evt); },
-
-        _mouseOrTouchesDragged: function (evt) {
-          var coords = this.coordsForEvent(evt),
-              point = this._graphView.pointForCoordinates(coords.x, coords.y);
-
-          return this._graphController.inputAreaMouseDragged(point.x, point.y);
+        touchEnd: function (evt)
+        {
+					this._mouseUpOrTouchEnd(evt);
         },
-
-        touchEnd: function (evt) { this._mouseUpOrTouchEnd(evt); },
-        mouseUp:  function (evt) { this._mouseUpOrTouchEnd(evt); },
+        
+        mouseUp:  function (evt)
+        {
+					this._mouseUpOrTouchEnd(evt);
+        },
 
         _mouseUpOrTouchEnd: function (evt) {
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
 
           return this._graphController.inputAreaMouseUp(point.x, point.y);
+        },
+        
+        
+        mouseExited: function () {
+					var controller = this._graphView.get('graphController');
+          controller.hideToolTip();
         }
+        
       }),
 
       xAxisView: Smartgraphs.AxisView.design({
