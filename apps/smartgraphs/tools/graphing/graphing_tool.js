@@ -32,6 +32,16 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
     this.graphControllerForState(state).addDatadef(rep);
   },
 
+  hideGraphTitle: function (state) {
+    var graphView = this.graphViewForPane(this.paneForState(state));
+    graphView.get('titleView').set('isVisible', false);
+  },
+  
+  showGraphTitle: function (state) {
+    var graphView = this.graphViewForPane(this.paneForState(state));
+    graphView.get('titleView').set('isVisible', true);
+  },
+  
   graphingStarting: function (state) {
     var controller = this.graphControllerForState(state);
 		if (controller && controller.graphingToolGraphingStarting)
@@ -44,7 +54,7 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
 		var controller = this.graphControllerForState(state);
 		if (controller && controller.graphingToolGraphingFinished)
 		{
-			this.set('lineCount', 0);
+			this.set('showTooltip', false);
 			controller.graphingToolGraphingFinished();
 		}
   },
@@ -102,7 +112,7 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
 		this.getAnnotation(this.get('annotationName')).addPoint(pointLogical1[0], pointLogical1[1]);
 		this.getAnnotation(this.get('annotationName')).addPoint(pointLogical2[0], pointLogical2[1]);
 		
-		this.set('lineCount', this.get('lineCount' + 1));
+		this.set('lineCount', this.get('lineCount') + 1);
   },
   
   getLinePointWithinLogicalBounds: function (point, m, c, screenBounds) {
