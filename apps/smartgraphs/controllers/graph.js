@@ -101,6 +101,14 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
   graphableDataObjects: null,
 
   /**
+    @property {Smartgraphs.Datadef[]}
+
+    A list of all the Datadefs added to this graph 
+ 
+  */
+  datadefList: null,
+
+  /**
     @property {Smartgraphs.Unit|null}
 
     The units on the x (horizontal) axis of the graph, if defined.
@@ -194,6 +202,71 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     (show a spinny or other message indicating that the sensor is loading) or null (don't show the panel, or don't show anything in it.)
   */
   showInControlsPanel: null,
+
+/**
+    Add a datadef to this controller
+
+    @param {Smartgraphs.Datadef} datadef
+      The datadef to be added.
+  */
+  addDatadef: function (datadef) {
+    if (this.findDatadefByName(datadef.get('name'))) {
+      return; // Nothing to be done
+    }
+    this.get('datadefList').pushObject(datadef);
+  },
+
+  /**
+    Removes all datadefs from the list. Sets the datadefList attribute to [] (therefore, also initializes the
+    list if the value had previously been null).
+  */
+  clearDatadefs: function () {
+    var self = this;
+    var datadefNames = (this.get('datadefList') || []).getEach('name');
+
+    datadefNames.forEach(function (datadefName) {
+      self.removeDatadef(datadefName);
+    });
+    this.set('datadefList', []);
+  },
+
+  /**
+    Remove the datadef from this controller.
+
+    @param {Smartgraphs.Datadef|String} datadefOrName
+      The datadef, or name of the datadef, to remove.
+  */
+  removeDatadef: function (datadefOrName) {
+    var datadef = (SC.typeOf(datadefOrName) === SC.T_STRING) ? this.findDatadefByName(datadefOrName) : datadefOrName;
+
+    if (datadef) {
+      this.get('datadefList').removeObject(datadef);
+    }
+  },
+
+  /**
+    Given a valid datadef name, returns the named datadef. Returns null if the datadef
+    is not found in this controller.
+
+    @param {String} name
+      The name under which to search for the datadef.
+  */
+  findDatadefByName: function (name) {
+    var list = this.get('datadefList');
+    return list ? list.findProperty('name', name) : null;
+  },
+
+  addDatadefsByName: function (datadefs) {
+    var self = this;
+
+		if (!datadefs) {
+			return;
+		}
+
+		datadefs.forEach(function (name) {
+      self.addDatadef(self.getDatadef(name));
+    });
+  },
 
   /**
     Show the graph start/stop/reset controls.
@@ -313,6 +386,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set('graphableDataObjects', []);
     this.set('dataRepresentations', []);
     this.clearAnnotations();
+    this.clearDatadefs();
   },
 
   /**
@@ -467,7 +541,9 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
   },
 
 	graphingToolGraphingStarting: function () {
-		this.set('requestedCursorStyle', 'crosshair');
+		if (this.showCrossHairs === true)	{
+			this.set('requestedCursorStyle', 'crosshair');
+		}
 	},
 
   graphingToolGraphingFinished: function () {
