@@ -240,6 +240,7 @@ Smartgraphs.GraphView = SC.View.extend(
   },
 
   titleView: SC.LabelView.design({
+  	isVisible:'YES',
     valueBinding: '.parentView*graphController.title',
     classNames: 'pane-label',
     layout: { width: 400, centerX: 0, height: 20, top: 20, zIndex: 1 },

@@ -50,7 +50,9 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
 			
 			if (!datadef) {
         throw SC.Error.desc("Graphing tool was started with a bogus datadef name '%@'".fmt(datadefName));
-      }			
+      }
+      
+	  Smartgraphs.graphingTool.hideGraphTitle(this);
 
       Smartgraphs.graphingTool.graphingStarting(this);
 
@@ -62,8 +64,8 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
 
     exitState: function () {
       var toolRoot = this.get('toolRoot');
-
       this.get('owner').hideControls();
+      Smartgraphs.graphingTool.showGraphTitle(this);
       Smartgraphs.graphingTool.graphingFinished(this);
       toolRoot.set('annotation', null);
       toolRoot.set('annotationName', null);

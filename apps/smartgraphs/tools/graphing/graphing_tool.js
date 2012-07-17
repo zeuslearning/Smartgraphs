@@ -32,6 +32,16 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
     this.graphControllerForState(state).addDatadef(rep);
   },
 
+  hideGraphTitle: function (state) {
+    var graphView = this.graphViewForPane(this.paneForState(state));
+    graphView.get('titleView').set('isVisible', false);
+  },
+  
+  showGraphTitle: function (state) {
+    var graphView = this.graphViewForPane(this.paneForState(state));
+    graphView.get('titleView').set('isVisible', true);
+  },
+  
   graphingStarting: function (state) {
     var controller = this.graphControllerForState(state);
 		if (controller && controller.graphingToolGraphingStarting)
