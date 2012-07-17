@@ -27,15 +27,17 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
   appendSketch: function (state, sketch) {
     this.graphControllerForState(state).addAnnotation(sketch);
   },
+  
+  appendRepresentation: function (state, rep) {
+    this.graphControllerForState(state).addDatadef(rep);
+  },
 
   graphingStarting: function (state) {
     var controller = this.graphControllerForState(state);
-    if (controller.showCrossHairs === true) {
-			if (controller && controller.graphingToolGraphingStarting)
-			{ 
-				controller.graphingToolGraphingStarting();
-			}
-    }
+		if (controller && controller.graphingToolGraphingStarting)
+		{ 
+			controller.graphingToolGraphingStarting();
+		}
   },
 
   graphingFinished: function (state) {
@@ -51,8 +53,9 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
     return Smartgraphs.activityPage.getPath(Smartgraphs.activityViewController.firstOrSecondFor(pane) + 'GraphPane.graphView');
   },
   
-  graphViewFromState: function (state) {
-    return this.graphViewForPane(this.paneForState(state));
+  getLogicalBoundsFromState: function (state) {
+		var graphView = this.graphViewForPane(this.paneForState(state));
+		return graphView.graphCanvasView._getLogicalBounds();
   },
   
   plotPoint: function (x, y) {
@@ -67,8 +70,8 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
 			point2 = point1;
 			point1 = point3;
     }
-    
-    screenBounds = this.graphViewFromState(state).graphCanvasView._getLogicalBounds();
+
+    screenBounds = this.getLogicalBoundsFromState(state);
     
     pointLogical1 = [];
     pointLogical2 = [];
@@ -99,7 +102,7 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
 		this.getAnnotation(this.get('annotationName')).addPoint(pointLogical1[0], pointLogical1[1]);
 		this.getAnnotation(this.get('annotationName')).addPoint(pointLogical2[0], pointLogical2[1]);
 		
-		this.set('lineCount', this.get('lineCount') + 1);
+		this.set('lineCount', this.get('lineCount' + 1));
   },
   
   getLinePointWithinLogicalBounds: function (point, m, c, screenBounds) {
