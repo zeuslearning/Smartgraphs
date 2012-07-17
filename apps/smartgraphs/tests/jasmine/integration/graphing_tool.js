@@ -86,6 +86,8 @@
         });
         spyOn(Smartgraphs.graphingTool, "getAnnotation").andReturn(sketch);
         spyOn(Smartgraphs.graphingTool, "getDatadef").andReturn(rep);
+        spyOn(Smartgraphs.graphingTool, "showGraphTitle");
+        spyOn(Smartgraphs.graphingTool, "hideGraphTitle");
         controller.showCrossHairs = true;
         controller.graphingToolStartTool({
           annotationName: "freehand-sketch-1",
