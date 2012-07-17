@@ -240,26 +240,46 @@ Smartgraphs.GraphView = SC.View.extend(
   },
 
   titleView: SC.LabelView.design({
-  	isVisible:'YES',
-    valueBinding: '.parentView*graphController.title',
+		isVisible: 'YES',
+		valueBinding: '.parentView*graphController.title',
     classNames: 'pane-label',
     layout: { width: 400, centerX: 0, height: 20, top: 20, zIndex: 1 },
     textAlign: SC.ALIGN_CENTER
   }),
 	
-	tooltipView: SC.LabelView.design({
-		textAlign: SC.ALIGN_CENTER,
-		classNames: 'toolTipLabel',
-		valueBinding: '.parentView*graphController.tooltipText',
-		layoutBinding: '.parentView*graphController.tooltipLayout',
-   
-	  valueDidChange: function () {
-	    var value = this.get('tooltipText');
-	    var layout = this.get('tooltipLayout');
-	    this.adjust('value', value);
-	    this.adjust('layout', layout);
-	  }.observes('tooltipText')
- 
+  tooltipView: SC.View.extend({
+		coords : { x: 0, y: 0, top: 0, left: 0, coordOffset: 5, width: 0},
+		hideToolTipCoords: true,
+		displayProperties: ['coords', 'hideToolTipCoords'],
+		coordsBinding: '.parentView*graphController.tooltipCoords',
+		hideToolTipCoordsBinding: '.parentView*graphController.hideToolTipCoords',
+		
+		render: function (context, firstTime)
+		{
+			if (this.get("owner").graphController === undefined)
+			{
+				return;
+			}
+			
+			if (!this.get("owner").graphController.get("showToolTipCoords"))
+			{
+				return;
+			}
+			
+			var hideToolTipCoords = this.get('hideToolTipCoords');
+			if (hideToolTipCoords)
+			{
+				context.push("<div></div>");
+				return;
+			}
+			
+			var coords = this.get('coords');
+			var strHtml = "";
+			strHtml += "<div class='toolTipLabel' style='width:" + coords.width + "px; text-align:center; padding: 5px; position: absolute; top:" + (coords.top + coords.coordOffset) + "px; left: " + (coords.left + coords.coordOffset) + "px; z-index: 10000;'>" +
+									coords.x + ",&nbsp;" + coords.y +
+								 "</div>";
+			context.push(strHtml);
+		}
   }),
 	
   graphCanvasView: RaphaelViews.RaphaelCanvasView.design({
@@ -305,13 +325,14 @@ Smartgraphs.GraphView = SC.View.extend(
 		
 		_mouseMoved: function (evt)
 		{
+			var graphController = this.get("graphView").get('graphController');
 			if (this._checkInputAreaScreenBounds(evt.pageX, evt.pageY))
 			{
+				graphController.showToolTip();
 				this.get('axesView').get('inputAreaView').mouseMoved(evt);
 			}
 			else
 			{
-				var graphController = this.get("graphView").get('graphController');
 				graphController.hideToolTip();
 			}
 		},
@@ -734,10 +755,6 @@ Smartgraphs.GraphView = SC.View.extend(
 			      }
 			      
 			      var logicalBounds = graphView.graphCanvasView._getLogicalBounds();
-			      var layout = this.get("graphView").get("graphController").get('tooltipLayout');
-			      var itoolTipLength = (logicalBounds.xMax + "," + logicalBounds.yMax).length * 8;
-			      var newLayout = { height: layout.height, width: layout.width, top: layout.top, left: layout.left, zIndex: -1 }; 
-						this.get("graphView").get("graphController").set("tooltipLayout", newLayout);
 			      
 			      var nXSteps = xAxis.get("nSteps");
 			      var nYSteps = yAxis.get("nSteps");
@@ -916,21 +933,24 @@ Smartgraphs.GraphView = SC.View.extend(
 					
 					var bounds = this.get("graphView").get("graphCanvasView")._getScreenBounds();
 					
-					var layout = this._graphView.get('graphController').get("tooltipLayout");
-					if (coords.x + layout.width >= bounds.xRight)
+					var graphController = this._graphView.get('graphController');
+					graphController.showToolTip();
+					if (graphController.tooltipCoords.width + coords.x >= bounds.xRight)
 					{
-						coords.x = bounds.xRight - layout.width;
+						coords.x = bounds.xRight - graphController.tooltipCoords.width - this.get("graphView").get("padding").right;
 					}
 					
-					var graphController = this._graphView.get('graphController');
-					if (graphController.showToolTipCoords && Smartgraphs.graphingTool.get('showTooltip') == true)
+					
+					if (graphController.showToolTipCoords && Smartgraphs.graphingTool.get('showTooltip') === true)
 					{
-						graphController.updateToolTip(point, coords);
+						graphController.showToolTip();
 					}
 					else
 					{
 						graphController.hideToolTip();
 					}
+					
+					graphController.updateToolTip(point, coords);
 					
           return graphController.inputAreaMouseMove(point.x, point.y);
         },

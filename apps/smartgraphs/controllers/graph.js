@@ -142,21 +142,20 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
   /**
    @property Bool
    
-   Wheather to show the tooltip  or not
+   Whether to show the tooltip  or not
    
   */
   
   showToolTipCoords : null,
-
-	/**
-   
-   @property String
-   
-   Text of the Tooltip
-   
-   */
   
-  tooltipText : null,
+  /**
+   @property Bool
+   
+   Hide tooltip on instances where crosshair goes outside the bounds of the graph.
+   
+  */
+  
+  hideToolTipCoords : true,
   
   /**
    
@@ -166,7 +165,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
    
    */
   
-  tooltipLayout : { width: 100, height: 20, centerX: 0, centerY: 0, zIndex: -1 },
+  tooltipCoords : { x: 0, y: 0, top: 0, left: 0, coordOffset: 5, width: 100},
 
   /**
     @property {SC.Object}
@@ -383,6 +382,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set('showGraphGrid', null);
     this.set('showCrossHairs', null);
     this.set('showToolTipCoords', null);
+    this.set('hideToolTipCoords', false);
     this.set('graphableDataObjects', []);
     this.set('dataRepresentations', []);
     this.clearAnnotations();
@@ -414,7 +414,14 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set('showCrossHairs', config.showCrossHairs);
     this.set('showToolTipCoords', config.showToolTipCoords);
     
+    var xMax = this.getAxis(config.xAxis).get("max");
+    var yMax = this.getAxis(config.yAxis).get("max"); 
+    var iTooltipWidth = (xMax + "," + yMax).length * 15;
+    var tooltipCoords = this.get("tooltipCoords"); 
+    this.set("tooltipCoords", { x: 0, y: 0, top: 0, left: 0, coordOffset: 5, width: iTooltipWidth});
 
+		this.hideToolTip();
+		
     dataSpecs.forEach(function (dataSpec) {
       var datadefName,
           options = {},
@@ -513,20 +520,29 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
 			var newPoint = Smartgraphs.Point.create();
 			newPoint.set('x', point.x);
 			newPoint.set('y', point.y);
-			var xRounded = newPoint.xRounded();
-			var yRounded = newPoint.yRounded();
-			var strTooltipText = xRounded + ', ' + yRounded;
-			this.set("tooltipText", strTooltipText);
-			var layout = this.get('tooltipLayout');
-			var newLayout = { height: layout.height, width: layout.width, top: coords.y + layout.height / 2, left: coords.x, zIndex: 1 }; 
-			this.set("tooltipLayout", newLayout);
+			var xRounded = newPoint.xRounded().toFixed(2);
+			var yRounded = newPoint.yRounded().toFixed(2);
+			
+			var tooltipCoords = this.get("tooltipCoords");
+			tooltipCoords = {
+				x: xRounded,
+				y: yRounded,
+				top: coords.y,
+				left: coords.x,
+				coordOffset: tooltipCoords.coordOffset,
+				width: tooltipCoords.width
+			};
+			this.set("tooltipCoords", tooltipCoords);
 		},
+		
+	showToolTip : function ()
+	{
+		this.set("hideToolTipCoords", false);
+	},
 	
 	hideToolTip : function ()
 	{
-		var layout = this.get('tooltipLayout');
-		var newLayout = { height: layout.height, width: layout.width, top: layout.top, left: layout.left, zIndex: -1 }; 
-		this.set("tooltipLayout", newLayout);
+		this.set("hideToolTipCoords", true);
 	},
 
   // Events
