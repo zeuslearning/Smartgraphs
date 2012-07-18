@@ -1,60 +1,32 @@
-__bind_ = (fn, me) ->
-  ->
-    fn.apply me, arguments
 defineJasmineHelpers()
 $ ->
   $("body").css "overflow", "auto"
 
 describe "Smartgraphs.graphingTool with 'singleLine' shape option", ->
-  controller = undefined
-  sketch = undefined
-  statechart = undefined
-  store = undefined
-  toolState = undefined
-  store = controller = statechart = toolState = rep = sketch = null
+  store = controller = toolState = null
   beforeEach ->
     store = SC.Store.create().from(SC.FixturesDataSource.create())
     controller = Smartgraphs.GraphController.create()
     controller.clear()
     statechart = controller.get("statechart")
     toolState = statechart.getState("GRAPHING_TOOL")
-    __bind_(->
-      matchArraysUsing = undefined
+    do =>
       matchArraysUsing = (matcher) ->
         (pairs) ->
-          a = undefined
-          i = undefined
-          _len = undefined
-          _ref = undefined
-          _ref2 = undefined
-          return false  if (if (_ref = @actual)? then _ref.length else undefined) isnt pairs.length or typeof @actual isnt "object"
-          _ref2 = @actual
-          i = 0
-          _len = _ref2.length
-
-          while i < _len
-            a = _ref2[i]
-            return false  unless matcher(a, pairs[i])
-            i++
+          return false if @actual?.length isnt pairs.length or typeof @actual isnt 'object'
+          return false for a, i in @actual when not matcher( a, pairs[i] )
           true
 
-      @addMatchers toEqualPairs: matchArraysUsing((a, _arg) ->
-        x = undefined
-        y = undefined
-        x = _arg[0]
-        y = _arg[1]
-
-        a[0] is x and a[1] is y
+      @addMatchers(
+        toEqualPairs: matchArraysUsing (a, [x, y]) -> a[0] is x and a[1] is y
       )
-    , this)()
 
   describe "GRAPHING_TOOL state", ->
     it "should exist", ->
       expect(toolState).toBeDefined()
 
   describe "when the graphing tool is started with shape: 'SINGLE_LINE'", ->
-    startState = undefined
-    sketch = startState = null
+    rep = sketch = startState = null
     beforeEach ->
       rep = store.createRecord(Smartgraphs.UnorderedDataPoints,
         url: "rep"

@@ -1,11 +1,4 @@
 (function() {
-  var __bind_;
-
-  __bind_ = function(fn, me) {
-    return function() {
-      return fn.apply(me, arguments);
-    };
-  };
 
   defineJasmineHelpers();
 
@@ -14,57 +7,42 @@
   });
 
   describe("Smartgraphs.graphingTool with 'singleLine' shape option", function() {
-    var controller, rep, sketch, statechart, store, toolState;
-    controller = void 0;
-    sketch = void 0;
-    statechart = void 0;
-    store = void 0;
-    toolState = void 0;
-    store = controller = statechart = toolState = rep = sketch = null;
+    var controller, store, toolState;
+    store = controller = toolState = null;
     beforeEach(function() {
+      var statechart,
+        _this = this;
       store = SC.Store.create().from(SC.FixturesDataSource.create());
       controller = Smartgraphs.GraphController.create();
       controller.clear();
       statechart = controller.get("statechart");
       toolState = statechart.getState("GRAPHING_TOOL");
-      return __bind_(function() {
+      return (function() {
         var matchArraysUsing;
-        matchArraysUsing = void 0;
         matchArraysUsing = function(matcher) {
           return function(pairs) {
-            var a, i, _len, _ref, _ref2;
-            a = void 0;
-            i = void 0;
-            _len = void 0;
-            _ref = void 0;
-            _ref2 = void 0;
-            if (((_ref = this.actual) != null ? _ref.length : void 0) !== pairs.length || typeof this.actual !== "object") {
+            var a, i, _i, _len, _ref, _ref1;
+            if (((_ref = this.actual) != null ? _ref.length : void 0) !== pairs.length || typeof this.actual !== 'object') {
               return false;
             }
-            _ref2 = this.actual;
-            i = 0;
-            _len = _ref2.length;
-            while (i < _len) {
-              a = _ref2[i];
+            _ref1 = this.actual;
+            for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
+              a = _ref1[i];
               if (!matcher(a, pairs[i])) {
                 return false;
               }
-              i++;
             }
             return true;
           };
         };
-        return this.addMatchers({
+        return _this.addMatchers({
           toEqualPairs: matchArraysUsing(function(a, _arg) {
             var x, y;
-            x = void 0;
-            y = void 0;
-            x = _arg[0];
-            y = _arg[1];
+            x = _arg[0], y = _arg[1];
             return a[0] === x && a[1] === y;
           })
         });
-      }, this)();
+      })();
     });
     describe("GRAPHING_TOOL state", function() {
       return it("should exist", function() {
@@ -72,9 +50,8 @@
       });
     });
     return describe("when the graphing tool is started with shape: 'SINGLE_LINE'", function() {
-      var startState;
-      startState = void 0;
-      sketch = startState = null;
+      var rep, sketch, startState;
+      rep = sketch = startState = null;
       beforeEach(function() {
         rep = store.createRecord(Smartgraphs.UnorderedDataPoints, {
           url: "rep",
