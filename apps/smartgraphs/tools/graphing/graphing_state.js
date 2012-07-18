@@ -47,12 +47,12 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
       if (!SC.kindOf(annotation, Smartgraphs.FreehandSketch)) {
         throw SC.Error.desc("Graphing tool was started with a non-FreehandSketch annotation name '%@'".fmt(annotationName));
       }
-			
-			if (!datadef) {
+   
+      if (!datadef) {
         throw SC.Error.desc("Graphing tool was started with a bogus datadef name '%@'".fmt(datadefName));
       }
       
-		  Smartgraphs.graphingTool.hideGraphTitle(this);
+      Smartgraphs.graphingTool.hideGraphTitle(this);
 
       Smartgraphs.graphingTool.graphingStarting(this);
 
@@ -115,40 +115,40 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
         },
 
         mouseDownAtPoint: function (context, args) {
-					var datadef = this.getPath('toolRoot.datadef');   
-					if (datadef.get("points").length < 2)
-					{
-						Smartgraphs.graphingTool.plotPoint(args.x, args.y);
-						
-						if (datadef.get("points").length == 2)
-						{
-							Smartgraphs.graphingTool.drawLineThroughPoints(datadef.get("points")[0], [args.x, args.y], this);
-							Smartgraphs.graphingTool.graphingFinished(this);
-						}
-					}
+          var datadef = this.getPath('toolRoot.datadef');   
+          if (datadef.get("points").length < 2)
+          {
+            Smartgraphs.graphingTool.plotPoint(args.x, args.y);
+           
+            if (datadef.get("points").length == 2)
+            {
+              Smartgraphs.graphingTool.drawLineThroughPoints(datadef.get("points")[0], [args.x, args.y], this);
+              Smartgraphs.graphingTool.graphingFinished(this);
+            }
+          }
         },
         
         mouseMoveAtPoint: function (context, args) {
-					//Kept this event for future use for of graphing tool
+         //Kept this event for future use for of graphing tool
         },
         
         mouseDraggedToPoint: function (context, args) {
-					var points = this.getPath('toolRoot.annotation').get('points');
-					for (var i = 0; i < points.length; i++)
-					{
-						if (Math.round(args.x) == Math.round(points[i][0]) && Math.round(args.y) == Math.round(points[i][1], 2))
-						{
-							break;
-						}
-					}          
+          var points = this.getPath('toolRoot.annotation').get('points');
+          for (var i = 0; i < points.length; i++)
+          {
+            if (Math.round(args.x) == Math.round(points[i][0]) && Math.round(args.y) == Math.round(points[i][1], 2))
+            {
+              break;
+            }
+          }          
         },
 
         mouseUpAtPoint: function (context, args) {
-					if (Smartgraphs.graphingTool.get("lineCount") == 2)
-					{
-						this.get('owner').set('requestedCursorStyle', 'default');
-						//Smartgraphs.graphingTool.set('showRequestedCursorStyle', false);
-					}
+          if (Smartgraphs.graphingTool.get("lineCount") == 2)
+          {
+            this.get('owner').set('requestedCursorStyle', 'default');
+            //Smartgraphs.graphingTool.set('showRequestedCursorStyle', false);
+          }
           return;
         }
 
