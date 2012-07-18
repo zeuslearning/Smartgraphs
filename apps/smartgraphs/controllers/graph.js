@@ -616,6 +616,20 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       Smartgraphs.statechart.sendAction('dataPointSelected', this, { dataRepresentation: dataRepresentation, x: x, y: y });
     }
     this.sendAction('dataPointSelected', this, { dataRepresentation: dataRepresentation, x: x, y: y });
+  },
+
+  dataPointDragged: function (dataRepresentation, x, y) {
+    if (Smartgraphs.statechart && Smartgraphs.statechart.get('statechartIsInitialized')) {
+      Smartgraphs.statechart.sendAction('dataPointDragged', this, { dataRepresentation: dataRepresentation,  x: x, y: y });
+    }
+    this.sendAction('dataPointDragged', this, { dataRepresentation: dataRepresentation,  x: x, y: y  });
+  },
+
+  dataPointMouseUp: function (dataRepresentation, x, y) {
+    if (Smartgraphs.statechart && Smartgraphs.statechart.get('statechartIsInitialized')) {
+      Smartgraphs.statechart.sendAction('dataPointMouseUp', this, { dataRepresentation: dataRepresentation,  x: x, y: y });
+    }
+    this.sendAction('dataPointMouseUp', this, { dataRepresentation: dataRepresentation,  x: x, y: y  });
   }
 
 });

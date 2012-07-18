@@ -36,42 +36,40 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
     var graphView = this.graphViewForPane(this.paneForState(state));
     graphView.get('titleView').set('isVisible', false);
   },
-  
+
   showGraphTitle: function (state) {
     var graphView = this.graphViewForPane(this.paneForState(state));
     graphView.get('titleView').set('isVisible', true);
   },
-  
+
   graphingStarting: function (state) {
     var controller = this.graphControllerForState(state);
-    if (controller && controller.graphingToolGraphingStarting)
-    { 
+    if (controller && controller.graphingToolGraphingStarting) {
       controller.graphingToolGraphingStarting();
     }
   },
 
   graphingFinished: function (state) {
     var controller = this.graphControllerForState(state);
-    if (controller && controller.graphingToolGraphingFinished)
-    {
+    if (controller && controller.graphingToolGraphingFinished) {
       this.set('showTooltip', false);
       controller.graphingToolGraphingFinished();
     }
   },
-  
+
   graphViewForPane: function (pane) {
     return Smartgraphs.activityPage.getPath(Smartgraphs.activityViewController.firstOrSecondFor(pane) + 'GraphPane.graphView');
   },
-  
+
   getLogicalBoundsFromState: function (state) {
     var graphView = this.graphViewForPane(this.paneForState(state));
     return graphView.graphCanvasView._getLogicalBounds();
   },
-  
+
   plotPoint: function (x, y) {
     this.getDatadef(this.get('datadefName')).addPoint(x, y);
   },
-  
+
   drawLineThroughPoints: function (point1, point2, state) {
     var m, c, ptPlotted1, ptPlotted2, screenBounds, pointLogical1, pointLogical2;
     
@@ -80,13 +78,39 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
       point2 = point1;
       point1 = point3;
     }
-
-    screenBounds = this.getLogicalBoundsFromState(state);
+    var pointLogicalBoundsArr = this.getAnnotationPointsArray(point1, point2, state);
     
+    this.getAnnotation(this.get('annotationName')).addPoint(pointLogicalBoundsArr[0][0], pointLogicalBoundsArr[0][1]);
+    this.getAnnotation(this.get('annotationName')).addPoint(pointLogicalBoundsArr[1][0], pointLogicalBoundsArr[1][1]);
+    this.set('lineCount', this.get('lineCount') + 1);
+  },
+
+  getLinePointWithinLogicalBounds: function (point, m, c, screenBounds) {
+    var pointCalculated;
+    pointCalculated = [point[0], point[1]];
+    if (point[0] < screenBounds.xMin) {
+      pointCalculated[0] = screenBounds.xMin;
+      pointCalculated[1] = m * pointCalculated[0] + c;
+    } else if (point[0] > screenBounds.xMax) {
+      pointCalculated[0] = screenBounds.xMax;
+      pointCalculated[1] = m * pointCalculated[0] + c;
+    }
+    if (point[1] < screenBounds.yMin) {
+      pointCalculated[1] = screenBounds.yMin;
+      pointCalculated[0] = (pointCalculated[1] - c) / m;
+    } else if (point[1] > screenBounds.yMax) {
+      pointCalculated[1] = screenBounds.yMax;
+      pointCalculated[0] = (pointCalculated[1] - c) / m;
+    }
+    return pointCalculated;
+  },
+
+  getAnnotationPointsArray: function (point1, point2, state) {
+    var screenBounds, pointLogical1, pointLogical2, m, c;
+    screenBounds = this.getLogicalBoundsFromState(state);
     pointLogical1 = [];
     pointLogical2 = [];
-    
-    if ((point2[0] === point1[0])) {
+    if (point2[0] === point1[0]) {
       pointLogical1 = [point1[0], screenBounds.yMin];
       pointLogical2 = [point1[0], screenBounds.yMax];
     } else {
@@ -99,44 +123,18 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
       } else {
         pointLogical1[0] = screenBounds.xMin;
         pointLogical1[1] = m * pointLogical1[0] + c;
-        
         pointLogical1 = this.getLinePointWithinLogicalBounds(pointLogical1, m, c, screenBounds);
-        
         pointLogical2[1] = m > 0 ? screenBounds.yMax : screenBounds.yMin;
         pointLogical2[0] = (pointLogical2[1] - c) / m;
-        
         pointLogical2 = this.getLinePointWithinLogicalBounds(pointLogical2, m, c, screenBounds);
       }
     }
-    
-    this.getAnnotation(this.get('annotationName')).addPoint(pointLogical1[0], pointLogical1[1]);
-    this.getAnnotation(this.get('annotationName')).addPoint(pointLogical2[0], pointLogical2[1]);
-    
-    this.set('lineCount', this.get('lineCount') + 1);
+    return [pointLogical1, pointLogical2];
   },
-  
-  getLinePointWithinLogicalBounds: function (point, m, c, screenBounds) {
-    var pointCalculated;
-    
-    pointCalculated = [point[0], point[1]];
-    
-    if (point[0] < screenBounds.xMin) {
-      pointCalculated[0] = screenBounds.xMin;
-      pointCalculated[1] = m * pointCalculated[0] + c;
-    } else if (point[0] > screenBounds.xMax) {
-      pointCalculated[0] = screenBounds.xMax;
-      pointCalculated[1] = m * pointCalculated[0] + c;
-    }
-  
-    if (point[1] < screenBounds.yMin) {
-      pointCalculated[1] = screenBounds.yMin;
-      pointCalculated[0] = (pointCalculated[1] - c) / m;
-    } else if (point[1] > screenBounds.yMax) {
-      pointCalculated[1] = screenBounds.yMax;
-      pointCalculated[0] = (pointCalculated[1] - c) / m;
-    }
-    
-    return pointCalculated;
+
+  checkInputAreaScreenBounds: function (x, y, state) {
+    var graphView = this.graphViewForPane(this.paneForState(state));
+    return graphView.graphCanvasView._checkInputAreaScreenBounds(x, y);
   }
   
 });
