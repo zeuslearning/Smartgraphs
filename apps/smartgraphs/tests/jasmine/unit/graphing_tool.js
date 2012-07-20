@@ -15,12 +15,15 @@
       return expect(Smartgraphs.Tool.tools["graphing"].context).toBe(graphingTool);
     });
     describe("setup method", function() {
-      var controller;
-      controller = void 0;
+      var controller, tableController;
+      controller = tableController = void 0;
       beforeEach(function() {
         controller = Smartgraphs.GraphController.create();
+        tableController = Smartgraphs.TableController.create();
         spyOn(graphingTool, "graphControllerForPane").andReturn(controller);
+        spyOn(graphingTool, "tableControllerForPane").andReturn(tableController);
         spyOn(controller, "graphingToolStartTool");
+        spyOn(tableController, "setRoundingFunc");
         return graphingTool.setup({
           annotationName: "freehand-sketch-1",
           shape: "SingleLine",
@@ -30,6 +33,9 @@
       });
       it("should translate the 'pane' parameter to a controller ", function() {
         return expect(graphingTool.graphControllerForPane).toHaveBeenCalledWith("top");
+      });
+      it("should call TableController's setRoundingFunc with value 'Fixed''", function() {
+        return expect(tableController.setRoundingFunc).toHaveBeenCalledWith("Fixed");
       });
       return it("should ask the relevant graph controller to start the graphing tool", function() {
         return expect(controller.graphingToolStartTool).toHaveBeenCalledWith({
