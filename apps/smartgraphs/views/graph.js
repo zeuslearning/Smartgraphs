@@ -923,6 +923,37 @@ Smartgraphs.GraphView = SC.View.extend(
           return { x: x, y: y };
         },
         
+        touchStart: function (evt) {
+          this._mouseDownOrTouchStart(evt);
+        },
+        mouseDown: function (evt) {
+          this._mouseDownOrTouchStart(evt);
+        },
+
+        _mouseDownOrTouchStart: function (evt) {
+          console.log("from inputAreaView");
+          var coords = this.coordsForEvent(evt),
+              point = this._graphView.pointForCoordinates(coords.x, coords.y);
+
+          this._graphController = this._graphView.get('graphController');
+          return this._graphController.inputAreaMouseDown(point.x, point.y);
+        },
+
+        touchesDragged: function (evt) {
+          this._mouseOrTouchesDragged(evt);
+        },
+
+        mouseDragged: function (evt) {
+          this._mouseOrTouchesDragged(evt);
+        },
+
+        _mouseOrTouchesDragged: function (evt) {
+          var coords = this.coordsForEvent(evt),
+              point = this._graphView.pointForCoordinates(coords.x, coords.y);
+
+          return this._graphController.inputAreaMouseDragged(point.x, point.y);
+        },
+
         mouseMoved:  function (evt)
         { 
           this._mouseMoved(evt);
@@ -950,43 +981,22 @@ Smartgraphs.GraphView = SC.View.extend(
           {
             graphController.hideToolTip();
           }
-     
           graphController.updateToolTip(point, coords);
-     
           return graphController.inputAreaMouseMove(point.x, point.y);
         },
 
-        touchStart: function (evt)
-        {
-          this._mouseDownOrTouchStart(evt);
-        },
-        mouseDown:  function (evt)
-        {
-          this._mouseDownOrTouchStart(evt);
-        },
-
-        _mouseDownOrTouchStart: function (evt) {
-          var coords = this.coordsForEvent(evt),
-              point = this._graphView.pointForCoordinates(coords.x, coords.y);
-
-          var graphController = this._graphView.get('graphController');
-          return graphController.inputAreaMouseDown(point.x, point.y);
-        },
-
-        touchEnd: function (evt)
-        {
+        touchEnd: function (evt) {
           this._mouseUpOrTouchEnd(evt);
         },
         
-        mouseUp:  function (evt)
-        {
+        mouseUp: function (evt) {
           this._mouseUpOrTouchEnd(evt);
         },
 
         _mouseUpOrTouchEnd: function (evt) {
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
-     
+
           var graphController = this._graphView.get('graphController');
           return graphController.inputAreaMouseUp(point.x, point.y);
         },
@@ -1019,7 +1029,95 @@ Smartgraphs.GraphView = SC.View.extend(
     }),
 
     // Holds the annotation views. Should be later in the DOM (and thus "in front of") the data views
+    // Mouse events are propagated because line annotation are above the points. 
     annotationsHolder: RaphaelViews.RaphaelView.design({
+      graphCanvasView: SC.outlet('parentView'),
+      graphView: SC.outlet('graphCanvasView.graphView'),
+
+      mouseEntered: function (evt) {
+        
+        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
+        if (!pointView)
+        {
+          return;
+        }
+        else
+        {
+          this._pointView = pointView;
+          pointView.mouseEntered();
+        }
+      },
+      
+      mouseDown:  function (evt) {
+        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
+        this._pointView = pointView;
+        if (!pointView)
+        {
+          return;
+        }
+        else
+        {
+          this._pointView = pointView;
+          pointView.mouseDown();
+        }
+      },
+
+      mouseMoved:  function (evt) {
+        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
+        if (!pointView)
+        {
+          if (this._pointView)
+          {
+            this._pointView.mouseExited();
+          }
+        }
+        else
+        {
+          this._pointView = pointView;
+          pointView.mouseEntered();
+        }
+      },
+
+      mouseExited: function (evt) {
+        return;
+      },
+
+      mouseUp: function () {
+        if (this._pointView)
+        {
+          this._pointView.mouseExited();
+        }
+        this._pointView = undefined;
+      },
+
+      mouseDragged: function (evt) {
+        if (!this._pointView)
+        {
+          return;
+        }
+        this._pointView.mouseDragged(evt);
+      },
+
+      getPointViewUnderMouse: function (dataHolder, evt) {
+        //reverse loop in order to fetch according to SVG element's' drawing order 
+        for (var iDataCounter = dataHolder.childViews.length - 1; iDataCounter >= 0; iDataCounter--)
+        {
+          var oView = dataHolder.childViews[iDataCounter];
+          for (var iPointViewCounter = oView.childViews.length - 1; iPointViewCounter >= 0; iPointViewCounter--)
+          {
+            var oPointView = oView.childViews[iPointViewCounter];
+            var graphView = dataHolder.parentView.get("graphView");
+            var evtPoint = graphView.graphCanvasView.axesView.inputAreaView.coordsForEvent(evt);
+            var centerPoint = graphView.coordinatesForPoint(oPointView.content.xFixed(), oPointView.content.yFixed());
+            if (Math.sqrt(
+                  Math.pow((centerPoint.x - evtPoint.x), 2) + 
+                  Math.pow((centerPoint.y - evtPoint.y), 2)) <= oPointView.get('hoveredRadius'))
+            {
+              return oPointView;
+            }
+          }
+        }
+      }
     }),
 
     // Holds the 'overlay annotations'; is transparent to mouse events
