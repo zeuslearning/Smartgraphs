@@ -21,9 +21,15 @@ Smartgraphs.Point = Smartgraphs.Mark.extend(
   xRounded: function () {
     return Math.round(this.get('x') * 100) / 100;
   }.property('x').cacheable(),
+  xFixed: function () {
+    return (this.get('x').toFixed(2));
+  }.property('x').cacheable(),
 
   y: null,
   yRounded: function () {
     return Math.round(this.get('y') * 100) / 100;
+  }.property('y').cacheable(),
+  yFixed: function () {
+    return (this.get('y').toFixed(2));
   }.property('y').cacheable()
 });
