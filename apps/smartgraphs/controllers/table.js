@@ -214,7 +214,7 @@ Smartgraphs.TableController = SC.ArrayController.extend( Smartgraphs.AnnotationS
 
     @param {String} roundingFunc
       The rounding function to be used for rounding 'x' & 'y' values of a point
-      Expected values of roundingFunc are 'Rounded' for 'Math.round'' and 'Fixed' for 'toFixed'.
+      Expected values of roundingFunc are 'Rounded' for 'Math.round' and 'Fixed' for 'toFixed'.
   */
   setRoundingFunc: function (roundingFunc) {
     this.set('xRoundingFunc', 'x' + roundingFunc);
