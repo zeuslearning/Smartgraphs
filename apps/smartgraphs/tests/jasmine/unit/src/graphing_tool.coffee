@@ -53,7 +53,7 @@ describe "smartgraphs.graphingTool", ->
       expect(controller.get("addAnnotation")).toHaveBeenCalledWith sketch
 
   describe "graphViewForPane", ->
-    it "should return proper graphview for the graphing tool", ->
+    it "should return proper graphView for the graphingTool", ->
       expect(graphingTool.graphViewForPane("top")).toEqual Smartgraphs.activityPage.getPath("FirstGraphPane.graphView")
 
   describe "getLinePointWithinLogicalBounds ", ->
@@ -67,5 +67,5 @@ describe "smartgraphs.graphingTool", ->
     c = 3
     it "should get line points within logical bounds", ->
       expect(graphingTool.getLinePointWithinLogicalBounds([ 2, -1 ], m, c, screenBounds)).toEqual [ -6, 0 ]
-      expect(graphingTool.getLinePointWithinLogicalBounds([ 15, 12 ], m, c, screenBounds)).toEqual [ 14, 10 ]
+      expect(graphingTool.getLinePointWithinLogicalBounds([ 15, 12 ], m, c, screenBounds)).toEqual [ 10, 8 ]
       expect(graphingTool.getLinePointWithinLogicalBounds([ 6, 3 ], m, c, screenBounds)).toEqual [ 6, 3 ]

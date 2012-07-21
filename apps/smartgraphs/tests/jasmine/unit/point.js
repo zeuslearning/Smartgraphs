@@ -11,7 +11,7 @@
     it("should be defined", function() {
       return expect(point).toBeDefined();
     });
-    return it("should return values with two decimal places", function() {
+    return it("should be able to return values with two decimal places", function() {
       expect(point.xFixed()).toEqual('3.20');
       return expect(point.yFixed()).toEqual('2.00');
     });
