@@ -79,7 +79,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
         }
       ],
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/5",
+      "defaultBranch": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/2",
       "submissibilityCriterion": [
         "=",
         [
@@ -97,7 +97,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
               [
                 "lineSlope",
                 "freehand-sketch-1",
-                "1"
+                1
               ],
               0.1
             ],
@@ -107,12 +107,12 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
               [
                 "yIntercept",
                 "freehand-sketch-1",
-                "1"
+                1
               ],
               0.1
             ]
           ],
-          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/2"
+          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/5"
         },
         {
           "criterion": [
@@ -121,11 +121,11 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
             [
               "lineSlope",
               "freehand-sketch-1",
-              "1"
+              1
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/3"
+          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/4"
         },
         {
           "criterion": [
@@ -134,11 +134,11 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
             [
               "yIntercept",
               "freehand-sketch-1",
-              "1"
+              1
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/4"
+          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/3"
         }
       ],
       "isFinalStep": false,
@@ -155,9 +155,9 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
           "title": "Line Construction Graph Pane",
           "xAxis": "/shared/activity-with-a-line-construction-tool/axes/1",
           "yAxis": "/shared/activity-with-a-line-construction-tool/axes/2",
-          "showCrossHairs": true,
+          "showCrossHairs": false,
           "showGraphGrid": true,
-          "showToolTipCoords": false,
+          "showToolTipCoords": true,
           "annotations": [
             "freehand-sketch-1"
           ],
@@ -185,7 +185,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
         }
       ],
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/5",
+      "defaultBranch": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/2",
       "submissibilityCriterion": [
         "or",
         [
@@ -209,7 +209,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
               [
                 "lineSlope",
                 "freehand-sketch-1",
-                "1"
+                1
               ],
               0.1
             ],
@@ -219,12 +219,12 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
               [
                 "yIntercept",
                 "freehand-sketch-1",
-                "1"
+                1
               ],
               0.1
             ]
           ],
-          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/2"
+          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/5"
         },
         {
           "criterion": [
@@ -233,11 +233,11 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
             [
               "lineSlope",
               "freehand-sketch-1",
-              "1"
+              1
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/3"
+          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/4"
         },
         {
           "criterion": [
@@ -246,11 +246,11 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
             [
               "yIntercept",
               "freehand-sketch-1",
-              "1"
+              1
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/4"
+          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/3"
         }
       ],
       "isFinalStep": false,
@@ -267,9 +267,9 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
           "title": "Line Construction Graph Pane",
           "xAxis": "/shared/activity-with-a-line-construction-tool/axes/1",
           "yAxis": "/shared/activity-with-a-line-construction-tool/axes/2",
-          "showCrossHairs": true,
+          "showCrossHairs": false,
           "showGraphGrid": true,
-          "showToolTipCoords": false,
+          "showToolTipCoords": true,
           "annotations": [
             "freehand-sketch-1"
           ],
@@ -297,7 +297,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
         }
       ],
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/5",
+      "defaultBranch": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/2",
       "submissibilityCriterion": [
         "or",
         [
@@ -321,7 +321,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
               [
                 "lineSlope",
                 "freehand-sketch-1",
-                "1"
+                1
               ],
               0.1
             ],
@@ -331,12 +331,12 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
               [
                 "yIntercept",
                 "freehand-sketch-1",
-                "1"
+                1
               ],
               0.1
             ]
           ],
-          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/2"
+          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/5"
         },
         {
           "criterion": [
@@ -345,11 +345,11 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
             [
               "lineSlope",
               "freehand-sketch-1",
-              "1"
+              1
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/3"
+          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/4"
         },
         {
           "criterion": [
@@ -358,11 +358,11 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
             [
               "yIntercept",
               "freehand-sketch-1",
-              "1"
+              1
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/4"
+          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/3"
         }
       ],
       "isFinalStep": false,
@@ -371,7 +371,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
     {
       "url": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/4",
       "activityPage": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page",
-      "beforeText": " <b>Incorrect, your y-intercept is wrong.</b><p>Construct a line with y-interept 0.0, with slope 1.0</p>",
+      "beforeText": "<b>Incorrect, your y-intercept is wrong.</b><p>Construct a line with y-interept 0.0, with slope 1.0</p>",
       "paneConfig": "split",
       "panes": {
         "top": {
@@ -379,9 +379,9 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
           "title": "Line Construction Graph Pane",
           "xAxis": "/shared/activity-with-a-line-construction-tool/axes/1",
           "yAxis": "/shared/activity-with-a-line-construction-tool/axes/2",
-          "showCrossHairs": true,
+          "showCrossHairs": false,
           "showGraphGrid": true,
-          "showToolTipCoords": false,
+          "showToolTipCoords": true,
           "annotations": [
             "freehand-sketch-1"
           ],
@@ -409,7 +409,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
         }
       ],
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/5",
+      "defaultBranch": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/2",
       "submissibilityCriterion": [
         "or",
         [
@@ -433,7 +433,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
               [
                 "lineSlope",
                 "freehand-sketch-1",
-                "1"
+                1
               ],
               0.1
             ],
@@ -443,12 +443,12 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
               [
                 "yIntercept",
                 "freehand-sketch-1",
-                "1"
+                1
               ],
               0.1
             ]
           ],
-          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/2"
+          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/5"
         },
         {
           "criterion": [
@@ -457,11 +457,11 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
             [
               "lineSlope",
               "freehand-sketch-1",
-              "1"
+              1
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/3"
+          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/4"
         },
         {
           "criterion": [
@@ -470,11 +470,11 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
             [
               "yIntercept",
               "freehand-sketch-1",
-              "1"
+              1
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/4"
+          "step": "/shared/activity-with-a-line-construction-tool/page/1-this-is-the-first-page/step/3"
         }
       ],
       "isFinalStep": false,
@@ -491,10 +491,12 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
           "title": "Line Construction Graph Pane",
           "xAxis": "/shared/activity-with-a-line-construction-tool/axes/1",
           "yAxis": "/shared/activity-with-a-line-construction-tool/axes/2",
-          "showCrossHairs": true,
+          "showCrossHairs": false,
           "showGraphGrid": true,
           "showToolTipCoords": false,
-          "annotations": [],
+          "annotations": [
+            "freehand-sketch-1"
+          ],
           "highlightedAnnotations": [],
           "data": [
             "datadef-1"
