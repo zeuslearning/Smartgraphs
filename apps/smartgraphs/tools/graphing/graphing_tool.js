@@ -11,18 +11,19 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
 
   name: 'graphing',
   state: 'GRAPHING_TOOL',
-  lineCount : 0,
-  annotationName : null,
-  datadefName : null,
-  requestedCursorStyle : 'default',
-  showTooltip : true, 
+  lineCount: 0,
+  pointSelectedinArray: null, // used this tool-variable for checking that which point from the data point is moved 
+  annotationName: null,
+  datadefName: null,
+  requestedCursorStyle: 'default',
+  showTooltip: true, 
 
   setup: function (args) {
-    var controller = this.graphControllerForPane(args.pane);
+    var graphController = this.graphControllerForPane(args.pane);
     var otherPane = this.otherPaneFor(args.pane);
     var tableController = this.tableControllerForPane(otherPane);
     tableController.setRoundingFunc('Fixed');
-    controller.graphingToolStartTool({ annotationName: args.annotationName, shape: args.shape, datadefName: args.data});
+    graphController.graphingToolStartTool({ annotationName: args.annotationName, shape: args.shape, datadefName: args.data});
     this.set('annotationName', args.annotationName);
     this.set('datadefName', args.data);
   },
@@ -46,17 +47,17 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
   },
 
   graphingStarting: function (state) {
-    var controller = this.graphControllerForState(state);
-    if (controller && controller.graphingToolGraphingStarting) {
-      controller.graphingToolGraphingStarting();
+    var graphController = this.graphControllerForState(state);
+    if (graphController && graphController.graphingToolGraphingStarting) {
+      graphController.graphingToolGraphingStarting();
     }
   },
 
   graphingFinished: function (state) {
-    var controller = this.graphControllerForState(state);
-    if (controller && controller.graphingToolGraphingFinished) {
+    var graphController = this.graphControllerForState(state);
+    if (graphController && graphController.graphingToolGraphingFinished) {
       this.set('showTooltip', false);
-      controller.graphingToolGraphingFinished();
+      graphController.graphingToolGraphingFinished();
     }
   },
 
@@ -81,63 +82,70 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
       point2 = point1;
       point1 = point3;
     }
-    var pointLogicalBoundsArr = this.getAnnotationPointsArray(point1, point2, state);
-    
-    this.getAnnotation(this.get('annotationName')).addPoint(pointLogicalBoundsArr[0][0], pointLogicalBoundsArr[0][1]);
-    this.getAnnotation(this.get('annotationName')).addPoint(pointLogicalBoundsArr[1][0], pointLogicalBoundsArr[1][1]);
+    var pointLogicalBoundsArr = this.getLineEndPointsArray(point1, point2, state);
+    var annotation = this.getAnnotation(this.get('annotationName'));
+    annotation.addPoint(pointLogicalBoundsArr[0][0], pointLogicalBoundsArr[0][1]);
+    annotation.addPoint(pointLogicalBoundsArr[1][0], pointLogicalBoundsArr[1][1]);
     this.set('lineCount', this.get('lineCount') + 1);
   },
 
   getLinePointWithinLogicalBounds: function (point, m, c, screenBounds) {
-    var pointCalculated;
-    pointCalculated = [point[0], point[1]];
+    var x, y;
+    x = point[0];
+    y = point[1];
     if (point[0] < screenBounds.xMin) {
-      pointCalculated[0] = screenBounds.xMin;
-      pointCalculated[1] = m * pointCalculated[0] + c;
+      x = screenBounds.xMin;
+      y = m * x + c;
     } else if (point[0] > screenBounds.xMax) {
-      pointCalculated[0] = screenBounds.xMax;
-      pointCalculated[1] = m * pointCalculated[0] + c;
+      x = screenBounds.xMax;
+      y = m * x + c;
     }
     if (point[1] < screenBounds.yMin) {
-      pointCalculated[1] = screenBounds.yMin;
-      pointCalculated[0] = (pointCalculated[1] - c) / m;
+      y = screenBounds.yMin;
+      x = (y - c) / m;
     } else if (point[1] > screenBounds.yMax) {
-      pointCalculated[1] = screenBounds.yMax;
-      pointCalculated[0] = (pointCalculated[1] - c) / m;
+      y = screenBounds.yMax;
+      x = (y - c) / m;
     }
-    return pointCalculated;
+    return [x, y];
   },
 
-  getAnnotationPointsArray: function (point1, point2, state) {
-    var screenBounds, pointLogical1, pointLogical2, m, c;
+  getLineEndPointsArray: function (point1, point2, state) {
+    var screenBounds, m, c, x1, y1, x2, y2;
     screenBounds = this.getLogicalBoundsFromState(state);
-    pointLogical1 = [];
-    pointLogical2 = [];
     if (point2[0] === point1[0]) {
-      pointLogical1 = [point1[0], screenBounds.yMin];
-      pointLogical2 = [point1[0], screenBounds.yMax];
+      x1 = point1[0];
+      y1 = screenBounds.yMin;
+      x2 = point1[0];
+      y2 = screenBounds.yMax;
     } else {
       m = (point2[1] - point1[1]) / (point2[0] - point1[0]);
       c = point2[1] - m * point2[0];
    
       if (m === 0) {
-        pointLogical1 = [screenBounds.xMin, point1[1]];
-        pointLogical2 = [screenBounds.xMax, point1[1]];
+        x1 = screenBounds.xMin;
+        y1 = point1[1];
+        x2 = screenBounds.xMax;
+        y2 = point1[1];
       } else {
-        pointLogical1[0] = screenBounds.xMin;
-        pointLogical1[1] = m * pointLogical1[0] + c;
-        pointLogical1 = this.getLinePointWithinLogicalBounds(pointLogical1, m, c, screenBounds);
-        pointLogical2[1] = m > 0 ? screenBounds.yMax : screenBounds.yMin;
-        pointLogical2[0] = (pointLogical2[1] - c) / m;
-        pointLogical2 = this.getLinePointWithinLogicalBounds(pointLogical2, m, c, screenBounds);
+        var pointArr;
+        x1 = screenBounds.xMin;
+        y1 = m * x1 + c;
+        pointArr = this.getLinePointWithinLogicalBounds([x1, y1], m, c, screenBounds);
+        x1 = pointArr[0];
+        y1 = pointArr[1];
+        y2 = m > 0 ? screenBounds.yMax : screenBounds.yMin;
+        x2 = (y2 - c) / m;
+        pointArr = this.getLinePointWithinLogicalBounds([x2, y2], m, c, screenBounds);
+        x2 = pointArr[0];
+        y2 = pointArr[1];
       }
     }
-    return [pointLogical1, pointLogical2];
+    return [[x1, y1], [x2, y2]];
   },
 
   checkInputAreaScreenBounds: function (x, y, state) {
     var graphView = this.graphViewForPane(this.paneForState(state));
     return graphView.graphCanvasView._checkInputAreaScreenBounds(x, y);
   }
-  
 });
