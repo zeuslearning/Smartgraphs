@@ -362,4 +362,31 @@ Smartgraphs.evaluator.defineOperators( function (def) {
     return Smartgraphs.graphingTool.get('lineCount');
   }).dependsOn('Smartgraphs.graphingTool.lineCount');
 
+  def('lineSlope', function (annotaionName, lineNumber) {
+    var annotation = Smartgraphs.activityObjectsController.findAnnotation(annotaionName);
+    var annotationPoints = annotation.get('points');
+    var point1 = annotationPoints[lineNumber - 1];
+    var point2 = annotationPoints[lineNumber];
+    var m = (point2[1] - point1[1]) / (point2[0] - point1[0]);
+    return m;
+  }).args(2);
+
+  def('yIntercept', function (annotationName, lineNumber) {
+    var annotation = Smartgraphs.activityObjectsController.findAnnotation(annotationName);
+    var annotationPoints = annotation.get('points');
+    var point1 = annotationPoints[lineNumber - 1];
+    var point2 = annotationPoints[lineNumber];
+    var m = (point2[1] - point1[1]) / (point2[0] - point1[0]);
+    var b = point1[1] - (m * point1[0]);
+    return b;
+  }).args(2);
+  
+  def('pointMoved', function (datadefName, pointNumber) {
+    var pointSelected = Smartgraphs.graphingTool.get('pointSelectedinArray');
+    var toolDatadefName = Smartgraphs.graphingTool.get('datadefName');
+    if (pointSelected == (pointNumber - 1) && toolDatadefName == datadefName) {
+      return true;
+    }
+    return false;
+  }).dependsOn('Smartgraphs.graphingTool.pointSelectedinArray');
 });

@@ -33,7 +33,7 @@ Smartgraphs.GraphView = SC.View.extend(
 
   padding: { top: 15, right: 15, bottom: 45, left: 45 },
 
-  childViews: 'titleView  tooltipView graphCanvasView'.w(),
+  childViews: 'titleView tooltipView graphCanvasView'.w(),
 
   init: function () {
     sc_super();
@@ -248,27 +248,19 @@ Smartgraphs.GraphView = SC.View.extend(
   }),
  
   tooltipView: SC.View.extend({
-    coords : { x: 0, y: 0, top: 0, left: 0, coordOffset: 5, width: 0},
-    hideToolTipCoords: true,
     displayProperties: ['coords', 'hideToolTipCoords'],
     coordsBinding: '.parentView*graphController.tooltipCoords',
     hideToolTipCoordsBinding: '.parentView*graphController.hideToolTipCoords',
-    
+
     render: function (context, firstTime)
     {
-      if (this.get("owner").graphController === undefined)
-      {
-        return;
-      }
-      
-      if (!this.get("owner").graphController.get("showToolTipCoords"))
-      {
+      var graphController = this.get("owner").graphController || null;
+      if (!graphController || !graphController.get("showToolTipCoords")) {
         return;
       }
       
       var hideToolTipCoords = this.get('hideToolTipCoords');
-      if (hideToolTipCoords)
-      {
+      if (hideToolTipCoords) {
         context.push("<div></div>");
         return;
       }
@@ -281,7 +273,7 @@ Smartgraphs.GraphView = SC.View.extend(
       context.push(strHtml);
     }
   }),
-	
+
   graphCanvasView: RaphaelViews.RaphaelCanvasView.design({
 
     init: function () {
@@ -305,16 +297,14 @@ Smartgraphs.GraphView = SC.View.extend(
 
     childViews: 'axesView dataHolder annotationsHolder overlayAnnotationsHolder animationView'.w(),
   
-    _checkInputAreaScreenBounds: function (x, y)
-    {
+    _checkInputAreaScreenBounds: function (x, y) {
       var inputAreaOffset = this.get("graphView").get("inputAreaView").$().offset();
       var bounds = this._getScreenBounds();
-      if ((x >= inputAreaOffset.left && x <= inputAreaOffset.left + bounds.plotWidth) && (y >= inputAreaOffset.top  && y <= inputAreaOffset.top + bounds.plotHeight))
-      {
+      if ((x >= inputAreaOffset.left && x <= inputAreaOffset.left + bounds.plotWidth) &&
+          (y >= inputAreaOffset.top  && y <= inputAreaOffset.top + bounds.plotHeight)) {
         return true;
       }
-      else
-      {
+      else {
         return false;
       }
     },
@@ -323,16 +313,13 @@ Smartgraphs.GraphView = SC.View.extend(
       this._mouseMoved(evt);
     },
   
-    _mouseMoved: function (evt)
-    {
+    _mouseMoved: function (evt) {
       var graphController = this.get("graphView").get('graphController');
-      if (this._checkInputAreaScreenBounds(evt.pageX, evt.pageY))
-      {
+      if (this._checkInputAreaScreenBounds(evt.pageX, evt.pageY)) {
         graphController.showToolTip();
         this.get('axesView').get('inputAreaView').mouseMoved(evt);
       }
-      else
-      {
+      else {
         graphController.hideToolTip();
       }
     },
@@ -340,14 +327,12 @@ Smartgraphs.GraphView = SC.View.extend(
     touchStart: function (evt) {
       this._mouseDownOrTouchStart(evt);
     },
-    mouseDown:  function (evt) {
+    mouseDown: function (evt) {
       this._mouseDownOrTouchStart(evt);
     },
   
-    _mouseDownOrTouchStart: function (evt) 
-   {
-      if (this._checkInputAreaScreenBounds(evt.pageX, evt.pageY))
-      {
+    _mouseDownOrTouchStart: function (evt) {
+      if (this._checkInputAreaScreenBounds(evt.pageX, evt.pageY)) {
         this.get('axesView').get('inputAreaView').mouseDown(evt);
       }
     },
@@ -728,6 +713,10 @@ Smartgraphs.GraphView = SC.View.extend(
       
       gridView: RaphaelViews.RaphaelView.design({
       
+        gridStroke: '#C2CCE0',
+        gridStrokeWidth: 1,
+        gridStrokeOpacity: 0.7,
+      
         graphCanvasView: SC.outlet('parentView.graphCanvasView'),
         graphView: SC.outlet('parentView.graphView'),
         
@@ -750,7 +739,7 @@ Smartgraphs.GraphView = SC.View.extend(
             return;
           }
          
-          if (this.get("graphView").get("graphController").showGraphGrid === undefined || this.get("graphView").get("graphController").showGraphGrid === false)
+          if (!(this.get("graphView").get("graphController").showGraphGrid))
           {
             return;
           }
@@ -767,10 +756,8 @@ Smartgraphs.GraphView = SC.View.extend(
           var points;
           var i, coords, point, pathComponents = [], pathString;
          
-          for (var iCounter = 0 ; iCounter < nXSteps; iCounter++, iCurrentX = iCurrentX + nXDifference)
-          {
-            if (nXDifference + iCurrentX === 0)
-            {
+          for (var iCounter = 0 ; iCounter < nXSteps; iCounter++, iCurrentX += nXDifference) {
+            if (nXDifference + iCurrentX === 0) {
               continue;
             }
             points = [];
@@ -789,9 +776,9 @@ Smartgraphs.GraphView = SC.View.extend(
             
             attrs.push({
               'd':              pathString,
-              'stroke':         '#C2CCE0',
-              'stroke-width':   1,
-              'stroke-opacity': 0.7
+              'stroke':         this.get('gridStroke'),
+              'stroke-width':   this.get('gridStrokeWidth'),
+              'stroke-opacity': this.get('gridStrokeOpacity')
             });
           }
           
@@ -820,9 +807,9 @@ Smartgraphs.GraphView = SC.View.extend(
             
             attrs.push({
               'd':              pathString,
-              'stroke':         '#C2CCE0',
-              'stroke-width':   1,
-              'stroke-opacity': 0.7
+              'stroke':         this.get('gridStroke'),
+              'stroke-width':   this.get('gridStrokeWidth'),
+              'stroke-opacity': this.get('gridStrokeOpacity')
             });
           }
           
@@ -923,6 +910,36 @@ Smartgraphs.GraphView = SC.View.extend(
           return { x: x, y: y };
         },
         
+        touchStart: function (evt) {
+          this._mouseDownOrTouchStart(evt);
+        },
+        mouseDown: function (evt) {
+          this._mouseDownOrTouchStart(evt);
+        },
+
+        _mouseDownOrTouchStart: function (evt) {
+          var coords = this.coordsForEvent(evt),
+              point = this._graphView.pointForCoordinates(coords.x, coords.y);
+
+          this._graphController = this._graphView.get('graphController');
+          return this._graphController.inputAreaMouseDown(point.x, point.y);
+        },
+
+        touchesDragged: function (evt) {
+          this._mouseOrTouchesDragged(evt);
+        },
+
+        mouseDragged: function (evt) {
+          this._mouseOrTouchesDragged(evt);
+        },
+
+        _mouseOrTouchesDragged: function (evt) {
+          var coords = this.coordsForEvent(evt),
+              point = this._graphView.pointForCoordinates(coords.x, coords.y);
+
+          return this._graphController.inputAreaMouseDragged(point.x, point.y);
+        },
+
         mouseMoved:  function (evt)
         { 
           this._mouseMoved(evt);
@@ -950,51 +967,30 @@ Smartgraphs.GraphView = SC.View.extend(
           {
             graphController.hideToolTip();
           }
-     
           graphController.updateToolTip(point, coords);
-     
           return graphController.inputAreaMouseMove(point.x, point.y);
         },
 
-        touchStart: function (evt)
-        {
-          this._mouseDownOrTouchStart(evt);
-        },
-        mouseDown:  function (evt)
-        {
-          this._mouseDownOrTouchStart(evt);
-        },
-
-        _mouseDownOrTouchStart: function (evt) {
-          var coords = this.coordsForEvent(evt),
-              point = this._graphView.pointForCoordinates(coords.x, coords.y);
-
-          var graphController = this._graphView.get('graphController');
-          return graphController.inputAreaMouseDown(point.x, point.y);
-        },
-
-        touchEnd: function (evt)
-        {
+        touchEnd: function (evt) {
           this._mouseUpOrTouchEnd(evt);
         },
         
-        mouseUp:  function (evt)
-        {
+        mouseUp: function (evt) {
           this._mouseUpOrTouchEnd(evt);
         },
 
         _mouseUpOrTouchEnd: function (evt) {
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
-     
+
           var graphController = this._graphView.get('graphController');
           return graphController.inputAreaMouseUp(point.x, point.y);
         },
         
         
         mouseExited: function () {
-          var controller = this._graphView.get('graphController');
-          controller.hideToolTip();
+          var graphController = this._graphView.get('graphController');
+          graphController.hideToolTip();
         }
         
       }),
@@ -1019,7 +1015,84 @@ Smartgraphs.GraphView = SC.View.extend(
     }),
 
     // Holds the annotation views. Should be later in the DOM (and thus "in front of") the data views
+    // Mouse events are propagated because line annotation are above the points. 
     annotationsHolder: RaphaelViews.RaphaelView.design({
+      graphCanvasView: SC.outlet('parentView'),
+      graphView: SC.outlet('graphCanvasView.graphView'),
+
+      mouseEntered: function (evt) {
+        
+        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
+        if (!pointView) {
+          return;
+        }
+        
+        this._pointView = pointView;
+        pointView.mouseEntered();
+      },
+      
+      mouseDown: function (evt) {
+        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
+        this._pointView = pointView;
+        if (!pointView) {
+          return;
+        }
+
+        this._pointView = pointView;
+        pointView.mouseDown();
+      },
+
+      mouseMoved:  function (evt) {
+        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
+        if (!pointView) {
+          if (this._pointView) {
+            this._pointView.mouseExited();
+          }
+        }
+        else {
+          this._pointView = pointView;
+          pointView.mouseEntered();
+        }
+      },
+
+      mouseExited: function (evt) {
+        return;
+      },
+
+      mouseUp: function () {
+        if (this._pointView) {
+          this._pointView.mouseExited();
+        }
+        this._pointView = null;
+      },
+
+      mouseDragged: function (evt) {
+        if (!this._pointView) {
+          return;
+        }
+        this._pointView.mouseDragged(evt);
+      },
+
+      getPointViewUnderMouse: function (dataHolder, evt) {
+        //reverse loop in order to fetch according to SVG element's' drawing order 
+        for (var iDataCounter = dataHolder.childViews.length - 1; iDataCounter >= 0; iDataCounter--)
+        {
+          var oView = dataHolder.childViews[iDataCounter];
+          for (var iPointViewCounter = oView.childViews.length - 1; iPointViewCounter >= 0; iPointViewCounter--)
+          {
+            var oPointView = oView.childViews[iPointViewCounter];
+            var graphView = dataHolder.parentView.get("graphView");
+            var evtPoint = graphView.graphCanvasView.axesView.inputAreaView.coordsForEvent(evt);
+            var centerPoint = graphView.coordinatesForPoint(oPointView.content.xFixed(), oPointView.content.yFixed());
+            if (Math.sqrt(
+                  Math.pow((centerPoint.x - evtPoint.x), 2) + 
+                  Math.pow((centerPoint.y - evtPoint.y), 2)) <= oPointView.get('hoveredRadius'))
+            {
+              return oPointView;
+            }
+          }
+        }
+      }
     }),
 
     // Holds the 'overlay annotations'; is transparent to mouse events

@@ -47,13 +47,11 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
       if (!SC.kindOf(annotation, Smartgraphs.FreehandSketch)) {
         throw SC.Error.desc("Graphing tool was started with a non-FreehandSketch annotation name '%@'".fmt(annotationName));
       }
-   
       if (!datadef) {
         throw SC.Error.desc("Graphing tool was started with a bogus datadef name '%@'".fmt(datadefName));
       }
-      
-      Smartgraphs.graphingTool.hideGraphTitle(this);
 
+      Smartgraphs.graphingTool.hideGraphTitle(this);
       Smartgraphs.graphingTool.graphingStarting(this);
 
       toolRoot.set('annotation', annotation);
@@ -65,13 +63,13 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
     exitState: function () {
       var toolRoot = this.get('toolRoot');
       this.get('owner').hideControls();
-      Smartgraphs.graphingTool.showGraphTitle(this);
       Smartgraphs.graphingTool.graphingFinished(this);
       Smartgraphs.graphingTool.set('lineCount', 0);
       toolRoot.set('annotation', null);
       toolRoot.set('annotationName', null);
       toolRoot.set('datadef', null);
       toolRoot.set('datadefName', null);
+      Smartgraphs.graphingTool.set('pointSelectedinArray', null);
     },
 
     stopTool: function () {
@@ -87,12 +85,9 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
         if (shape === 'singleLine') {
           this.gotoState(this.getPath('parentState.SINGLE_LINE'));
         }
-        /*else if (shape === 'extendedLine') {
-         //for future reference if required
-        }*/
         else
         {
-          throw SC.Error.desc("Graphing behavior was started with unknown Shape argument '%@'".fmt(shape));
+          throw SC.Error.desc("Graphing tool was started with unknown 'shape' argument '%@'".fmt(shape));
         }
       }
     }),
@@ -102,7 +97,13 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
     SINGLE_LINE: SC.State.design({
 
       toolRoot: SC.outlet('parentState.toolRoot'),
-
+      // Adding this variable to avoid indirect fetching of datadefPoints and annotationPoints.
+      // Also adding two more values required while dragging.
+      pointDraggedInfo: {
+        datadefPoints: null,
+        annotationPoints: null,
+        initialPointSelected: null
+      },
       initialSubstate: 'START',
 
       START: SC.State.design({
@@ -115,68 +116,97 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
         },
 
         mouseDownAtPoint: function (context, args) {
-          var datadef = this.getPath('toolRoot.datadef');   
-          if (datadef.get("points").length < 2)
-          {
+          var datadef = this.getPath('toolRoot.datadef');
+          var datadefPoints = datadef.get("points");
+          if (datadefPoints.length < 2) {
             Smartgraphs.graphingTool.plotPoint(args.x, args.y);
-           
-            if (datadef.get("points").length === 2)
-            {
-              Smartgraphs.graphingTool.drawLineThroughPoints(datadef.get("points")[0], [args.x, args.y], this);
+            if (datadefPoints.length === 2) {
+              Smartgraphs.graphingTool.drawLineThroughPoints(datadefPoints[0], datadefPoints[1], this);
               Smartgraphs.graphingTool.graphingFinished(this);
             }
           }
         },
-        
-        mouseMoveAtPoint: function (context, args) {
-         //Kept this event for future use for of graphing tool
-        },
-        
-        mouseDraggedToPoint: function (context, args) {
-          var points = this.getPath('toolRoot.annotation').get('points');
-          for (var i = 0; i < points.length; i++)
-          {
-            if (Math.round(args.x) === Math.round(points[i][0]) && Math.round(args.y) === Math.round(points[i][1], 2))
-            {
+
+        dataPointSelected: function (context, args) {
+          var pointSelected = args;
+          var datadefPoints = this.getPath('toolRoot.datadef').get('points');
+          var annotationPoints = this.getPath('toolRoot.annotation').get('points');
+          for (var i = 0 ; i < datadefPoints.length; i++) {
+            if ((pointSelected.x == datadefPoints[i][0]) && (pointSelected.y == datadefPoints[i][1])) {
+              Smartgraphs.graphingTool.set('pointSelectedinArray', i);
               break;
             }
-          }          
+          }
+          Smartgraphs.graphingTool.set('showTooltip', true);
+          this.pointDraggedInfo = {
+            datadefPoints: datadefPoints,
+            annotationPoints: annotationPoints,
+            initialPointSelected: pointSelected
+          };
+          return;
         },
 
-        mouseUpAtPoint: function (context, args) {
-          if (Smartgraphs.graphingTool.get("lineCount") === 2)
-          {
-            this.get('owner').set('requestedCursorStyle', 'default');
-            //Smartgraphs.graphingTool.set('showRequestedCursorStyle', false);
+        isPointInDatadef: function (xCur, yCur) {
+          var info = this.pointDraggedInfo;
+          var pointSelected = Smartgraphs.graphingTool.get('pointSelectedinArray');
+          for (var i = 0 ; i < info.datadefPoints.length; i ++) {
+            var point = info.datadefPoints[i];
+            if (point[0] == xCur && point[1] == yCur) {
+              Smartgraphs.graphingTool.set('showTooltip', false);
+              return true;
+            }
+            return false;
+          }
+        },
+
+        dataPointDragged: function (context, args) {
+          var graphingTool = Smartgraphs.graphingTool;
+          if (this.isPointInDatadef(args.x, args.y)) {
+            graphingTool.set('showTooltip', false);
+          }
+          else {
+            graphingTool.set('showTooltip', true);
+          }
+          var info = this.pointDraggedInfo;
+          var pointSelected = graphingTool.get('pointSelectedinArray');
+          info.datadefPoints.replace(pointSelected, 1, [[args.x, args.y]]);
+          if (info.datadefPoints.length >= 2) {
+            var pointLogicalArray = graphingTool.getLineEndPointsArray(info.datadefPoints[0], info.datadefPoints[1], this);
+            info.annotationPoints.replace(0, 2, pointLogicalArray);
           }
           return;
-        }
-
-      }),
-
-      CONTINUE: SC.State.design({
-
-        toolRoot: SC.outlet('parentState.toolRoot'),
-        owner: SC.outlet('statechart.owner'),
-
-        enterState: function () {
-          this.get('owner').highlightClearControl();
         },
 
-        mouseDownAtPoint: function (context, args) {
-          this.getPath('toolRoot.annotation').addPoint(args.x, args.y);
+        rollbackPointDragged: function () {
+          var graphingTool = Smartgraphs.graphingTool;
+          var info = this.pointDraggedInfo;
+          var pointSelected = graphingTool.get('pointSelectedinArray');
+          info.datadefPoints.replace(pointSelected, 1, [[info.initialPointSelected.x, info.initialPointSelected.y]]);
+          if (info.datadefPoints.length >= 2) {
+            var pointLogicalArray = graphingTool.getLineEndPointsArray(info.datadefPoints[0], info.datadefPoints[1], this);
+            info.annotationPoints.replace(0, 2, pointLogicalArray);
+          }
         },
 
-        mouseDraggedToPoint: function (context, args) {
-          this.getPath('toolRoot.annotation').updateLatestPoint(args.x, args.y);
+        //This event occurs with screen bounds in args as an argument.
+        dataScreenPointUp: function (context, args) {
+          var graphingTool = Smartgraphs.graphingTool;
+          var bPointInGraph = graphingTool.checkInputAreaScreenBounds(args.x, args.y, this);
+          if (!bPointInGraph) {
+            this.rollbackPointDragged();
+          }
+          //graphingTool.set('showTooltip', false);
+          return;
         },
 
-        mouseUpAtPoint: function (context, args) {
-          this.getPath('toolRoot.annotation').updateLatestPoint(args.x, args.y);
-        },
-
-        clearControlWasClicked: function () {
-          this.gotoState(this.getPath('parentState.START'));
+        //This event occurs with logical bounds in args as an argument.
+        dataPointUp: function (context, args) {
+          var bPointInDatadef = this.isPointInDatadef(args.x, args.y);
+          if (bPointInDatadef) {
+            this.rollbackPointDragged();
+          }
+          Smartgraphs.graphingTool.set('showTooltip', false);
+          return;
         }
       })
     })
