@@ -68,7 +68,7 @@
       });
     });
     describe("graphViewForPane", function() {
-      return it("should return proper graphview for the graphing tool", function() {
+      return it("should return proper graphView for the graphingTool", function() {
         return expect(graphingTool.graphViewForPane("top")).toEqual(Smartgraphs.activityPage.getPath("FirstGraphPane.graphView"));
       });
     });
@@ -84,7 +84,7 @@
       c = 3;
       return it("should get line points within logical bounds", function() {
         expect(graphingTool.getLinePointWithinLogicalBounds([2, -1], m, c, screenBounds)).toEqual([-6, 0]);
-        expect(graphingTool.getLinePointWithinLogicalBounds([15, 12], m, c, screenBounds)).toEqual([14, 10]);
+        expect(graphingTool.getLinePointWithinLogicalBounds([15, 12], m, c, screenBounds)).toEqual([10, 8]);
         return expect(graphingTool.getLinePointWithinLogicalBounds([6, 3], m, c, screenBounds)).toEqual([6, 3]);
       });
     });
