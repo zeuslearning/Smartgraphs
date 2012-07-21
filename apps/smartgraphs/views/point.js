@@ -104,11 +104,13 @@ Smartgraphs.PointView = RaphaelViews.RaphaelView.extend(
   },
 
   _mouseUp: function (evt) {
-    this.get('controller').dataScreenPointUp(this.get('dataRepresentation'), evt.pageX, evt.pageY);
+    var graphController = this.get('controller');
+    var dataRepresentation = this.get('dataRepresentation');
+    graphController.dataScreenPointUp(dataRepresentation, evt.pageX, evt.pageY);
     var graphView = this.getPath('parentView.graphView');
     var coords = graphView.graphCanvasView.axesView.inputAreaView.coordsForEvent(evt);
     var point = graphView.pointForCoordinates(coords.x, coords.y);
-    this.get('controller').dataPointUp(this.get('dataRepresentation'), point.x, point.y);
+    graphController.dataPointUp(dataRepresentation, point.x, point.y);
     return YES;
   },
 

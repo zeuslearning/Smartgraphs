@@ -12,7 +12,7 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
   name: 'graphing',
   state: 'GRAPHING_TOOL',
   lineCount: 0,
-  pointSelectedinArray: null, // used this tool-variable for checking that which point from the data point is moved 
+  pointSelectedInArray: null, // used this tool-variable for checking that which point from the data point is moved 
   annotationName: null,
   datadefName: null,
   requestedCursorStyle: 'default',
@@ -93,17 +93,17 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
     var x, y;
     x = point[0];
     y = point[1];
-    if (point[0] < screenBounds.xMin) {
+    if (x < screenBounds.xMin) {
       x = screenBounds.xMin;
       y = m * x + c;
-    } else if (point[0] > screenBounds.xMax) {
+    } else if (x > screenBounds.xMax) {
       x = screenBounds.xMax;
       y = m * x + c;
     }
-    if (point[1] < screenBounds.yMin) {
+    if (y < screenBounds.yMin) {
       y = screenBounds.yMin;
       x = (y - c) / m;
-    } else if (point[1] > screenBounds.yMax) {
+    } else if (y > screenBounds.yMax) {
       y = screenBounds.yMax;
       x = (y - c) / m;
     }
@@ -116,31 +116,38 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
     if (point2[0] === point1[0]) {
       x1 = point1[0];
       y1 = screenBounds.yMin;
-      x2 = point1[0];
+      x2 = x1;
       y2 = screenBounds.yMax;
-    } else {
-      m = (point2[1] - point1[1]) / (point2[0] - point1[0]);
-      c = point2[1] - m * point2[0];
-   
-      if (m === 0) {
-        x1 = screenBounds.xMin;
-        y1 = point1[1];
-        x2 = screenBounds.xMax;
-        y2 = point1[1];
-      } else {
-        var pointArr;
-        x1 = screenBounds.xMin;
-        y1 = m * x1 + c;
-        pointArr = this.getLinePointWithinLogicalBounds([x1, y1], m, c, screenBounds);
-        x1 = pointArr[0];
-        y1 = pointArr[1];
-        y2 = m > 0 ? screenBounds.yMax : screenBounds.yMin;
-        x2 = (y2 - c) / m;
-        pointArr = this.getLinePointWithinLogicalBounds([x2, y2], m, c, screenBounds);
-        x2 = pointArr[0];
-        y2 = pointArr[1];
-      }
+      
+      return [[x1, y1], [x2, y2]];
     }
+    
+    m = (point2[1] - point1[1]) / (point2[0] - point1[0]);
+    c = point2[1] - m * point2[0];
+    
+    if (m === 0) {
+      x1 = screenBounds.xMin;
+      y1 = point1[1];
+      x2 = screenBounds.xMax;
+      y2 = y1;
+      
+      return [[x1, y1], [x2, y2]];
+    }
+    
+    var pointArr;
+    
+    x1 = screenBounds.xMin;
+    y1 = m * x1 + c;
+    pointArr = this.getLinePointWithinLogicalBounds([x1, y1], m, c, screenBounds);
+    x1 = pointArr[0];
+    y1 = pointArr[1];
+    
+    y2 = m > 0 ? screenBounds.yMax : screenBounds.yMin;
+    x2 = (y2 - c) / m;
+    pointArr = this.getLinePointWithinLogicalBounds([x2, y2], m, c, screenBounds);
+    x2 = pointArr[0];
+    y2 = pointArr[1];
+    
     return [[x1, y1], [x2, y2]];
   },
 
