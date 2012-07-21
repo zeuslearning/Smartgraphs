@@ -1023,51 +1023,53 @@ Smartgraphs.GraphView = SC.View.extend(
       mouseEntered: function (evt) {
         
         var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
-        if (!pointView) {
+        if (!pointView || pointView === undefined) {
           return;
         }
-        
-        this._pointView = pointView;
         pointView.mouseEntered();
       },
       
       mouseDown: function (evt) {
         var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
-        this._pointView = pointView;
-        if (!pointView) {
+        if (!pointView || pointView === undefined) {
+          this._pointView = null;
           return;
         }
-
         this._pointView = pointView;
         pointView.mouseDown();
       },
 
       mouseMoved:  function (evt) {
         var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
-        if (!pointView) {
+        if (!pointView || pointView === undefined) {
           if (this._pointView) {
             this._pointView.mouseExited();
+            this._pointView = null;
           }
         }
         else {
-          this._pointView = pointView;
           pointView.mouseEntered();
         }
       },
 
       mouseExited: function (evt) {
+        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null
+        if(pointView) {
+          pointView.mouseExited();
+        }
         return;
       },
 
-      mouseUp: function () {
+      mouseUp: function (evt) {
         if (this._pointView) {
           this._pointView.mouseExited();
+          this._pointView.mouseUp(evt);
         }
         this._pointView = null;
       },
 
       mouseDragged: function (evt) {
-        if (!this._pointView) {
+        if (!(this._pointView) || this._pointView === undefined) {
           return;
         }
         this._pointView.mouseDragged(evt);

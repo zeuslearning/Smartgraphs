@@ -150,6 +150,9 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
           var info = this.pointDraggedInfo;
           var pointSelected = Smartgraphs.graphingTool.get('pointSelectedinArray');
           for (var i = 0 ; i < info.datadefPoints.length; i ++) {
+            if (i === pointSelected) {
+              continue;
+            }
             var point = info.datadefPoints[i];
             if (point[0] == xCur && point[1] == yCur) {
               Smartgraphs.graphingTool.set('showTooltip', false);
@@ -190,22 +193,16 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
 
         //This event occurs with screen bounds in args as an argument.
         dataScreenPointUp: function (context, args) {
+          var graphView = Smartgraphs.graphingTool.graphViewForPane(Smartgraphs.graphingTool.paneForState(this));
+          var coords = graphView.graphCanvasView.axesView.inputAreaView.coordsForEvent({ pageX: args.x, pageY: args.y });
+          var logicalPoint = graphView.pointForCoordinates(coords.x, coords.y);
           var graphingTool = Smartgraphs.graphingTool;
           var bPointInGraph = graphingTool.checkInputAreaScreenBounds(args.x, args.y, this);
-          if (!bPointInGraph) {
+          var bPointInDatadef = this.isPointInDatadef(logicalPoint.x, logicalPoint.y);
+          if (!bPointInGraph || bPointInDatadef) {
             this.rollbackPointDragged();
           }
-          //graphingTool.set('showTooltip', false);
-          return;
-        },
-
-        //This event occurs with logical bounds in args as an argument.
-        dataPointUp: function (context, args) {
-          var bPointInDatadef = this.isPointInDatadef(args.x, args.y);
-          if (bPointInDatadef) {
-            this.rollbackPointDragged();
-          }
-          Smartgraphs.graphingTool.set('showTooltip', false);
+          graphingTool.set('showTooltip', false);
           return;
         }
       })
