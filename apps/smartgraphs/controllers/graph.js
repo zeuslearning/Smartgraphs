@@ -415,8 +415,12 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set('showToolTipCoords', config.showToolTipCoords);
 
     var xMax = this.getAxis(config.xAxis).get("max");
-    var yMax = this.getAxis(config.yAxis).get("max"); 
-    var iTooltipWidth = (xMax + "," + yMax).length * 15;
+    var yMax = this.getAxis(config.yAxis).get("max");
+    var widthMultiplier = 15; 
+    if (parseInt(this.getAxis(config.yAxis).get("min")) < 0 || parseInt(this.getAxis(config.xAxis).get("min") < 0)) {
+      widthMultiplier = 20;
+    }
+    var iTooltipWidth = (xMax + "," + yMax).length * widthMultiplier;
     var tooltipCoords = this.get("tooltipCoords"); 
     this.set("tooltipCoords", { x: 0, y: 0, top: 0, left: 0, coordOffset: 5, width: iTooltipWidth});
     this.hideToolTip();
