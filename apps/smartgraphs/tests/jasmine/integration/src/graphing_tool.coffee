@@ -116,6 +116,7 @@ describe "Smartgraphs.graphingTool with 'singleLine' shape option", ->
         controller.inputAreaMouseDown 0, 1
         controller.inputAreaMouseDown 2, 3
         controller.dataPointSelected rep, 0, 1
+        controller.dataPointDown rep, 0, 1
         controller.dataPointDragged rep, 1, 2
         controller.dataScreenPointUp rep, 1, 2
 
