@@ -63,7 +63,8 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
     exitState: function () {
       this.get('owner').hideControls();
       
-      Smartgraphs.graphingTool.set('pointSelectedInArray', null);
+      Smartgraphs.graphingTool.set('pointMovedNumber', null);
+      Smartgraphs.graphingTool.set('pointMoved', false);
       Smartgraphs.graphingTool.graphingFinished(this);
       Smartgraphs.graphingTool.set('lineCount', 0);
       
@@ -101,14 +102,15 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
       toolRoot: SC.outlet('parentState.toolRoot'),
       // Adding this variable to avoid indirect fetching of datadefPoints and annotationPoints.
       // Also adding two more values required while dragging.
-      pointDraggedInfo: {
-        datadefPoints: null,
-        annotationPoints: null,
-        initialPointSelected: null
-      },
       initialSubstate: 'START',
 
       START: SC.State.design({
+
+        pointDraggedInfo: {
+          datadefPoints: null,
+          annotationPoints: null,
+          initialPoint: null
+        },
 
         toolRoot: SC.outlet('parentState.toolRoot'),
         owner:    SC.outlet('statechart.owner'),
@@ -130,33 +132,36 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
         },
 
         dataPointSelected: function (context, args) {
-          var pointSelected = args;
+          var curPoint = args;
           var datadefPoints = this.getPath('toolRoot.datadef').get('points');
           var annotationPoints = this.getPath('toolRoot.annotation').get('points');
           for (var i = 0 ; i < datadefPoints.length; i++) {
-            if ((pointSelected.x == datadefPoints[i][0]) && (pointSelected.y == datadefPoints[i][1])) {
-              Smartgraphs.graphingTool.set('pointSelectedInArray', i);
+            if ((curPoint.x === datadefPoints[i][0]) && (curPoint.y === datadefPoints[i][1])) {
+              Smartgraphs.graphingTool.set('pointMovedNumber', i);
               break;
             }
           }
           Smartgraphs.graphingTool.set('showTooltip', true);
-          this.pointDraggedInfo = {
-            datadefPoints: datadefPoints,
-            annotationPoints: annotationPoints,
-            initialPointSelected: pointSelected
-          };
+          this.pointDraggedInfo.datadefPoints = datadefPoints;
+          this.pointDraggedInfo.annotationPoints = annotationPoints;
+          return;
+        },
+
+        dataPointDown: function (context, args) {
+          var curPoint = args;
+          this.pointDraggedInfo.initialPoint = Smartgraphs.Point.create({x: curPoint.x, y: curPoint.y});
           return;
         },
 
         isPointInDatadef: function (xCur, yCur) {
           var info = this.pointDraggedInfo;
-          var pointSelected = Smartgraphs.graphingTool.get('pointSelectedInArray');
+          var pointMovedNumber = Smartgraphs.graphingTool.get('pointMovedNumber');
           for (var i = 0 ; i < info.datadefPoints.length; i ++) {
-            if (i === pointSelected) {
+            if (i === pointMovedNumber) {
               continue;
             }
             var point = info.datadefPoints[i];
-            if (point[0] == xCur && point[1] == yCur) {
+            if (point[0] === xCur && point[1] === yCur) {
               Smartgraphs.graphingTool.set('showTooltip', false);
               return true;
             }
@@ -173,8 +178,8 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
             graphingTool.set('showTooltip', true);
           }
           var info = this.pointDraggedInfo;
-          var pointSelected = graphingTool.get('pointSelectedInArray');
-          info.datadefPoints.replace(pointSelected, 1, [[args.x, args.y]]);
+          var pointMovedNumber = graphingTool.get('pointMovedNumber');
+          info.datadefPoints.replace(pointMovedNumber, 1, [[args.x, args.y]]);
           if (info.datadefPoints.length >= 2) {
             var pointLogicalArray = graphingTool.getLineEndPointsArray(info.datadefPoints[0], info.datadefPoints[1], this);
             info.annotationPoints.replace(0, 2, pointLogicalArray);
@@ -185,8 +190,8 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
         rollbackPointDragged: function () {
           var graphingTool = Smartgraphs.graphingTool;
           var info = this.pointDraggedInfo;
-          var pointSelected = graphingTool.get('pointSelectedInArray');
-          info.datadefPoints.replace(pointSelected, 1, [[info.initialPointSelected.x, info.initialPointSelected.y]]);
+          var pointMovedNumber = graphingTool.get('pointMovedNumber');
+          info.datadefPoints.replace(pointMovedNumber, 1, [[info.initialPoint.x, info.initialPoint.y]]);
           if (info.datadefPoints.length >= 2) {
             var pointLogicalArray = graphingTool.getLineEndPointsArray(info.datadefPoints[0], info.datadefPoints[1], this);
             info.annotationPoints.replace(0, 2, pointLogicalArray);
@@ -196,12 +201,24 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
         //This event occurs with screen bounds in args as an argument.
         dataScreenPointUp: function (context, args) {
           var graphingTool = Smartgraphs.graphingTool;
-          var logicalPoint = graphingTool.pointForCoordinates(args.x, args.y, this);
-          var bPointInGraph = graphingTool.checkInputAreaScreenBounds(args.x, args.y, this);
-          if (!bPointInGraph || this.isPointInDatadef(logicalPoint.x, logicalPoint.y)) {
-            this.rollbackPointDragged();
-          }
           graphingTool.set('showTooltip', false);
+          var bPointInGraph = graphingTool.checkInputAreaScreenBounds(args.x, args.y, this);
+          if (bPointInGraph)
+          {
+            var curPoint = graphingTool.pointForCoordinates(args.x, args.y, this);
+            var bPointInDatadef = this.isPointInDatadef(curPoint.x, curPoint.y);
+            if (!bPointInDatadef) {
+              var curPointFixed = Smartgraphs.Point.create({x: curPoint.x, y: curPoint.y});
+              var initialPoint = this.pointDraggedInfo.initialPoint;
+              if (initialPoint.xFixed() !== curPointFixed.xFixed() ||
+                  initialPoint.yFixed() !== curPointFixed.yFixed())
+              {
+                graphingTool.set('pointMoved', true);
+              }
+              return;
+            }
+          }
+          this.rollbackPointDragged();
           return;
         }
       })

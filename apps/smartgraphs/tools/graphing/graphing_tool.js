@@ -12,7 +12,8 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
   name: 'graphing',
   state: 'GRAPHING_TOOL',
   lineCount: 0,
-  pointSelectedInArray: null, // used this tool-variable for checking that which point from the data point is moved 
+  pointMovedNumber: null, // used this tool-variable for checking that which point from the data point is moved
+  pointMoved: false, // this tool-variable used to check whether point is moved or not.
   annotationName: null,
   datadefName: null,
   requestedCursorStyle: 'default',
@@ -170,7 +171,6 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
   pointForCoordinates: function (x, y, state) {
     var graphView = this.graphViewForPane(this.paneForState(state));
     var coords = graphView.graphCanvasView.axesView.inputAreaView.coordsForEvent({ pageX: x, pageY: y });
-    var logicalPoint = graphView.pointForCoordinates(coords.x, coords.y);
-    return graphView.graphCanvasView._checkInputAreaScreenBounds(x, y);
+    return graphView.pointForCoordinates(coords.x, coords.y);
   }
 });

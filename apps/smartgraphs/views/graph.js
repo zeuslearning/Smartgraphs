@@ -1036,7 +1036,7 @@ Smartgraphs.GraphView = SC.View.extend(
           return;
         }
         this._pointView = pointView;
-        pointView.mouseDown();
+        pointView.mouseDown(evt);
       },
 
       mouseMoved:  function (evt) {
