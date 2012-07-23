@@ -1021,17 +1021,15 @@ Smartgraphs.GraphView = SC.View.extend(
       graphView: SC.outlet('graphCanvasView.graphView'),
 
       mouseEntered: function (evt) {
-        
-        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
-        if (!pointView || pointView === undefined) {
-          return;
+        if (this._pointView && !this._currentPoint.isHovered) {
+          this._currentPoint.mouseEntered();
         }
-        pointView.mouseEntered();
+        return;
       },
       
       mouseDown: function (evt) {
         var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
-        if (!pointView || pointView === undefined) {
+        if (!pointView) {
           this._pointView = null;
           return;
         }
@@ -1040,22 +1038,32 @@ Smartgraphs.GraphView = SC.View.extend(
       },
 
       mouseMoved:  function (evt) {
-        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
-        if (!pointView || pointView === undefined) {
-          if (this._pointView) {
-            this._pointView.mouseExited();
-            this._pointView = null;
-          }
+        if (this._pointView) {
+          return;
         }
-        else {
+        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
+        if (!pointView) {
+          if (this._currentPoint) {
+            this._currentPoint.mouseExited();
+            this._currentPoint = null;
+          }
+          return;
+        }
+        if (!this._currentPoint)
+        {
+          this._currentPoint = pointView;
           pointView.mouseEntered();
+          return;
         }
       },
 
       mouseExited: function (evt) {
-        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null
-        if(pointView) {
-          pointView.mouseExited();
+        if (this._pointView) {
+          return;
+        }
+        if (this._currentPoint) {
+          this._currentPoint.mouseExited();
+          this._currentPoint = null;
         }
         return;
       },
@@ -1069,7 +1077,7 @@ Smartgraphs.GraphView = SC.View.extend(
       },
 
       mouseDragged: function (evt) {
-        if (!(this._pointView) || this._pointView === undefined) {
+        if (!this._pointView) {
           return;
         }
         this._pointView.mouseDragged(evt);
