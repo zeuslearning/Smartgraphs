@@ -15,12 +15,15 @@
       return expect(Smartgraphs.Tool.tools["graphing"].context).toBe(graphingTool);
     });
     describe("setup method", function() {
-      var controller;
-      controller = void 0;
+      var controller, tableController;
+      controller = tableController = void 0;
       beforeEach(function() {
         controller = Smartgraphs.GraphController.create();
+        tableController = Smartgraphs.TableController.create();
         spyOn(graphingTool, "graphControllerForPane").andReturn(controller);
+        spyOn(graphingTool, "tableControllerForPane").andReturn(tableController);
         spyOn(controller, "graphingToolStartTool");
+        spyOn(tableController, "setRoundingFunc");
         return graphingTool.setup({
           annotationName: "freehand-sketch-1",
           shape: "SingleLine",
@@ -30,6 +33,9 @@
       });
       it("should translate the 'pane' parameter to a controller ", function() {
         return expect(graphingTool.graphControllerForPane).toHaveBeenCalledWith("top");
+      });
+      it("should call TableController's setRoundingFunc with value 'Fixed''", function() {
+        return expect(tableController.setRoundingFunc).toHaveBeenCalledWith("Fixed");
       });
       return it("should ask the relevant graph controller to start the graphing tool", function() {
         return expect(controller.graphingToolStartTool).toHaveBeenCalledWith({
@@ -62,7 +68,7 @@
       });
     });
     describe("graphViewForPane", function() {
-      return it("should return proper graphview for the graphing tool", function() {
+      return it("should return proper graphView for the graphingTool", function() {
         return expect(graphingTool.graphViewForPane("top")).toEqual(Smartgraphs.activityPage.getPath("FirstGraphPane.graphView"));
       });
     });
@@ -78,7 +84,7 @@
       c = 3;
       return it("should get line points within logical bounds", function() {
         expect(graphingTool.getLinePointWithinLogicalBounds([2, -1], m, c, screenBounds)).toEqual([-6, 0]);
-        expect(graphingTool.getLinePointWithinLogicalBounds([15, 12], m, c, screenBounds)).toEqual([14, 10]);
+        expect(graphingTool.getLinePointWithinLogicalBounds([15, 12], m, c, screenBounds)).toEqual([10, 8]);
         return expect(graphingTool.getLinePointWithinLogicalBounds([6, 3], m, c, screenBounds)).toEqual([6, 3]);
       });
     });

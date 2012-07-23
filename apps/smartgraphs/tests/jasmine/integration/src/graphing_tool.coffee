@@ -75,31 +75,57 @@ describe "Smartgraphs.graphingTool with 'singleLine' shape option", ->
         controller.inputAreaMouseDown 0, 1
 
       describe "the representation", ->
-        it "should have points [ [0,1] ]", ->
-          expect(rep.get("points")).toEqualPairs [ [ 0, 1 ] ]
+        it "should have points [[0, 1]]", ->
+          expect(rep.get("points")).toEqualPairs [[0, 1]]
 
       describe "the cursor style requested by the controller", ->
         it "should be 'crosshair'", ->
           expect(controller.get("requestedCursorStyle")).toEqual "crosshair"
 
-    describe "when the controller's inputAreaMouseDown method is called with (0,1)", ->
+    describe "when the controller's inputAreaMouseDown method is called twice with (0, 1) and (2, 3)", ->
       beforeEach ->
-        controller.inputAreaMouseDown 0, 1
         spyOn(Smartgraphs.graphingTool, "getLogicalBoundsFromState").andReturn
           xMin: 0
           yMin: 0
           xMax: 10
           yMax: 10
-
+        controller.inputAreaMouseDown 0, 1
         controller.inputAreaMouseDown 2, 3
 
       describe "the sketch", ->
-        it "line should be drawn with points [ [0,1], [9,10] ]", ->
-          expect(sketch.get("points")).toEqualPairs [ [ 0, 1 ], [ 9, 10 ] ]
+        it "line should be drawn with points [[0,1], [9,10]]", ->
+          expect(sketch.get("points")).toEqualPairs [[0, 1], [9, 10]]
 
       describe "the representation", ->
-        it "should have points [ [0,1], [2,3] ]", ->
-          expect(rep.get("points")).toEqualPairs [ [ 0, 1 ], [ 2, 3 ] ]
+        it "should have points [[0,1], [2, 3]]", ->
+          expect(rep.get("points")).toEqualPairs [[0, 1], [2, 3]]
+
+      describe "the cursor style requested by the controller", ->
+        it "should be back to 'default'", ->
+          expect(controller.get("requestedCursorStyle")).toEqual "default"
+
+    describe "when the controller's dataPointDragged method is called with (1, 2)", ->
+      beforeEach ->
+        spyOn(Smartgraphs.graphingTool, "getLogicalBoundsFromState").andReturn
+          xMin: 0
+          yMin: 0
+          xMax: 10
+          yMax: 10
+        spyOn(Smartgraphs.graphingTool, "checkInputAreaScreenBounds").andReturn(true)
+        spyOn(Smartgraphs.graphingTool, "pointForCoordinates").andReturn({x: 9, y: 9})
+        controller.inputAreaMouseDown 0, 1
+        controller.inputAreaMouseDown 2, 3
+        controller.dataPointSelected rep, 0, 1
+        controller.dataPointDragged rep, 1, 2
+        controller.dataScreenPointUp rep, 1, 2
+
+      describe "the sketch", ->
+        it "line should be drawn with points [[0, 1], [9, 10]]", ->
+          expect(sketch.get("points")).toEqualPairs [[0, 1], [9, 10]]
+
+      describe "the representation", ->
+        it "should have points [[1, 2], [2, 3]]", ->
+          expect(rep.get("points")).toEqualPairs [[1, 2], [2, 3]]
 
       describe "the cursor style requested by the controller", ->
         it "should be back to 'default'", ->

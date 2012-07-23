@@ -51,7 +51,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
           "yAxis": "/shared/activity-with-a-line-construction-tool/axes/2",
           "showCrossHairs": true,
           "showGraphGrid": true,
-          "showToolTipCoords": false,
+          "showToolTipCoords": true,
           "annotations": [
             "freehand-sketch-1"
           ],
@@ -157,7 +157,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
           "yAxis": "/shared/activity-with-a-line-construction-tool/axes/2",
           "showCrossHairs": false,
           "showGraphGrid": true,
-          "showToolTipCoords": false,
+          "showToolTipCoords": true,
           "annotations": [
             "freehand-sketch-1"
           ],
@@ -269,7 +269,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
           "yAxis": "/shared/activity-with-a-line-construction-tool/axes/2",
           "showCrossHairs": false,
           "showGraphGrid": true,
-          "showToolTipCoords": false,
+          "showToolTipCoords": true,
           "annotations": [
             "freehand-sketch-1"
           ],
@@ -381,7 +381,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool"] =
           "yAxis": "/shared/activity-with-a-line-construction-tool/axes/2",
           "showCrossHairs": false,
           "showGraphGrid": true,
-          "showToolTipCoords": false,
+          "showToolTipCoords": true,
           "annotations": [
             "freehand-sketch-1"
           ],

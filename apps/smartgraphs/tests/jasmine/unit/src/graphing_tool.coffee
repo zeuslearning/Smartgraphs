@@ -11,11 +11,14 @@ describe "smartgraphs.graphingTool", ->
     expect(Smartgraphs.Tool.tools["graphing"].context).toBe graphingTool
 
   describe "setup method", ->
-    controller = undefined
+    controller = tableController = undefined
     beforeEach ->
       controller = Smartgraphs.GraphController.create()
+      tableController = Smartgraphs.TableController.create()
       spyOn(graphingTool, "graphControllerForPane").andReturn controller
+      spyOn(graphingTool, "tableControllerForPane").andReturn tableController
       spyOn controller, "graphingToolStartTool"
+      spyOn tableController, "setRoundingFunc"
       graphingTool.setup
         annotationName: "freehand-sketch-1"
         shape: "SingleLine"
@@ -24,6 +27,9 @@ describe "smartgraphs.graphingTool", ->
 
     it "should translate the 'pane' parameter to a controller ", ->
       expect(graphingTool.graphControllerForPane).toHaveBeenCalledWith "top"
+
+    it "should call TableController's setRoundingFunc with value 'Fixed''", ->
+      expect(tableController.setRoundingFunc).toHaveBeenCalledWith "Fixed"
 
     it "should ask the relevant graph controller to start the graphing tool", ->
       expect(controller.graphingToolStartTool).toHaveBeenCalledWith
@@ -47,7 +53,7 @@ describe "smartgraphs.graphingTool", ->
       expect(controller.get("addAnnotation")).toHaveBeenCalledWith sketch
 
   describe "graphViewForPane", ->
-    it "should return proper graphview for the graphing tool", ->
+    it "should return proper graphView for the graphingTool", ->
       expect(graphingTool.graphViewForPane("top")).toEqual Smartgraphs.activityPage.getPath("FirstGraphPane.graphView")
 
   describe "getLinePointWithinLogicalBounds ", ->
@@ -61,5 +67,5 @@ describe "smartgraphs.graphingTool", ->
     c = 3
     it "should get line points within logical bounds", ->
       expect(graphingTool.getLinePointWithinLogicalBounds([ 2, -1 ], m, c, screenBounds)).toEqual [ -6, 0 ]
-      expect(graphingTool.getLinePointWithinLogicalBounds([ 15, 12 ], m, c, screenBounds)).toEqual [ 14, 10 ]
+      expect(graphingTool.getLinePointWithinLogicalBounds([ 15, 12 ], m, c, screenBounds)).toEqual [ 10, 8 ]
       expect(graphingTool.getLinePointWithinLogicalBounds([ 6, 3 ], m, c, screenBounds)).toEqual [ 6, 3 ]
