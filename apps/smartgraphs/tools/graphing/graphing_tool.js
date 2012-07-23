@@ -12,7 +12,8 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
   name: 'graphing',
   state: 'GRAPHING_TOOL',
   lineCount: 0,
-  pointSelectedInArray: null, // used this tool-variable for checking that which point from the data point is moved 
+  pointMovedNumber: null, // used this tool-variable for checking that which point from the data point is moved
+  pointMoved: false, // this tool-variable used to check whether point is moved or not.
   annotationName: null,
   datadefName: null,
   requestedCursorStyle: 'default',
@@ -70,8 +71,19 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
     return graphView.graphCanvasView._getLogicalBounds();
   },
 
-  plotPoint: function (x, y) {
-    this.getDatadef(this.get('datadefName')).addPoint(x, y);
+  plotPoint: function (point) {
+    var datadef = this.getDatadef(this.get('datadefName'));
+    var datadefPoints = datadef.get('points');
+    var i = 0;
+    
+    for (i = 0; i < datadefPoints.length; i++) {
+      var datadefPoint = Smartgraphs.Point.create({ x: datadefPoints[i][0], y: datadefPoints[i][1] });
+      if (datadefPoint.xFixed() === point.xFixed() && datadefPoint.yFixed() === point.yFixed()) {
+        return; // Nothing to be done
+      }
+    }
+    
+    datadef.addPoint(point.x, point.y);
   },
 
   drawLineThroughPoints: function (point1, point2, state) {
@@ -159,7 +171,6 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
   pointForCoordinates: function (x, y, state) {
     var graphView = this.graphViewForPane(this.paneForState(state));
     var coords = graphView.graphCanvasView.axesView.inputAreaView.coordsForEvent({ pageX: x, pageY: y });
-    var logicalPoint = graphView.pointForCoordinates(coords.x, coords.y);
-    return graphView.graphCanvasView._checkInputAreaScreenBounds(x, y);
+    return graphView.pointForCoordinates(coords.x, coords.y);
   }
 });

@@ -298,10 +298,12 @@ Smartgraphs.GraphView = SC.View.extend(
     childViews: 'axesView dataHolder annotationsHolder overlayAnnotationsHolder animationView'.w(),
   
     _checkInputAreaScreenBounds: function (x, y) {
-      var inputAreaOffset = this.get("graphView").get("inputAreaView").$().offset();
+      var graphAreaOffset = this.get("graphView").$().offset();
+      var padding = this.get("graphView").get("padding");
       var bounds = this._getScreenBounds();
-      if ((x >= inputAreaOffset.left && x <= inputAreaOffset.left + bounds.plotWidth) &&
-          (y >= inputAreaOffset.top  && y <= inputAreaOffset.top + bounds.plotHeight)) {
+      
+      if ((x >= graphAreaOffset.left + padding.left && x <= graphAreaOffset.left + bounds.plotWidth + padding.left) &&
+          (y >= graphAreaOffset.top + padding.top  && y <= graphAreaOffset.top + bounds.plotHeight + padding.top)) {
         return true;
       }
       else {
@@ -1034,7 +1036,7 @@ Smartgraphs.GraphView = SC.View.extend(
           return;
         }
         this._pointView = pointView;
-        pointView.mouseDown();
+        pointView.mouseDown(evt);
       },
 
       mouseMoved:  function (evt) {
