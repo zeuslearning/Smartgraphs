@@ -416,9 +416,9 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
 
     var xMax = this.getAxis(config.xAxis).get("max");
     var yMax = this.getAxis(config.yAxis).get("max");
-    var widthMultiplier = 15; 
-    if (parseInt(this.getAxis(config.yAxis).get("min")) < 0 || parseInt(this.getAxis(config.xAxis).get("min") < 0)) {
-      widthMultiplier = 20;
+    var widthMultiplier = 15;
+    if (parseInt(this.getAxis(config.yAxis).get("min"), 10) < 0 || parseInt(this.getAxis(config.xAxis).get("min"), 10) < 0) {
+      widthMultiplier = 21;
     }
     var iTooltipWidth = (xMax + "," + yMax).length * widthMultiplier;
     var tooltipCoords = this.get("tooltipCoords"); 
