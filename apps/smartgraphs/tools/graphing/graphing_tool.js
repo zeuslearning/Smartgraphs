@@ -30,6 +30,10 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
     graphController.graphingToolStartTool({ annotationName: args.annotationName, shape: args.shape, datadefName: args.data});
     this.set('annotationName', args.annotationName);
     this.set('datadefName', args.data);
+    
+    this.getAnnotation(args.annotationName).set("isOverlayAnnotation", true);
+    var graphView = this.graphViewForPane(args.pane);
+    graphView._updateAllViews();
   },
 
   appendSketch: function (state, sketch) {
