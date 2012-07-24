@@ -212,8 +212,6 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
           if (this.pointDraggedInfo.datadefPoints.length >= 2) {
             graphingTool.set('showTooltip', false);
           }
-          var graphView = graphingTool.graphViewForPane(graphingTool.get('graphPane'));
-          graphView.get('tooltipView').displayDidChange();
           var bPointInGraph = graphingTool.checkInputAreaScreenBounds(args.x, args.y);
           if (bPointInGraph)
           {
