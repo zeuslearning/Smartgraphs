@@ -3,8 +3,10 @@ $ ->
   $("body").css "overflow", "auto"
 
 describe "Smartgraphs.graphingTool with 'singleLine' shape option", ->
-  store = controller = toolState = null
+  store = controller = toolState = graphingTool = null
   beforeEach ->
+    graphingTool = Smartgraphs.graphingTool
+    graphingTool.set('graphLogicalBounds', { xMin: 0, yMin: 0, xMax: 10, yMax: 10 })
     store = SC.Store.create().from(SC.FixturesDataSource.create())
     controller = Smartgraphs.GraphController.create()
     controller.clear()
@@ -36,10 +38,11 @@ describe "Smartgraphs.graphingTool with 'singleLine' shape option", ->
         url: "sketch"
         points: []
       )
-      spyOn(Smartgraphs.graphingTool, "getAnnotation").andReturn sketch
-      spyOn(Smartgraphs.graphingTool, "getDatadef").andReturn rep
-      spyOn(Smartgraphs.graphingTool, "showGraphTitle")
-      spyOn(Smartgraphs.graphingTool, "hideGraphTitle")
+
+      spyOn(graphingTool, "getAnnotation").andReturn sketch
+      spyOn(graphingTool, "getDatadef").andReturn rep
+      spyOn(graphingTool, "hideGraphTitle")
+      spyOn(graphingTool, "updateGraphLogicalBounds")
       controller.showCrossHairs = true
       controller.graphingToolStartTool
         annotationName: "freehand-sketch-1"
@@ -84,11 +87,6 @@ describe "Smartgraphs.graphingTool with 'singleLine' shape option", ->
 
     describe "when the controller's inputAreaMouseDown method is called twice with (0, 1) and (2, 3)", ->
       beforeEach ->
-        spyOn(Smartgraphs.graphingTool, "getLogicalBoundsFromState").andReturn
-          xMin: 0
-          yMin: 0
-          xMax: 10
-          yMax: 10
         controller.inputAreaMouseDown 0, 1
         controller.inputAreaMouseDown 2, 3
 
@@ -106,16 +104,12 @@ describe "Smartgraphs.graphingTool with 'singleLine' shape option", ->
 
     describe "when the controller's dataPointDragged method is called with (1, 2)", ->
       beforeEach ->
-        spyOn(Smartgraphs.graphingTool, "getLogicalBoundsFromState").andReturn
-          xMin: 0
-          yMin: 0
-          xMax: 10
-          yMax: 10
         spyOn(Smartgraphs.graphingTool, "checkInputAreaScreenBounds").andReturn(true)
         spyOn(Smartgraphs.graphingTool, "pointForCoordinates").andReturn({x: 9, y: 9})
         controller.inputAreaMouseDown 0, 1
         controller.inputAreaMouseDown 2, 3
         controller.dataPointSelected rep, 0, 1
+        controller.dataPointDown rep, 0, 1
         controller.dataPointDragged rep, 1, 2
         controller.dataScreenPointUp rep, 1, 2
 

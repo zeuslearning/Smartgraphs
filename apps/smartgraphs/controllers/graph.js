@@ -415,8 +415,12 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set('showToolTipCoords', config.showToolTipCoords);
 
     var xMax = this.getAxis(config.xAxis).get("max");
-    var yMax = this.getAxis(config.yAxis).get("max"); 
-    var iTooltipWidth = (xMax + "," + yMax).length * 15;
+    var yMax = this.getAxis(config.yAxis).get("max");
+    var widthMultiplier = 15;
+    if (parseInt(this.getAxis(config.yAxis).get("min"), 10) < 0 || parseInt(this.getAxis(config.xAxis).get("min"), 10) < 0) {
+      widthMultiplier = 21;
+    }
+    var iTooltipWidth = (xMax + "," + yMax).length * widthMultiplier;
     var tooltipCoords = this.get("tooltipCoords"); 
     this.set("tooltipCoords", { x: 0, y: 0, top: 0, left: 0, coordOffset: 5, width: iTooltipWidth});
     this.hideToolTip();
@@ -612,6 +616,13 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       Smartgraphs.statechart.sendAction('dataPointSelected', this, { dataRepresentation: dataRepresentation, x: x, y: y });
     }
     this.sendAction('dataPointSelected', this, { dataRepresentation: dataRepresentation, x: x, y: y });
+  },
+
+  dataPointDown: function (dataRepresentation, x, y) {
+    if (Smartgraphs.statechart && Smartgraphs.statechart.get('statechartIsInitialized')) {
+      Smartgraphs.statechart.sendAction('dataPointDown', this, { dataRepresentation: dataRepresentation,  x: x, y: y });
+    }
+    this.sendAction('dataPointDown', this, { dataRepresentation: dataRepresentation,  x: x, y: y  });
   },
 
   dataPointDragged: function (dataRepresentation, x, y) {

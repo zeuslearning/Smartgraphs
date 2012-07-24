@@ -22,7 +22,7 @@ Smartgraphs.Point = Smartgraphs.Mark.extend(
     return Math.round(this.get('x') * 100) / 100;
   }.property('x').cacheable(),
   xFixed: function () {
-    return (this.get('x').toFixed(2));
+    return (this.xRounded().toFixed(2));
   }.property('x').cacheable(),
 
   y: null,
@@ -30,6 +30,6 @@ Smartgraphs.Point = Smartgraphs.Mark.extend(
     return Math.round(this.get('y') * 100) / 100;
   }.property('y').cacheable(),
   yFixed: function () {
-    return (this.get('y').toFixed(2));
+    return (this.yRounded().toFixed(2));
   }.property('y').cacheable()
 });

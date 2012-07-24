@@ -167,6 +167,53 @@ Smartgraphs.GraphView = SC.View.extend(
     this._viewsByClassAndItem[classKey][itemKey] = view;
   },
 
+  _updateAllViews: function () {
+    var list,
+        item,
+        classKey,
+        itemKey,
+        itemType,
+        itemTypes = ['data', 'annotation'],
+        i, j, len;
+
+    for (j = 0; j < itemTypes.length; j++) {
+      itemType = itemTypes[j];
+      list = this.get(itemType === 'data' ? 'graphableDataObjects' : 'annotationList');
+
+      // add views for items (DataRepresentations or Annotations) not currently in the list of child views
+      for (i = 0, len = list.get('length'); i < len; i++) {
+        item = list.objectAt(i);
+
+        if (item.get('isModifierAnnotation')) {
+          continue;
+        }
+
+        classKey = SC.guidFor(item.constructor);
+        itemKey = SC.guidFor(item);
+
+        if (this._viewsByClassAndItem[classKey] && this._viewsByClassAndItem[classKey][itemKey]) {
+          var view = this._viewsByClassAndItem[classKey][itemKey];
+          var animatedDatadefNames = (this.getPath('animationInfo.animations') || []).concat(this.getPath('animationInfo.linkedAnimations')).getEach('datadefName');
+
+          // remove the view from parent
+          view.removeFromParent();
+          // append data and annotations
+          if (itemType === 'data') {
+            view.set('isHiddenForAnimation', animatedDatadefNames.indexOf(item.getPath('dataRepresentation.datadef.name')) >= 0);
+            this.get('dataHolder').appendChild(view);
+          }
+          else if (itemType === 'annotation') {
+            if (item.get('isOverlayAnnotation')) {
+              this.get('overlayAnnotationsHolder').appendChild(view);
+            }
+            else {
+              this.get('annotationsHolder').appendChild(view);
+            }
+          }
+        }
+      }
+    }
+  },
 
   _removeView: function (view) {
     var item     = view.get('item'),
@@ -298,10 +345,12 @@ Smartgraphs.GraphView = SC.View.extend(
     childViews: 'axesView dataHolder annotationsHolder overlayAnnotationsHolder animationView'.w(),
   
     _checkInputAreaScreenBounds: function (x, y) {
-      var inputAreaOffset = this.get("graphView").get("inputAreaView").$().offset();
+      var graphAreaOffset = this.get("graphView").$().offset();
+      var padding = this.get("graphView").get("padding");
       var bounds = this._getScreenBounds();
-      if ((x >= inputAreaOffset.left && x <= inputAreaOffset.left + bounds.plotWidth) &&
-          (y >= inputAreaOffset.top  && y <= inputAreaOffset.top + bounds.plotHeight)) {
+      
+      if ((x >= graphAreaOffset.left + padding.left && x <= graphAreaOffset.left + bounds.plotWidth + padding.left) &&
+          (y >= graphAreaOffset.top + padding.top  && y <= graphAreaOffset.top + bounds.plotHeight + padding.top)) {
         return true;
       }
       else {
@@ -1017,84 +1066,6 @@ Smartgraphs.GraphView = SC.View.extend(
     // Holds the annotation views. Should be later in the DOM (and thus "in front of") the data views
     // Mouse events are propagated because line annotation are above the points. 
     annotationsHolder: RaphaelViews.RaphaelView.design({
-      graphCanvasView: SC.outlet('parentView'),
-      graphView: SC.outlet('graphCanvasView.graphView'),
-
-      mouseEntered: function (evt) {
-        
-        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
-        if (!pointView || pointView === undefined) {
-          return;
-        }
-        pointView.mouseEntered();
-      },
-      
-      mouseDown: function (evt) {
-        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
-        if (!pointView || pointView === undefined) {
-          this._pointView = null;
-          return;
-        }
-        this._pointView = pointView;
-        pointView.mouseDown();
-      },
-
-      mouseMoved:  function (evt) {
-        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null;
-        if (!pointView || pointView === undefined) {
-          if (this._pointView) {
-            this._pointView.mouseExited();
-            this._pointView = null;
-          }
-        }
-        else {
-          pointView.mouseEntered();
-        }
-      },
-
-      mouseExited: function (evt) {
-        var pointView = this.getPointViewUnderMouse(this.parentView.dataHolder, evt) || null
-        if(pointView) {
-          pointView.mouseExited();
-        }
-        return;
-      },
-
-      mouseUp: function (evt) {
-        if (this._pointView) {
-          this._pointView.mouseExited();
-          this._pointView.mouseUp(evt);
-        }
-        this._pointView = null;
-      },
-
-      mouseDragged: function (evt) {
-        if (!(this._pointView) || this._pointView === undefined) {
-          return;
-        }
-        this._pointView.mouseDragged(evt);
-      },
-
-      getPointViewUnderMouse: function (dataHolder, evt) {
-        //reverse loop in order to fetch according to SVG element's' drawing order 
-        for (var iDataCounter = dataHolder.childViews.length - 1; iDataCounter >= 0; iDataCounter--)
-        {
-          var oView = dataHolder.childViews[iDataCounter];
-          for (var iPointViewCounter = oView.childViews.length - 1; iPointViewCounter >= 0; iPointViewCounter--)
-          {
-            var oPointView = oView.childViews[iPointViewCounter];
-            var graphView = dataHolder.parentView.get("graphView");
-            var evtPoint = graphView.graphCanvasView.axesView.inputAreaView.coordsForEvent(evt);
-            var centerPoint = graphView.coordinatesForPoint(oPointView.content.xFixed(), oPointView.content.yFixed());
-            if (Math.sqrt(
-                  Math.pow((centerPoint.x - evtPoint.x), 2) + 
-                  Math.pow((centerPoint.y - evtPoint.y), 2)) <= oPointView.get('hoveredRadius'))
-            {
-              return oPointView;
-            }
-          }
-        }
-      }
     }),
 
     // Holds the 'overlay annotations'; is transparent to mouse events

@@ -380,13 +380,17 @@ Smartgraphs.evaluator.defineOperators( function (def) {
     var b = point1[1] - (m * point1[0]);
     return b;
   }).args(2);
-  
+
   def('pointMoved', function (datadefName, pointNumber) {
-    var pointSelected = Smartgraphs.graphingTool.get('pointSelectedinArray');
-    var toolDatadefName = Smartgraphs.graphingTool.get('datadefName');
-    if (pointSelected == (pointNumber - 1) && toolDatadefName == datadefName) {
-      return true;
+    var graphingTool = Smartgraphs.graphingTool;
+    if (graphingTool.get('pointMoved'))
+    {
+      var pointMovedNumber = graphingTool.get('pointMovedNumber');
+      var toolDatadefName = graphingTool.get('datadefName');
+      if (pointMovedNumber === (pointNumber - 1) && toolDatadefName === datadefName) {
+        return true;
+      }
     }
     return false;
-  }).dependsOn('Smartgraphs.graphingTool.pointSelectedinArray');
+  }).dependsOn('Smartgraphs.graphingTool.pointMoved');
 });
