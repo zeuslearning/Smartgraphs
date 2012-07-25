@@ -169,11 +169,6 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
     return [[x1, y1], [x2, y2]];
   },
 
-  checkInputAreaScreenBounds: function (x, y) {
-    var graphView = this.graphViewForPane(this.get('graphPane'));
-    return graphView.graphCanvasView._checkInputAreaScreenBounds(x, y);
-  },
-  
   pointForCoordinates: function (x, y) {
     var graphView = this.graphViewForPane(this.get('graphPane'));
     var coords = graphView.graphCanvasView.axesView.inputAreaView.coordsForEvent({ pageX: x, pageY: y });
