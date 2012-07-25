@@ -864,51 +864,6 @@ Smartgraphs.GraphView = SC.View.extend(
           
           context.callback(this, this.renderCallback, attrs);
           
-        },
-         
-        touchStart: function (evt) {
-          this._mouseDownOrTouchStart(evt);
-        },
-        mouseDown:  function (evt) {
-          this._mouseDownOrTouchStart(evt);
-        },
-        
-        _mouseDownOrTouchStart: function (evt) {
-          var coords = this.coordsForEvent(evt),
-          point = this._graphView.pointForCoordinates(coords.x, coords.y);
-          
-          this._graphController = this._graphView.get('graphController');
-          return this._graphController.inputAreaMouseDown(point.x, point.y);
-        },
-        
-        touchesDragged: function (evt) { 
-          this._mouseOrTouchesDragged(evt);
-        },
-        mouseDragged: function (evt) {
-          this._mouseOrTouchesDragged(evt);
-        },
-        
-        _mouseOrTouchesDragged: function (evt) {
-          var coords = this.coordsForEvent(evt),
-           point = this._graphView.pointForCoordinates(coords.x, coords.y);
-          
-          var graphController = this._graphView.get('graphController');
-          return graphController.inputAreaMouseDragged(point.x, point.y);
-        },
-        
-        touchEnd: function (evt) {
-          this._mouseUpOrTouchEnd(evt);
-        },
-        mouseUp:  function (evt) {
-          this._mouseUpOrTouchEnd(evt);
-        },
-        
-        _mouseUpOrTouchEnd: function (evt) {
-          var coords = this.coordsForEvent(evt),
-          point = this._graphView.pointForCoordinates(coords.x, coords.y);
-          
-          this._graphController = this._graphView.get('graphController');
-          return this._graphController.inputAreaMouseUp(point.x, point.y);
         }
       }),
 

@@ -167,11 +167,5 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
     y2 = pointArr[1];
     
     return [[x1, y1], [x2, y2]];
-  },
-
-  pointForCoordinates: function (x, y) {
-    var graphView = this.graphViewForPane(this.get('graphPane'));
-    var coords = graphView.graphCanvasView.axesView.inputAreaView.coordsForEvent({ pageX: x, pageY: y });
-    return graphView.pointForCoordinates(coords.x, coords.y);
   }
 });
