@@ -64,13 +64,27 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
   graphingFinished: function (state) {
     var graphController = this.graphControllerForState(state);
     if (graphController && graphController.graphingToolGraphingFinished) {
-      this.set('showTooltip', false);
       graphController.graphingToolGraphingFinished();
     }
   },
 
   graphViewForPane: function (pane) {
     return Smartgraphs.activityPage.getPath(Smartgraphs.activityViewController.firstOrSecondFor(pane) + 'GraphPane.graphView');
+  },
+
+  showToolTip: function (bShow) {
+    var graphController = this.graphControllerForPane(this.get('graphPane'));
+    graphController.set('toolTipOverrideVisibility', bShow);
+  },
+
+  setToolTipPoint: function (point) {
+    var graphController = this.graphControllerForPane(this.get('graphPane'));
+    graphController.set('toolTipPoint', point);
+  },
+
+  checkInputAreaScreenBounds: function (x, y) {
+    var graphView = this.graphViewForPane(this.get('graphPane'));
+    return graphView.graphCanvasView._checkInputAreaScreenBounds(x, y);
   },
 
   updateGraphLogicalBounds: function () {

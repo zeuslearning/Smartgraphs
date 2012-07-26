@@ -71,10 +71,14 @@ Smartgraphs.PointView = RaphaelViews.RaphaelView.extend(
 
   mouseEntered: function () {
     this.set('isHovered', YES);
+    var graphController = this.get('controller');
+    graphController.dataPointEntered(this.get('dataRepresentation'), this.getPath('content.x'), this.getPath('content.y'));
   },
 
   mouseExited: function () {
     this.set('isHovered', NO);
+    var graphController = this.get('controller');
+    graphController.dataPointExited(this.get('dataRepresentation'), this.getPath('content.x'), this.getPath('content.y'));
   },
 
   mouseDown: function (evt) { return this._mouseDownOrTouchStart(evt); },
@@ -108,13 +112,13 @@ Smartgraphs.PointView = RaphaelViews.RaphaelView.extend(
   },
 
   _mouseUp: function (evt) {
-    var graphController = this.get('controller');
-    var dataRepresentation = this.get('dataRepresentation');
-    graphController.dataScreenPointUp(dataRepresentation, evt.pageX, evt.pageY);
     var graphView = this.getPath('parentView.graphView');
     var coords = graphView.graphCanvasView.axesView.inputAreaView.coordsForEvent(evt);
     var point = graphView.pointForCoordinates(coords.x, coords.y);
+    var graphController = this.get('controller');
+    var dataRepresentation = this.get('dataRepresentation');
     graphController.dataPointUp(dataRepresentation, point.x, point.y);
+    graphController.dataScreenPointUp(dataRepresentation, evt.pageX, evt.pageY);
     return YES;
   },
 

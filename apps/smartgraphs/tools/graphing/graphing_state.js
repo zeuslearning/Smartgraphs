@@ -132,6 +132,7 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
             if (datadefPoints.length === 2) {
               graphingTool.drawLineThroughPoints(datadefPoints[0], datadefPoints[1], this);
               graphingTool.graphingFinished(this);
+              graphingTool.showToolTip(false);
             }
           }
         },
@@ -146,11 +147,27 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
               break;
             }
           }
-          graphingTool.set('showTooltip', true);
+          graphingTool.showToolTip(true);
           this.pointDraggedInfo.datadefPoints = datadefPoints;
           this.pointDraggedInfo.annotationPoints = annotationPoints;
           this.pointDraggedInfo.initialPoint = Smartgraphs.Point.create({x: args.x, y: args.y});
           return;
+        },
+
+        dataPointEntered: function (context, args) {
+          var point = Smartgraphs.Point.create({x: args.x, y: args.y});
+          var graphingTool = Smartgraphs.graphingTool;
+          graphingTool.setToolTipPoint(point);
+          graphingTool.showToolTip(true);
+        },
+
+        dataPointExited: function (context, args) {
+          var graphingTool = Smartgraphs.graphingTool;
+          graphingTool.setToolTipPoint(null);
+          var datadefPoints = this.pointDraggedInfo.datadefPoints;
+          if (datadefPoints !== null && datadefPoints.length >= 2) {
+            graphingTool.showToolTip(false);
+          }
         },
 
         isPointInDatadef: function (xCur, yCur) {
@@ -163,7 +180,6 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
             }
             var point = info.datadefPoints[i];
             if (point[0] === xCur && point[1] === yCur) {
-              graphingTool.set('showTooltip', false);
               return true;
             }
             return false;
@@ -172,11 +188,12 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
 
         dataPointDragged: function (context, args) {
           var graphingTool = Smartgraphs.graphingTool;
+          graphingTool.setToolTipPoint(null);
           if (this.isPointInDatadef(args.x, args.y)) {
-            graphingTool.set('showTooltip', false);
+            graphingTool.showToolTip(false);
           }
           else {
-            graphingTool.set('showTooltip', true);
+            graphingTool.showToolTip(true);
           }
           var info = this.pointDraggedInfo;
           var pointMovedNumber = graphingTool.get('pointMovedNumber');
@@ -199,22 +216,35 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
           }
         },
 
+        dataScreenPointUp: function (context, args) {
+          var graphingTool = Smartgraphs.graphingTool;
+          if (!graphingTool.checkInputAreaScreenBounds(args.x, args.y)) {
+            graphingTool.setToolTipPoint(null);
+            var datadefPoints = this.pointDraggedInfo.datadefPoints;
+            if (datadefPoints !== null && datadefPoints.length >= 2) {
+              graphingTool.showToolTip(false);
+            }
+          }
+        },
+
         dataPointUp: function (context, args) {
           var graphingTool = Smartgraphs.graphingTool;
-          if (this.pointDraggedInfo.datadefPoints.length >= 2) {
-            graphingTool.set('showTooltip', false);
-          }
+          var info = this.pointDraggedInfo;
           var bPointInDatadef = this.isPointInDatadef(args.x, args.y);
+          var pointMovedNumber = graphingTool.get('pointMovedNumber');
+          var datadefPoint = info.datadefPoints[pointMovedNumber];
+          var selPoint = Smartgraphs.Point.create({x: datadefPoint[0], y: datadefPoint[1]});
           if (!bPointInDatadef) {
-            var info = this.pointDraggedInfo;
-            var pointMovedNumber = graphingTool.get('pointMovedNumber');
-            var datadefPoint = info.datadefPoints[pointMovedNumber];
-            var selPoint = Smartgraphs.Point.create({x: datadefPoint[0], y: datadefPoint[1]});
             var initialPoint = info.initialPoint;
             if (initialPoint.xFixed() !== selPoint.xFixed() || initialPoint.yFixed() !== selPoint.yFixed()) {
               graphingTool.set('pointMoved', true);
+              graphingTool.setToolTipPoint(null);
+              graphingTool.showToolTip(false);
             }
             return;
+          }
+          else {
+            graphingTool.setToolTipPoint(selPoint);
           }
           this.rollbackPointDragged();
           return;
