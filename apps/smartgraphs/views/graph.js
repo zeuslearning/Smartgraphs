@@ -305,7 +305,12 @@ Smartgraphs.GraphView = SC.View.extend(
       if (!graphController || !graphController.get("showToolTipCoords")) {
         return;
       }
-      
+
+      if (!graphController.get('toolTipOverrideVisibility')) {
+        context.push("<div></div>");
+        return;
+      }
+
       var hideToolTipCoords = this.get('hideToolTipCoords');
       if (hideToolTipCoords) {
         context.push("<div></div>");
@@ -365,11 +370,11 @@ Smartgraphs.GraphView = SC.View.extend(
     _mouseMoved: function (evt) {
       var graphController = this.get("graphView").get('graphController');
       if (this._checkInputAreaScreenBounds(evt.pageX, evt.pageY)) {
-        graphController.showToolTip();
+        graphController.showToolTip(true);
         this.get('axesView').get('inputAreaView').mouseMoved(evt);
       }
       else {
-        graphController.hideToolTip();
+        graphController.showToolTip(false);
       }
     },
   
@@ -761,50 +766,44 @@ Smartgraphs.GraphView = SC.View.extend(
       },
       
       gridView: RaphaelViews.RaphaelView.design({
-      
+
         gridStroke: '#C2CCE0',
         gridStrokeWidth: 1,
         gridStrokeOpacity: 0.7,
-      
+
         graphCanvasView: SC.outlet('parentView.graphCanvasView'),
         graphView: SC.outlet('parentView.graphView'),
-        
+
         renderCallback: function (raphaelCanvas, attrs) {
-          for (var iCounter = 0; iCounter < attrs.length; iCounter++)
-          {
+          for (var iCounter = 0; iCounter < attrs.length; iCounter++) {
             raphaelCanvas.path(attrs[iCounter].d).attr(attrs[iCounter]);
           }
           return;
         },
-    
+
         render: function (context, firstTime) {
           var graphView  = this.get('graphView');
           var xAxis      = graphView.get('xAxis');
           var yAxis      = graphView.get('yAxis');
          
          //return if xAxis and yAxis is undefined
-          if (!xAxis || !yAxis)
-          {
+          if (!xAxis || !yAxis) {
             return;
           }
-         
-          if (!(this.get("graphView").get("graphController").showGraphGrid))
-          {
+
+          if (!(this.get("graphView").get("graphController").showGraphGrid)) {
             return;
           }
          
           var logicalBounds = graphView.graphCanvasView._getLogicalBounds();
-         
           var nXSteps = xAxis.get("nSteps");
           var nYSteps = yAxis.get("nSteps");
           var attrs = [];
-         
           var nXDifference = Math.abs((logicalBounds.xMax - logicalBounds.xMin) / nXSteps);
           var nyDifference = Math.abs((logicalBounds.yMax - logicalBounds.yMin) / nYSteps);
           var iCurrentX = logicalBounds.xMin;
-          var points;
-          var i, coords, point, pathComponents = [], pathString;
-         
+          var points, i, coords, point, pathComponents = [], pathString;
+
           for (var iCounter = 0 ; iCounter < nXSteps; iCounter++, iCurrentX += nXDifference) {
             if (nXDifference + iCurrentX === 0) {
               continue;
@@ -813,7 +812,6 @@ Smartgraphs.GraphView = SC.View.extend(
             points.push({ 'y': logicalBounds.yMin, 'x': (nXDifference + iCurrentX) });
             points.push({ 'y': logicalBounds.yMax, 'x': (nXDifference + iCurrentX) });
             pathComponents = [];
-            
             for (i = 0; i < points.length; i++) {
               pathComponents.push(i === 0 ? 'M' : 'L');
               point = points[i];
@@ -822,7 +820,6 @@ Smartgraphs.GraphView = SC.View.extend(
               pathComponents.push(coords.y);
             }
             pathString = pathComponents.join(' ');
-            
             attrs.push({
               'd':              pathString,
               'stroke':         this.get('gridStroke'),
@@ -830,21 +827,16 @@ Smartgraphs.GraphView = SC.View.extend(
               'stroke-opacity': this.get('gridStrokeOpacity')
             });
           }
-          
+
           var iCurrentY = logicalBounds.yMin;
-          
-          for (iCounter = 0 ; iCounter < nYSteps; iCounter++, iCurrentY = iCurrentY + nyDifference)
-          {
-            if (nyDifference + iCurrentY === 0)
-            {
+          for (iCounter = 0 ; iCounter < nYSteps; iCounter++, iCurrentY = iCurrentY + nyDifference) {
+            if (nyDifference + iCurrentY === 0) {
               continue;
             }
-            
             points = [];
             points.push({ 'y': (nyDifference + iCurrentY), 'x': logicalBounds.xMin });
             points.push({ 'y': (nyDifference + iCurrentY), 'x': logicalBounds.xMax });
             pathComponents = [];
-            
             for (i = 0; i < points.length; i++) {
               pathComponents.push(i === 0 ? 'M' : 'L');
               point = points[i];
@@ -853,7 +845,6 @@ Smartgraphs.GraphView = SC.View.extend(
               pathComponents.push(coords.y);
             }
             pathString = pathComponents.join(' ');
-            
             attrs.push({
               'd':              pathString,
               'stroke':         this.get('gridStroke'),
@@ -861,54 +852,7 @@ Smartgraphs.GraphView = SC.View.extend(
               'stroke-opacity': this.get('gridStrokeOpacity')
             });
           }
-          
           context.callback(this, this.renderCallback, attrs);
-          
-        },
-         
-        touchStart: function (evt) {
-          this._mouseDownOrTouchStart(evt);
-        },
-        mouseDown:  function (evt) {
-          this._mouseDownOrTouchStart(evt);
-        },
-        
-        _mouseDownOrTouchStart: function (evt) {
-          var coords = this.coordsForEvent(evt),
-          point = this._graphView.pointForCoordinates(coords.x, coords.y);
-          
-          this._graphController = this._graphView.get('graphController');
-          return this._graphController.inputAreaMouseDown(point.x, point.y);
-        },
-        
-        touchesDragged: function (evt) { 
-          this._mouseOrTouchesDragged(evt);
-        },
-        mouseDragged: function (evt) {
-          this._mouseOrTouchesDragged(evt);
-        },
-        
-        _mouseOrTouchesDragged: function (evt) {
-          var coords = this.coordsForEvent(evt),
-           point = this._graphView.pointForCoordinates(coords.x, coords.y);
-          
-          var graphController = this._graphView.get('graphController');
-          return graphController.inputAreaMouseDragged(point.x, point.y);
-        },
-        
-        touchEnd: function (evt) {
-          this._mouseUpOrTouchEnd(evt);
-        },
-        mouseUp:  function (evt) {
-          this._mouseUpOrTouchEnd(evt);
-        },
-        
-        _mouseUpOrTouchEnd: function (evt) {
-          var coords = this.coordsForEvent(evt),
-          point = this._graphView.pointForCoordinates(coords.x, coords.y);
-          
-          this._graphController = this._graphView.get('graphController');
-          return this._graphController.inputAreaMouseUp(point.x, point.y);
         }
       }),
 
@@ -989,34 +933,25 @@ Smartgraphs.GraphView = SC.View.extend(
           return this._graphController.inputAreaMouseDragged(point.x, point.y);
         },
 
-        mouseMoved:  function (evt)
-        { 
+        mouseMoved:  function (evt) {
           this._mouseMoved(evt);
         },
 
         _mouseMoved: function (evt) {
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
-     
           var bounds = this.get("graphView").get("graphCanvasView")._getScreenBounds();
-          
           var graphController = this._graphView.get('graphController');
-          graphController.showToolTip();
-          if (graphController.tooltipCoords.width + coords.x >= bounds.xRight)
-          {
+          if (graphController.tooltipCoords.width + coords.x >= bounds.xRight) {
             coords.x = bounds.xRight - graphController.tooltipCoords.width - this.get("graphView").get("padding").right;
           }
-     
-     
-          if (graphController.showToolTipCoords && Smartgraphs.graphingTool.get('showTooltip') === true)
-          {
-            graphController.showToolTip();
+          var toolTipPoint = graphController.get('toolTipPoint');
+          if (toolTipPoint !== null) {
+            graphController.updateToolTip(toolTipPoint, coords);
           }
-          else
-          {
-            graphController.hideToolTip();
+          else {
+            graphController.updateToolTip(point, coords);
           }
-          graphController.updateToolTip(point, coords);
           return graphController.inputAreaMouseMove(point.x, point.y);
         },
 
@@ -1039,7 +974,7 @@ Smartgraphs.GraphView = SC.View.extend(
         
         mouseExited: function () {
           var graphController = this._graphView.get('graphController');
-          graphController.hideToolTip();
+          graphController.showToolTip(false);
         }
         
       }),

@@ -27,6 +27,7 @@
         graphView._updateAllViews = function() {};
         spyOn(graphingTool, "graphControllerForPane").andReturn(controller);
         spyOn(graphingTool, "tableControllerForPane").andReturn(tableController);
+        spyOn(graphingTool, "otherPaneFor").andReturn("bottom");
         spyOn(controller, "graphingToolStartTool");
         spyOn(tableController, "setRoundingFunc");
         spyOn(graphingTool, "getAnnotation").andReturn(annotation);

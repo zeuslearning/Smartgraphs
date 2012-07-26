@@ -21,6 +21,7 @@ describe "smartgraphs.graphingTool", ->
       graphView._updateAllViews = ->
       spyOn(graphingTool, "graphControllerForPane").andReturn controller
       spyOn(graphingTool, "tableControllerForPane").andReturn tableController
+      spyOn(graphingTool, "otherPaneFor").andReturn "bottom"
       spyOn controller, "graphingToolStartTool"
       spyOn tableController, "setRoundingFunc"
       spyOn(graphingTool, "getAnnotation").andReturn(annotation)

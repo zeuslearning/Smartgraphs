@@ -158,6 +158,20 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
   hideToolTipCoords : true,
   
   /**
+  @property Bool
+  
+  Hide tooltip according to overide of tool
+  
+ */
+  toolTipOverrideVisibility: true,
+  /**
+  @property Point
+  
+  Store the point value for point hover
+  
+ */
+  toolTipPoint: null,
+  /**
    
    @property Object
    
@@ -423,7 +437,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     var iTooltipWidth = (xMax + "," + yMax).length * widthMultiplier;
     var tooltipCoords = this.get("tooltipCoords"); 
     this.set("tooltipCoords", { x: 0, y: 0, top: 0, left: 0, coordOffset: 5, width: iTooltipWidth});
-    this.hideToolTip();
+    this.showToolTip(!config.showToolTipCoords);
 
     dataSpecs.forEach(function (dataSpec) {
       var datadefName,
@@ -537,12 +551,8 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set("tooltipCoords", tooltipCoords);
   },
 
-  showToolTip : function () {
-    this.set("hideToolTipCoords", false);
-  },
-  
-  hideToolTip : function () {
-    this.set("hideToolTipCoords", true);
+  showToolTip : function (bShow) {
+    this.set("hideToolTipCoords", !bShow);
   },
 
   // Events
@@ -609,6 +619,21 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
 
   inputAreaMouseMove: function (x, y) {
     return !!this.sendAction('mouseMoveAtPoint', this, {x: x, y: y});
+  },
+
+  dataPointEntered: function (dataRepresentation, x, y) {
+    
+    if (Smartgraphs.statechart && Smartgraphs.statechart.get('statechartIsInitialized')) {
+      Smartgraphs.statechart.sendAction('dataPointEntered', this, { dataRepresentation: dataRepresentation, x: x, y: y });
+    }
+    this.sendAction('dataPointEntered', this, { dataRepresentation: dataRepresentation, x: x, y: y });
+  },
+
+  dataPointExited: function (dataRepresentation, x, y) {
+    if (Smartgraphs.statechart && Smartgraphs.statechart.get('statechartIsInitialized')) {
+      Smartgraphs.statechart.sendAction('dataPointExited', this, { dataRepresentation: dataRepresentation, x: x, y: y });
+    }
+    this.sendAction('dataPointExited', this, { dataRepresentation: dataRepresentation, x: x, y: y });
   },
 
   dataPointSelected: function (dataRepresentation, x, y) {
