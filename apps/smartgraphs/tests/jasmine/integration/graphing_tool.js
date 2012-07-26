@@ -123,6 +123,8 @@
       });
       return describe("when the controller's inputAreaMouseDown method is called twice with (0, 1) and (2, 3)", function() {
         beforeEach(function() {
+          spyOn(graphingTool, "showToolTip");
+          spyOn(graphingTool, "setToolTipPoint");
           controller.inputAreaMouseDown(0, 1);
           return controller.inputAreaMouseDown(2, 3);
         });
@@ -143,6 +145,7 @@
         });
         return describe("when point (0, 1) is dragged to (1, 2)", function() {
           beforeEach(function() {
+            spyOn(graphingTool, "checkInputAreaScreenBounds").andReturn(true);
             controller.dataPointSelected(rep, 0, 1);
             controller.dataPointDown(rep, 0, 1);
             controller.dataPointDragged(rep, 1, 2);
