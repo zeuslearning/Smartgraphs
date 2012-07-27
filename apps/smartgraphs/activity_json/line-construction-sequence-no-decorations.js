@@ -1,54 +1,54 @@
 /*globals Smartgraphs */
 
 Smartgraphs.activityDocs = Smartgraphs.activityDocs || {};
-Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-3"] =
+Smartgraphs.activityDocs["/shared/line-construction-activity-sample-3"] =
 {
-  "_id": "activity-with-a-line-construction-tool-sample-3.df6",
+  "_id": "line-construction-activity-sample-3.df6",
   "_rev": 1,
   "data_format_version": 6,
   "activity": {
-    "title": "Activity with a line construction tool sample 3",
-    "url": "/shared/activity-with-a-line-construction-tool-sample-3",
+    "title": "Line construction activity Sample 3",
+    "url": "/shared/line-construction-activity-sample-3",
     "owner": "shared",
     "pages": [
-      "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1"
+      "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1"
     ],
     "axes": [
-      "/shared/activity-with-a-line-construction-tool-sample-3/axes/1",
-      "/shared/activity-with-a-line-construction-tool-sample-3/axes/2"
+      "/shared/line-construction-activity-sample-3/axes/1",
+      "/shared/line-construction-activity-sample-3/axes/2"
     ],
     "authorName": "Noah"
   },
   "pages": [
     {
       "name": "Construct a Line: Page 1",
-      "url": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1",
-      "activity": "/shared/activity-with-a-line-construction-tool-sample-3",
+      "url": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1",
+      "activity": "/shared/line-construction-activity-sample-3",
       "index": 1,
       "introText": "On this page, students will be asked to construct a line.",
       "steps": [
-        "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/1",
-        "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/2",
-        "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/3",
-        "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/4",
-        "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/5"
+        "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/1",
+        "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/2",
+        "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/3",
+        "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/4",
+        "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/5"
       ],
-      "firstStep": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/1",
+      "firstStep": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/1",
       "contextVars": []
     }
   ],
   "steps": [
     {
-      "url": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/1",
-      "activityPage": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1",
+      "url": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/1",
+      "activityPage": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1",
       "beforeText": "Construct a line with y-interept 7.0, with slope 3.0",
       "paneConfig": "split",
       "panes": {
         "top": {
           "type": "graph",
           "title": "Line Construction Graph Pane",
-          "xAxis": "/shared/activity-with-a-line-construction-tool-sample-3/axes/1",
-          "yAxis": "/shared/activity-with-a-line-construction-tool-sample-3/axes/2",
+          "xAxis": "/shared/line-construction-activity-sample-3/axes/1",
+          "yAxis": "/shared/line-construction-activity-sample-3/axes/2",
           "showCrossHairs": false,
           "showGraphGrid": false,
           "showToolTipCoords": false,
@@ -79,7 +79,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
         }
       ],
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/2",
+      "defaultBranch": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/2",
       "submissibilityCriterion": [
         "=",
         [
@@ -112,7 +112,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
               0.1
             ]
           ],
-          "step": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/5"
+          "step": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/5"
         },
         {
           "criterion": [
@@ -125,7 +125,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/4"
+          "step": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/4"
         },
         {
           "criterion": [
@@ -138,23 +138,23 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/3"
+          "step": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/3"
         }
       ],
       "isFinalStep": false,
       "substitutedExpressions": []
     },
     {
-      "url": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/2",
-      "activityPage": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1",
+      "url": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/2",
+      "activityPage": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1",
       "beforeText": "<b>Incorrect. Try again.</b><p>Construct a line with y-interept 7.0, with slope 3.0</p>",
       "paneConfig": "split",
       "panes": {
         "top": {
           "type": "graph",
           "title": "Line Construction Graph Pane",
-          "xAxis": "/shared/activity-with-a-line-construction-tool-sample-3/axes/1",
-          "yAxis": "/shared/activity-with-a-line-construction-tool-sample-3/axes/2",
+          "xAxis": "/shared/line-construction-activity-sample-3/axes/1",
+          "yAxis": "/shared/line-construction-activity-sample-3/axes/2",
           "showCrossHairs": false,
           "showGraphGrid": false,
           "showToolTipCoords": false,
@@ -185,7 +185,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
         }
       ],
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/2",
+      "defaultBranch": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/2",
       "submissibilityCriterion": [
         "or",
         [
@@ -224,7 +224,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
               0.1
             ]
           ],
-          "step": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/5"
+          "step": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/5"
         },
         {
           "criterion": [
@@ -237,7 +237,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/4"
+          "step": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/4"
         },
         {
           "criterion": [
@@ -250,23 +250,23 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/3"
+          "step": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/3"
         }
       ],
       "isFinalStep": false,
       "substitutedExpressions": []
     },
     {
-      "url": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/3",
-      "activityPage": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1",
+      "url": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/3",
+      "activityPage": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1",
       "beforeText": "<b>Incorrect, your slope is wrong.</b><p>Construct a line with y-interept 7.0, with slope 3.0</p>",
       "paneConfig": "split",
       "panes": {
         "top": {
           "type": "graph",
           "title": "Line Construction Graph Pane",
-          "xAxis": "/shared/activity-with-a-line-construction-tool-sample-3/axes/1",
-          "yAxis": "/shared/activity-with-a-line-construction-tool-sample-3/axes/2",
+          "xAxis": "/shared/line-construction-activity-sample-3/axes/1",
+          "yAxis": "/shared/line-construction-activity-sample-3/axes/2",
           "showCrossHairs": false,
           "showGraphGrid": false,
           "showToolTipCoords": false,
@@ -297,7 +297,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
         }
       ],
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/2",
+      "defaultBranch": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/2",
       "submissibilityCriterion": [
         "or",
         [
@@ -336,7 +336,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
               0.1
             ]
           ],
-          "step": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/5"
+          "step": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/5"
         },
         {
           "criterion": [
@@ -349,7 +349,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/4"
+          "step": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/4"
         },
         {
           "criterion": [
@@ -362,23 +362,23 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/3"
+          "step": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/3"
         }
       ],
       "isFinalStep": false,
       "substitutedExpressions": []
     },
     {
-      "url": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/4",
-      "activityPage": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1",
+      "url": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/4",
+      "activityPage": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1",
       "beforeText": "<b>Incorrect, your y-intercept is wrong.</b><p>Construct a line with y-interept 7.0, with slope 3.0</p>",
       "paneConfig": "split",
       "panes": {
         "top": {
           "type": "graph",
           "title": "Line Construction Graph Pane",
-          "xAxis": "/shared/activity-with-a-line-construction-tool-sample-3/axes/1",
-          "yAxis": "/shared/activity-with-a-line-construction-tool-sample-3/axes/2",
+          "xAxis": "/shared/line-construction-activity-sample-3/axes/1",
+          "yAxis": "/shared/line-construction-activity-sample-3/axes/2",
           "showCrossHairs": false,
           "showGraphGrid": false,
           "showToolTipCoords": false,
@@ -409,7 +409,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
         }
       ],
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/2",
+      "defaultBranch": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/2",
       "submissibilityCriterion": [
         "or",
         [
@@ -448,7 +448,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
               0.1
             ]
           ],
-          "step": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/5"
+          "step": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/5"
         },
         {
           "criterion": [
@@ -461,7 +461,7 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/4"
+          "step": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/4"
         },
         {
           "criterion": [
@@ -474,23 +474,23 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
             ],
             0.1
           ],
-          "step": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/3"
+          "step": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/3"
         }
       ],
       "isFinalStep": false,
       "substitutedExpressions": []
     },
     {
-      "url": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1/step/5",
-      "activityPage": "/shared/activity-with-a-line-construction-tool-sample-3/page/1-construct-a-line-page-1",
+      "url": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1/step/5",
+      "activityPage": "/shared/line-construction-activity-sample-3/page/1-construct-a-line-page-1",
       "beforeText": "<b>Thats Correct</b>",
       "paneConfig": "split",
       "panes": {
         "top": {
           "type": "graph",
           "title": "Line Construction Graph Pane",
-          "xAxis": "/shared/activity-with-a-line-construction-tool-sample-3/axes/1",
-          "yAxis": "/shared/activity-with-a-line-construction-tool-sample-3/axes/2",
+          "xAxis": "/shared/line-construction-activity-sample-3/axes/1",
+          "yAxis": "/shared/line-construction-activity-sample-3/axes/2",
           "showCrossHairs": false,
           "showGraphGrid": false,
           "showToolTipCoords": false,
@@ -516,14 +516,14 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
   "responseTemplates": [],
   "axes": [
     {
-      "url": "/shared/activity-with-a-line-construction-tool-sample-3/axes/1",
+      "url": "/shared/line-construction-activity-sample-3/axes/1",
       "min": 0,
       "max": 10,
       "nSteps": 10,
       "label": "x"
     },
     {
-      "url": "/shared/activity-with-a-line-construction-tool-sample-3/axes/2",
+      "url": "/shared/line-construction-activity-sample-3/axes/2",
       "min": 0,
       "max": 10,
       "nSteps": 10,
@@ -535,9 +535,9 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
       "type": "UnorderedDataPoints",
       "records": [
         {
-          "url": "/shared/activity-with-a-line-construction-tool-sample-3/datadefs/datadef-1",
+          "url": "/shared/line-construction-activity-sample-3/datadefs/datadef-1",
           "name": "datadef-1",
-          "activity": "/shared/activity-with-a-line-construction-tool-sample-3",
+          "activity": "/shared/line-construction-activity-sample-3",
           "xLabel": "x",
           "xShortLabel": "x",
           "yLabel": "y",
@@ -553,9 +553,9 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
       "type": "FreehandSketch",
       "records": [
         {
-          "url": "/shared/activity-with-a-line-construction-tool-sample-3/annotations/freehand-sketch-1",
+          "url": "/shared/line-construction-activity-sample-3/annotations/freehand-sketch-1",
           "name": "freehand-sketch-1",
-          "activity": "/shared/activity-with-a-line-construction-tool-sample-3",
+          "activity": "/shared/line-construction-activity-sample-3",
           "color": "#CC0000",
           "points": []
         }
@@ -565,32 +565,32 @@ Smartgraphs.activityDocs["/shared/activity-with-a-line-construction-tool-sample-
   "variables": [],
   "units": [
     {
-      "url": "/shared/activity-with-a-line-construction-tool-sample-3/units/meters",
-      "activity": "/shared/activity-with-a-line-construction-tool-sample-3",
+      "url": "/shared/line-construction-activity-sample-3/units/meters",
+      "activity": "/shared/line-construction-activity-sample-3",
       "name": "meter",
       "abbreviation": "m",
       "pluralName": "meters"
     },
     {
-      "url": "/shared/activity-with-a-line-construction-tool-sample-3/units/minutes",
-      "activity": "/shared/activity-with-a-line-construction-tool-sample-3",
+      "url": "/shared/line-construction-activity-sample-3/units/minutes",
+      "activity": "/shared/line-construction-activity-sample-3",
       "name": "minute",
       "abbreviation": "m",
       "pluralName": "minutes"
     },
     {
-      "url": "/shared/activity-with-a-line-construction-tool-sample-3/units/meters per second",
-      "activity": "/shared/activity-with-a-line-construction-tool-sample-3",
+      "url": "/shared/line-construction-activity-sample-3/units/meters per second",
+      "activity": "/shared/line-construction-activity-sample-3",
       "name": "meters per second",
       "abbreviation": "m/s",
       "pluralName": "meters per second"
     },
     {
-      "url": "/shared/activity-with-a-line-construction-tool-sample-3/units/seconds",
-      "activity": "/shared/activity-with-a-line-construction-tool-sample-3",
+      "url": "/shared/line-construction-activity-sample-3/units/seconds",
+      "activity": "/shared/line-construction-activity-sample-3",
       "name": "second",
       "abbreviation": "s",
       "pluralName": "seconds"
     }
   ]
-};
+}
