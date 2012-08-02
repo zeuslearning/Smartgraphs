@@ -106,7 +106,6 @@ describe "Smartgraphs.graphingTool with 'singleLine' shape option", ->
 
       describe "when point (0, 1) is dragged to (1, 2)", ->
         beforeEach ->
-          spyOn(graphingTool, "checkInputAreaScreenBounds").andReturn(true)
           controller.dataPointSelected rep, 0, 1
           controller.dataPointDragged rep, 1, 2
           controller.dataPointUp rep, 1, 2
