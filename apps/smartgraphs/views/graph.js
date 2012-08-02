@@ -31,6 +31,8 @@ Smartgraphs.GraphView = SC.View.extend(
   annotationsHolder: SC.outlet('graphCanvasView.annotationsHolder'),
   overlayAnnotationsHolder: SC.outlet('graphCanvasView.overlayAnnotationsHolder'),
 
+  mouseOverInputArea: false,
+
   padding: { top: 15, right: 15, bottom: 45, left: 45 },
 
   childViews: 'titleView tooltipView graphCanvasView'.w(),
@@ -295,38 +297,51 @@ Smartgraphs.GraphView = SC.View.extend(
   }),
  
   tooltipView: SC.View.extend({
-    displayProperties: ['coords', 'hideToolTipCoords'],
+    displayProperties: ['coords', 'mouseOverInputArea'],
     coordsBinding: '.parentView*graphController.tooltipCoords',
-    hideToolTipCoordsBinding: '.parentView*graphController.hideToolTipCoords',
+    mouseOverInputAreaBinding: '.parentView.mouseOverInputArea',
+    pointOverrideBinding: '.parentView*graphController.toolTipVisibilityOverrideOnPointHover',
 
-    render: function (context, firstTime)
-    {
+    render: function (context, firstTime) {
       var graphController = this.get("owner").graphController || null;
+      var mouseOverInputArea = this.get('mouseOverInputArea');
+      var pointOverride = this.get('pointOverride');
+      var showTooltip = false;
       if (!graphController || !graphController.get("showToolTipCoords")) {
         return;
       }
 
-      if (!graphController.get('toolTipOverrideVisibility')) {
+      if (!mouseOverInputArea) {
         context.push("<div></div>");
         return;
       }
 
-      var hideToolTipCoords = this.get('hideToolTipCoords');
-      if (hideToolTipCoords) {
+      if (pointOverride) {
+        showTooltip = true;
+      }
+      else if (!graphController.get('toolTipVisibilityOverrideFromToolState')) {
         context.push("<div></div>");
         return;
       }
-      
-      var coords = this.get('coords');
-      var strHtml = "";
-      strHtml += "<div class='toolTipLabel' style='width:" + coords.width + "px; text-align:center; padding: 5px; position: absolute; top:" + (coords.top + coords.coordOffset) + "px; left: " + (coords.left + coords.coordOffset) + "px; z-index: 10000;'>" +
-         coords.x + ",&nbsp;" + coords.y +
-         "</div>";
-      context.push(strHtml);
+      else {
+        showTooltip = true;
+      }
+
+      if (showTooltip) {
+        var coords = this.get('coords');
+        var strHtml = "";
+        strHtml += "<div class='toolTipLabel' style='width:" + coords.width + "px; text-align:center; padding: 5px; position: absolute; top:" + (coords.top + coords.coordOffset) + "px; left: " + (coords.left + coords.coordOffset) + "px; z-index: 10000;'>" +
+           coords.x + ",&nbsp;" + coords.y +
+           "</div>";
+        context.push(strHtml);
+      }
+      else {
+        context.push("<div></div>");
+        return;
+      }        
     },
 
-    mouseMoved: function (evt)
-    {
+    mouseMoved: function (evt) {
       var graphCanvasView = this.parentView.graphCanvasView;
       var graphController = this.parentView.graphController;
 
@@ -387,14 +402,20 @@ Smartgraphs.GraphView = SC.View.extend(
     },
   
     _mouseMoved: function (evt) {
-      var graphController = this.get("graphView").get('graphController');
+      var graphView = this.get("graphView");
+      var graphController = graphView.get('graphController');
       if (this._checkInputAreaScreenBounds(evt.pageX, evt.pageY)) {
-        graphController.showToolTip(true);
+        graphView.set("mouseOverInputArea", true);
         this.get('axesView').get('inputAreaView').mouseMoved(evt);
       }
       else {
-        graphController.showToolTip(false);
+        graphView.set("mouseOverInputArea", false);
       }
+    },
+    
+    mouseExited: function (evt) {
+      var graphView = this.get("graphView");
+      graphView.set("mouseOverInputArea", false);
     },
   
     touchStart: function (evt) {
@@ -968,7 +989,8 @@ Smartgraphs.GraphView = SC.View.extend(
           }
           
           var toolTipPoint = graphController.get('toolTipPoint');
-          if (toolTipPoint !== null) {
+          var pointOverride = graphController.get('toolTipVisibilityOverrideOnPointHover');
+          if (pointOverride && toolTipPoint !== null) {
             graphController.updateToolTip(toolTipPoint, coords);
           }
           else {
@@ -996,7 +1018,7 @@ Smartgraphs.GraphView = SC.View.extend(
         
         mouseExited: function () {
           var graphController = this._graphView.get('graphController');
-          graphController.showToolTip(false);
+          this._graphView.set("mouseOverInputArea", false);
         }
         
       }),
