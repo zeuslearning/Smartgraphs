@@ -72,6 +72,8 @@
         spyOn(graphingTool, "getDatadef").andReturn(rep);
         spyOn(graphingTool, "hideGraphTitle");
         spyOn(graphingTool, "updateGraphLogicalBounds");
+        spyOn(graphingTool, "showToolTip");
+        spyOn(graphingTool, "isPointOverlap").andReturn(false);
         controller.showCrossHairs = true;
         controller.graphingToolStartTool({
           annotationName: "freehand-sketch-1",
@@ -121,7 +123,7 @@
           });
         });
       });
-      describe("when the controller's inputAreaMouseDown method is called twice with (0, 1) and (2, 3)", function() {
+      return describe("when the controller's inputAreaMouseDown method is called twice with (0, 1) and (2, 3)", function() {
         beforeEach(function() {
           controller.inputAreaMouseDown(0, 1);
           return controller.inputAreaMouseDown(2, 3);
@@ -136,39 +138,32 @@
             return expect(rep.get("points")).toEqualPairs([[0, 1], [2, 3]]);
           });
         });
-        return describe("the cursor style requested by the controller", function() {
+        describe("the cursor style requested by the controller", function() {
           return it("should be back to 'default'", function() {
             return expect(controller.get("requestedCursorStyle")).toEqual("default");
           });
         });
-      });
-      return describe("when the controller's dataPointDragged method is called with (1, 2)", function() {
-        beforeEach(function() {
-          spyOn(Smartgraphs.graphingTool, "checkInputAreaScreenBounds").andReturn(true);
-          spyOn(Smartgraphs.graphingTool, "pointForCoordinates").andReturn({
-            x: 9,
-            y: 9
+        return describe("when point (0, 1) is dragged to (1, 2)", function() {
+          beforeEach(function() {
+            spyOn(graphingTool, "checkInputAreaScreenBounds").andReturn(true);
+            controller.dataPointSelected(rep, 0, 1);
+            controller.dataPointDragged(rep, 1, 2);
+            return controller.dataPointUp(rep, 1, 2);
           });
-          controller.inputAreaMouseDown(0, 1);
-          controller.inputAreaMouseDown(2, 3);
-          controller.dataPointSelected(rep, 0, 1);
-          controller.dataPointDown(rep, 0, 1);
-          controller.dataPointDragged(rep, 1, 2);
-          return controller.dataScreenPointUp(rep, 1, 2);
-        });
-        describe("the sketch", function() {
-          return it("line should be drawn with points [[0, 1], [9, 10]]", function() {
-            return expect(sketch.get("points")).toEqualPairs([[0, 1], [9, 10]]);
+          describe("the sketch", function() {
+            return it("line should be drawn with points [[0, 1], [9, 10]]", function() {
+              return expect(sketch.get("points")).toEqualPairs([[0, 1], [9, 10]]);
+            });
           });
-        });
-        describe("the representation", function() {
-          return it("should have points [[1, 2], [2, 3]]", function() {
-            return expect(rep.get("points")).toEqualPairs([[1, 2], [2, 3]]);
+          describe("the representation", function() {
+            return it("should have points [[1, 2], [2, 3]]", function() {
+              return expect(rep.get("points")).toEqualPairs([[1, 2], [2, 3]]);
+            });
           });
-        });
-        return describe("the cursor style requested by the controller", function() {
-          return it("should be back to 'default'", function() {
-            return expect(controller.get("requestedCursorStyle")).toEqual("default");
+          return describe("the cursor style requested by the controller", function() {
+            return it("should be back to 'default'", function() {
+              return expect(controller.get("requestedCursorStyle")).toEqual("default");
+            });
           });
         });
       });

@@ -15,10 +15,17 @@ describe "smartgraphs.graphingTool", ->
     beforeEach ->
       controller = Smartgraphs.GraphController.create()
       tableController = Smartgraphs.TableController.create()
+      annotation = new Object
+      annotation.set = ->
+      graphView = new Object
+      graphView._updateAllViews = ->
       spyOn(graphingTool, "graphControllerForPane").andReturn controller
       spyOn(graphingTool, "tableControllerForPane").andReturn tableController
+      spyOn(graphingTool, "otherPaneFor").andReturn "bottom"
       spyOn controller, "graphingToolStartTool"
       spyOn tableController, "setRoundingFunc"
+      spyOn(graphingTool, "getAnnotation").andReturn(annotation)
+      spyOn(graphingTool, "graphViewForPane").andReturn(graphView)
       graphingTool.setup
         annotationName: "freehand-sketch-1"
         shape: "SingleLine"
@@ -57,15 +64,16 @@ describe "smartgraphs.graphingTool", ->
       expect(graphingTool.graphViewForPane("top")).toEqual Smartgraphs.activityPage.getPath("FirstGraphPane.graphView")
 
   describe "getLinePointWithinLogicalBounds ", ->
-    screenBounds =
+    graphingTool = Smartgraphs.graphingTool
+    logicalBounds =
       xMin: 0
       xMax: 10
       yMin: 0
       yMax: 10
-
+    graphingTool.set('graphLogicalBounds', logicalBounds)
     m = 0.5
     c = 3
     it "should get line points within logical bounds", ->
-      expect(graphingTool.getLinePointWithinLogicalBounds([ 2, -1 ], m, c, screenBounds)).toEqual [ -6, 0 ]
-      expect(graphingTool.getLinePointWithinLogicalBounds([ 15, 12 ], m, c, screenBounds)).toEqual [ 10, 8 ]
-      expect(graphingTool.getLinePointWithinLogicalBounds([ 6, 3 ], m, c, screenBounds)).toEqual [ 6, 3 ]
+      expect(graphingTool.getLinePointWithinLogicalBounds([ 2, -1 ], m, c)).toEqual [ -6, 0 ]
+      expect(graphingTool.getLinePointWithinLogicalBounds([ 15, 12 ], m, c)).toEqual [ 10, 8 ]
+      expect(graphingTool.getLinePointWithinLogicalBounds([ 6, 3 ], m, c)).toEqual [ 6, 3 ]

@@ -43,6 +43,8 @@ describe "Smartgraphs.graphingTool with 'singleLine' shape option", ->
       spyOn(graphingTool, "getDatadef").andReturn rep
       spyOn(graphingTool, "hideGraphTitle")
       spyOn(graphingTool, "updateGraphLogicalBounds")
+      spyOn(graphingTool, "showToolTip")
+      spyOn(graphingTool, "isPointOverlap").andReturn false
       controller.showCrossHairs = true
       controller.graphingToolStartTool
         annotationName: "freehand-sketch-1"
@@ -102,25 +104,21 @@ describe "Smartgraphs.graphingTool with 'singleLine' shape option", ->
         it "should be back to 'default'", ->
           expect(controller.get("requestedCursorStyle")).toEqual "default"
 
-    describe "when the controller's dataPointDragged method is called with (1, 2)", ->
-      beforeEach ->
-        spyOn(Smartgraphs.graphingTool, "checkInputAreaScreenBounds").andReturn(true)
-        spyOn(Smartgraphs.graphingTool, "pointForCoordinates").andReturn({x: 9, y: 9})
-        controller.inputAreaMouseDown 0, 1
-        controller.inputAreaMouseDown 2, 3
-        controller.dataPointSelected rep, 0, 1
-        controller.dataPointDown rep, 0, 1
-        controller.dataPointDragged rep, 1, 2
-        controller.dataScreenPointUp rep, 1, 2
+      describe "when point (0, 1) is dragged to (1, 2)", ->
+        beforeEach ->
+          spyOn(graphingTool, "checkInputAreaScreenBounds").andReturn(true)
+          controller.dataPointSelected rep, 0, 1
+          controller.dataPointDragged rep, 1, 2
+          controller.dataPointUp rep, 1, 2
 
-      describe "the sketch", ->
-        it "line should be drawn with points [[0, 1], [9, 10]]", ->
-          expect(sketch.get("points")).toEqualPairs [[0, 1], [9, 10]]
+        describe "the sketch", ->
+          it "line should be drawn with points [[0, 1], [9, 10]]", ->
+            expect(sketch.get("points")).toEqualPairs [[0, 1], [9, 10]]
 
-      describe "the representation", ->
-        it "should have points [[1, 2], [2, 3]]", ->
-          expect(rep.get("points")).toEqualPairs [[1, 2], [2, 3]]
+        describe "the representation", ->
+          it "should have points [[1, 2], [2, 3]]", ->
+            expect(rep.get("points")).toEqualPairs [[1, 2], [2, 3]]
 
-      describe "the cursor style requested by the controller", ->
-        it "should be back to 'default'", ->
-          expect(controller.get("requestedCursorStyle")).toEqual "default"
+        describe "the cursor style requested by the controller", ->
+          it "should be back to 'default'", ->
+            expect(controller.get("requestedCursorStyle")).toEqual "default"
