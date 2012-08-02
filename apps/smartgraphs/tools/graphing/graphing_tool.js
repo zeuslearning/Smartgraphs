@@ -77,9 +77,9 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
     graphController.set('toolTipVisibilityOverrideFromToolState', bShow);
   },
 
-  checkInputAreaScreenBounds: function (x, y) {
+  coordinatesForPoint: function (x, y) {
     var graphView = this.graphViewForPane(this.get('graphPane'));
-    return graphView.graphCanvasView._checkInputAreaScreenBounds(x, y);
+    return graphView.coordinatesForPoint(x, y);
   },
 
   updateGraphLogicalBounds: function () {
@@ -95,13 +95,12 @@ Smartgraphs.graphingTool = Smartgraphs.Tool.create(
   },
 
   isPointOverlap: function (point) {
-    var graphView = this.graphViewForPane(this.get('graphPane'));
-    var curPoint = graphView.coordinatesForPoint(point.x, point.y);
+    var curPoint = this.coordinatesForPoint(point.x, point.y);
     var radius = this.getPointRadius();
     var datadef = this.getDatadef(this.get('datadefName'));
     var datadefPoints = datadef.get('points');
     for (var i = 0; i < datadefPoints.length; i++) {
-      var datadefPoint = graphView.coordinatesForPoint(datadefPoints[i][0], datadefPoints[i][1]);
+      var datadefPoint = this.coordinatesForPoint(datadefPoints[i][0], datadefPoints[i][1]);
       var distance = Math.sqrt(Math.pow(datadefPoint.x - curPoint.x, 2) +  Math.pow(datadefPoint.y - curPoint.y, 2));
       if (distance < radius + radius) {
         return true;

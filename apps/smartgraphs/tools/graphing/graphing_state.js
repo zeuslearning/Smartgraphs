@@ -138,6 +138,9 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
             if (datadefPoints.length < 2) {
               graphingTool.showToolTip(true);
             }
+            else {
+              graphingTool.showToolTip(false);
+            }
           }
         },
 
