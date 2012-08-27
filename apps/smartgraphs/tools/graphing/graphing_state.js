@@ -113,7 +113,7 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
             var toolRoot = this.get('toolRoot'),
                 annotationName = toolRoot.get('annotationName'),
                 annotation = toolRoot.get('annotation');
-            annotation.initialise({logicalScreenBounds: Smartgraphs.graphingTool.get('graphLogicalBounds')});
+            annotation.initialise({graphLogicalBounds: Smartgraphs.graphingTool.get('graphLogicalBounds')});
             annotation.plotEquation();
           }
         })

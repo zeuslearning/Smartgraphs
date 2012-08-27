@@ -22,7 +22,7 @@ Smartgraphs.Equation = Smartgraphs.Annotation.extend(
   /**
     @property {Object}
   */
-  logicalScreenBounds: {
+  graphLogicalBounds: {
     xMin: SC.Record.attr(Number),
     xMax: SC.Record.attr(Number),
     yMin: SC.Record.attr(Number),
@@ -32,7 +32,7 @@ Smartgraphs.Equation = Smartgraphs.Annotation.extend(
   /**
     Ordered array of [x, y] pairs that make up the sketch.
 
-    @property {Array[]}
+    @property {Object}
   */
   points: SC.Record.attr(Array),
 
@@ -58,7 +58,7 @@ Smartgraphs.Equation = Smartgraphs.Annotation.extend(
   color: SC.Record.attr(String),
 
   initialise: function (args) {
-    this.set('logicalScreenBounds', args.logicalScreenBounds);
+    this.set('graphLogicalBounds', args.graphLogicalBounds);
     this.populateDatasetPoints();
   },
 
@@ -66,17 +66,21 @@ Smartgraphs.Equation = Smartgraphs.Annotation.extend(
     this.set('points', []);
   },
 
+  getExpressionFunction: function () {
+    //This is an abstract method.
+  },
+
   populateDatasetPoints: function () {
-    var expression = this.getExpresstion();
-    var bounds = this.get('logicalScreenBounds');
-    var stepInterval = this.get('stepInterval');
-    var x, y;
-    this.set('datasetPoints', []);
-    for (var i = bounds.xMin; i <= bounds.xMax; i += stepInterval) {
-      x = i;
-      eval(expression);
-      if (y < bounds.yMax && y > bounds.yMin) {
-        this.get('datasetPoints').pushObject([x, y]);
+    var fn = this.getExpressionFunction();
+    if (fn) {
+      var graphBounds = this.get('graphLogicalBounds');
+      var stepInterval = this.get('stepInterval');
+      this.set('datasetPoints', []);
+      for (var x = graphBounds.xMin; x <= graphBounds.xMax; x += stepInterval) {
+        var y = fn(x);
+        if (y < graphBounds.yMax && y > graphBounds.yMin) {
+          this.get('datasetPoints').pushObject([x, y]);
+        }
       }
     }
   }

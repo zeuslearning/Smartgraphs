@@ -32,40 +32,48 @@ Smartgraphs.LinearEquation = Smartgraphs.Equation.extend(
     }
   },
 
-  getExpresstion: function () {
+  getExpressionFunction: function () {
     var expressionForm = this.get('expressionForm');
-    var expression = null;
     var params = this.get('params');
     switch (expressionForm) {
     case 'slope-intercept':
-      expression = 'y = ' + params.slope + ' * x + ' + params.yIntercept;
-      break;
+      return function (x) {
+        return params.slope * x + params.yIntercept;
+      };
     case 'general':
-      break;
+      return null;    // Not implemented yet
+    default:
+      return null;
     }
-    return expression;
+  },
+
+  computeGraphEndPoint: function (m, b, point) {
+    var graphBounds = this.get('graphLogicalBounds');
+    point.y = m * point.x + b;
+    if (m !== 0) {
+      if (point.y < graphBounds.yMin) {
+        point.y = graphBounds.yMin;
+        point.x = (point.y - b) / m;
+      }
+      else if (point.y > graphBounds.yMax) {
+        point.y = graphBounds.yMax;
+        point.x = (point.y - b) / m;
+      }
+    }
   },
 
   computePoints: function () {
-    var bounds = this.get('logicalScreenBounds');
+    var graphBounds = this.get('graphLogicalBounds');
     var points = this.get('points');
     var params = this.get('params');
     var m = params.slope;
     var b = params.yIntercept;
-    var x = bounds.xMin;
-    var y = m * x + b;
-    if (y < bounds.yMin) {
-      y = bounds.yMin;
-      x = (y - b) / m;
-    }
-    points.pushObject([x, y]);
-    x = bounds.xMax;
-    y = m * x + b;
-    if (y > bounds.yMax) {
-      y = bounds.yMax;
-      x = (y - b) / m;
-    }
-    points.pushObject([x, y]);
+    var point = {x: graphBounds.xMin, y: null};
+    this.computeGraphEndPoint(m, b, point);
+    points.pushObject([point.x, point.y]);
+    point = {x: graphBounds.xMax, y: null};
+    this.computeGraphEndPoint(m, b, point);
+    points.pushObject([point.x, point.y]);
   }
 });
 
