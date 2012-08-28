@@ -51,7 +51,7 @@ describe "Smartgraphs.graphingTool with 'singleLine' shape option", ->
         shape: "singleLine"
         datadefName: "datadef-1"
 
-      startState = toolState.getPath("ON.SINGLE_LINE.START")
+      startState = toolState.getPath("ON.PLOTTING.SINGLE_LINE.START")
 
     describe "the graph controller's statechart", ->
       it "should be in the relevant start state", ->

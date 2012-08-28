@@ -80,7 +80,7 @@
           shape: "singleLine",
           datadefName: "datadef-1"
         });
-        return startState = toolState.getPath("ON.SINGLE_LINE.START");
+        return startState = toolState.getPath("ON.PLOTTING.SINGLE_LINE.START");
       });
       describe("the graph controller's statechart", function() {
         return it("should be in the relevant start state", function() {
