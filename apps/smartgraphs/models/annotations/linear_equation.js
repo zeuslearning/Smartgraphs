@@ -1,6 +1,6 @@
 /*globals Smartgraphs */
 
-sc_require('models/equation');
+sc_require('models/annotations/equation');
 sc_require('views/linear_equation');
 
 /** @class
