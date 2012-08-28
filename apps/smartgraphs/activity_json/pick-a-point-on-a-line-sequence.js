@@ -40,7 +40,7 @@ Smartgraphs.activityDocs["/shared/pick-a-point-on-a-line-sequence"] =
     {
       "url": "/shared/pick-a-point-on-a-line-sequence/page/1-introduction/step/1",
       "activityPage": "/shared/pick-a-point-on-a-line-sequence/page/1-introduction",
-      "beforeText": "Click on the line where x is betwen 1 and 2",
+      "beforeText": "Click on the line where x is between 1 and 2",
       "paneConfig": "split",
       "panes": {
         "top": {
