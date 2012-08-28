@@ -30,7 +30,7 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
     toolRoot: SC.outlet('parentState'),
     owner:    SC.outlet('statechart.owner'),
 
-    initialSubstate: 'DISPLAY',
+    initialSubstate: 'CHOOSE_SUBSTATE',
 
     enterState: function () {
       var graphingTool = Smartgraphs.graphingTool;
@@ -79,6 +79,22 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
       this.gotoState(this.getPath('toolRoot.OFF'));
     },
 
+    CHOOSE_SUBSTATE: SC.State.design({
+      toolRoot: SC.outlet('parentState.toolRoot'),
+
+      enterState: function () {
+        var toolRoot = this.get('toolRoot'),
+            annotationName = toolRoot.get('annotationName'),
+            annotation = toolRoot.get('annotation');
+        if (SC.kindOf(annotation, Smartgraphs.FreehandSketch)) {
+          this.gotoState(this.getPath('parentState.PLOTTING'));
+        }
+        else {
+          this.gotoState(this.getPath('parentState.DISPLAY'));
+        }
+      }
+    }),
+
     DISPLAY: SC.State.design({
 
       toolRoot: SC.outlet('parentState.toolRoot'),
@@ -122,6 +138,11 @@ Smartgraphs.GRAPHING_TOOL = SC.State.extend(
     }),
 
     PLOTTING: SC.State.design({
+
+      toolRoot: SC.outlet('parentState.toolRoot'),
+      owner:    SC.outlet('statechart.owner'),
+
+      initialSubstate: 'CHOOSE_SHAPE',
 
       CHOOSE_SHAPE: SC.State.design({
         toolRoot: SC.outlet('parentState.toolRoot'),
