@@ -58,11 +58,13 @@ Smartgraphs.Equation = Smartgraphs.Annotation.extend(
   color: SC.Record.attr(String),
 
   initialise: function (args) {
+    this.set('datasetPoints', []);
     this.set('graphLogicalBounds', args.graphLogicalBounds);
     this.populateDatasetPoints();
   },
 
   clear: function () {
+    this.set('datasetPoints', []);
     this.set('points', []);
   },
 
@@ -75,7 +77,6 @@ Smartgraphs.Equation = Smartgraphs.Annotation.extend(
     if (fn) {
       var graphBounds = this.get('graphLogicalBounds');
       var stepInterval = this.get('stepInterval');
-      this.set('datasetPoints', []);
       for (var x = graphBounds.xMin; x <= graphBounds.xMax; x += stepInterval) {
         var y = fn(x);
         if (y < graphBounds.yMax && y > graphBounds.yMin) {
