@@ -99,9 +99,11 @@ Smartgraphs.CouchDataSource = SC.DataSource.extend(
         doc.datadefs.forEach(function (datadefRecs) {
           self.loadRecordsFromArray(store, Smartgraphs[datadefRecs.type], datadefRecs.records);
         });
-        doc.datarefs.forEach(function (datarefRecs) {
-          self.loadRecordsFromArray(store, Smartgraphs[datarefRecs.type], datarefRecs.records);
-        });
+        if (doc.datarefs) {
+          doc.datarefs.forEach(function (datarefRecs) {
+            self.loadRecordsFromArray(store, Smartgraphs[datarefRecs.type], datarefRecs.records);
+          });
+        }
         doc.annotations.forEach(function (annotationRecs) {
           self.loadRecordsFromArray(store, Smartgraphs[annotationRecs.type], annotationRecs.records);
         });
