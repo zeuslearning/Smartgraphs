@@ -92,6 +92,7 @@ Smartgraphs.activityStepController = SC.ObjectController.create(
           xAxis: config.xAxis,
           yAxis: config.yAxis,
           data: config.data,
+          dataref: (config.dataref === undefined) ? false : config.dataref,
           annotations: allAnnotations,
           showCrossHairs: (config.showCrossHairs === undefined) ? false : config.showCrossHairs,
           showGraphGrid: (config.showGraphGrid === undefined) ? false : config.showGraphGrid,
