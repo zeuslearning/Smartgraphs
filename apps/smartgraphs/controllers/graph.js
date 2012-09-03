@@ -496,7 +496,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
   setupGraph: function (config) {
     var dataSpecs = config.data || [],
         self      = this,
-        datarefNames = config.dataref || [];
+        datarefNames = config.datarefs || [];
 
     this.clear();
 
