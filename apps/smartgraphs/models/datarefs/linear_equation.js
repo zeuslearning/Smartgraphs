@@ -23,7 +23,8 @@ Smartgraphs.LinearEquation = Smartgraphs.ContinuousEquation.extend(
     switch (expressionForm) {
     case 'slope-intercept':
       return function (x) {
-        return params.slope * x + params.yIntercept;
+        var y = params.slope * x + params.yIntercept;
+        return y;
       };
     case 'general':
       return null;    // Not implemented
@@ -37,8 +38,9 @@ Smartgraphs.LinearEquation = Smartgraphs.ContinuousEquation.extend(
     var params = this.get('params');
     switch (expressionForm) {
     case 'slope-intercept':
-      return function (x) {
-        return (x - params.yIntercept) / params.slope;
+      return function (y) {
+        var x = (y - params.yIntercept) / params.slope;
+        return x;
       };
     case 'general':
       return null;    // Not implemented
