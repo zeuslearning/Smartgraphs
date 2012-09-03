@@ -540,11 +540,11 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       }
 
       datadef = self.getDatadef(datadefName);
-      if (options['point-type'] === undefined) {
-        options['point-type'] = datadef.get('point-type');
+      if (options['pointType'] === undefined) {
+        options['point-type'] = datadef.get('pointType');
       }
-      if (options['line-type'] === undefined) {
-        options['line-type'] = datadef.get('line-type');
+      if (options['lineType'] === undefined) {
+        options['line-type'] = datadef.get('lineType');
       }
       rep = datadef.getNewRepresentation(options);
       self.addDataRepresentation(rep);
