@@ -68,6 +68,11 @@ Smartgraphs.Dataref = SC.Record.extend(
     this.set('points', []);
   },
 
+  setDatadefPoints: function (datarefPoints) {
+    var datadef = this.getDatadef();
+    datadef.set('points', datarefPoints);
+  },
+
   /**
     Sets the bounds of the graph pane.
   */
