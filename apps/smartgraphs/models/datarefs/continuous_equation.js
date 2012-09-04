@@ -65,8 +65,7 @@ Smartgraphs.ContinuousEquation = Smartgraphs.Dataref.extend(
           datarefPoints.pushObject([xPrev, yPrev]);
         }
       }
-      var datadef = this.getDatadef();
-      datadef.set('points', datarefPoints);
+      this.setDatadefPoints(datarefPoints);
     }
   }
 });
