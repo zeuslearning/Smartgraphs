@@ -204,7 +204,7 @@ Smartgraphs.TableController = SC.ArrayController.extend( Smartgraphs.AnnotationS
 
        // Set Point in pointset of dataRepresetation to display the selected point.
       var rep = this.get('dataRepresentation');
-      if (rep && rep.getPath('datadef.lineType') === "connected" && rep.get('datadef.pointType') === "none") {
+      if (rep && rep.getPath('datadef.lineType') === "connected" && rep.getPath('datadef.pointType') === "none") {
         rep.showSinglePoint(tagX, tagY);
       }
 
