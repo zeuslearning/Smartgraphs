@@ -657,6 +657,20 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set("tooltipCoords", tooltipCoords);
   },
 
+  /**
+
+    return DataRepresentation which represents the given datadefName.
+  */
+  getDataRepresentation: function (datadefName) {
+    var dataRepresentations = this.get('dataRepresentations');
+    for (var i = dataRepresentations.get('length') - 1; i >= 0; i--) {
+      if (dataRepresentations[i].get('name') === datadefName) {
+        return dataRepresentations[i];
+      }
+    }
+    return null;
+  },
+
   // Events
 
   sendAction: function (action, context, args) {
@@ -708,6 +722,9 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
   },
 
   inputAreaMouseDown: function (x, y) {
+    if (Smartgraphs.statechart && Smartgraphs.statechart.get('statechartIsInitialized')) {
+      Smartgraphs.statechart.sendAction('mouseDownAtPoint', this, { x: x, y: y });
+    }
     return !!this.sendAction('mouseDownAtPoint', this, {x: x, y: y});
   },
 
