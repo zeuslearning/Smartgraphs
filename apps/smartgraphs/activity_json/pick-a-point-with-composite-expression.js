@@ -90,7 +90,7 @@ Smartgraphs.activityDocs["/shared/pick-a-point-with-composite-expression"] =
             "tag-1",
             10,
             null,
-            30,
+            20,
             null
           ],
           "step": "/shared/pick-a-point-with-composite-expression/page/1-introduction/step/5"
@@ -151,7 +151,7 @@ Smartgraphs.activityDocs["/shared/pick-a-point-with-composite-expression"] =
             "tag-1",
             10,
             null,
-            30,
+            20,
             null
           ],
           "step": "/shared/pick-a-point-with-composite-expression/page/1-introduction/step/5"
@@ -213,7 +213,7 @@ Smartgraphs.activityDocs["/shared/pick-a-point-with-composite-expression"] =
             "tag-1",
             10,
             null,
-            30,
+            20,
             null
           ],
           "step": "/shared/pick-a-point-with-composite-expression/page/1-introduction/step/5"
