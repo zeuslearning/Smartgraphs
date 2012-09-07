@@ -196,6 +196,12 @@ Smartgraphs.TableController = SC.ArrayController.extend( Smartgraphs.AnnotationS
         delete this._stackIndicesOfTagsByGuid[guid];
       }
 
+       // Set Point in pointset of dataRepresetation to display the selected point.
+      var rep = this.get('dataRepresentation');
+      if (rep && rep.getPath('datadef.lineType') === "connected" && rep.get('datadef.pointType') === "none") {
+        rep.showSinglePoint(tagX, tagY);
+      }
+
       // Find the index, in the table, of the just-tagged point.
       for (i = 0, len = this.get('length'); i < len; i++) {
         point = this.objectAt(i);
