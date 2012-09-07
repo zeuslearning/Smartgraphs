@@ -43,9 +43,7 @@ Smartgraphs.ContinuousEquation = Smartgraphs.Dataref.extend(
           if (isContinue) {
             continue;
           }
-          else {
-            break;
-          }
+          break;
         }
         else {
           if (isContinue && x !== graphBounds.xMin) {
