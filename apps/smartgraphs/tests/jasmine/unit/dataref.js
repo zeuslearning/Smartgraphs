@@ -78,7 +78,7 @@
         });
       });
     });
-    return describe("Smartgraphs.Sinusoidal with sine-cosine expression form", function() {
+    describe("Smartgraphs.Sinusoidal with sine-cosine expression form", function() {
       var sinusoidalEquation;
       sinusoidalEquation = Smartgraphs.SinusoidalEquation.create();
       sinusoidalEquation.expressionForm = 'sine-cosine';
@@ -126,6 +126,32 @@
           var linePoints;
           linePoints = sinusoidalEquation.points;
           return expect(linePoints).toEqualPairs([[0, 3.8414709848078967], [0.5, 3.909297426825682], [1, 3.1411200080598674], [1.5, 2.2431975046920716], [2, 2.0410757253368614]]);
+        });
+      });
+    });
+    return describe("Smartgraphs.CompositeEquation with y = log(x) + sin(x) expression", function() {
+      var compositeEquation;
+      compositeEquation = Smartgraphs.CompositeEquation.create();
+      compositeEquation.graphBounds = {
+        xMin: 0,
+        yMin: 0,
+        xMax: 2,
+        yMax: 10
+      };
+      compositeEquation.datadefName = 'datadef-1';
+      return describe("having xPrecision of 0.5", function() {
+        beforeEach(function() {
+          compositeEquation.expression = 'y = log(x) + sin(x)';
+          compositeEquation.stepInterval = 0.5;
+          compositeEquation.params = {};
+          compositeEquation.points = [];
+          spyOn(compositeEquation, 'setDatadefPoints');
+          return compositeEquation.populatePoints();
+        });
+        return it("should generate proper dataset points", function() {
+          var linePoints;
+          linePoints = compositeEquation.points;
+          return expect(linePoints).toEqualPairs([[0.5, -0.21372164195574228], [1, 0.8414709848078965], [1.5, 1.4029600947122187], [2, 1.6024446073856269], [2.5, 1.5147628759781115]]);
         });
       });
     });
