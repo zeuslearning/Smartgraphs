@@ -93,14 +93,14 @@ Smartgraphs.TableController = SC.ArrayController.extend( Smartgraphs.AnnotationS
 
     To identify the rounding function to display 'x' value of point
   */
-  xRoundingFunc: 'xRounded',
+  xRoundingFunc: 'xFixed',
 
   /**
     @property String
 
     To identify the rounding function to display 'y' value of point
   */
-  yRoundingFunc: 'yRounded',
+  yRoundingFunc: 'yFixed',
 
   /**
     Whether to display the table (or else the numeric view)
@@ -199,7 +199,7 @@ Smartgraphs.TableController = SC.ArrayController.extend( Smartgraphs.AnnotationS
       // Find the index, in the table, of the just-tagged point.
       for (i = 0, len = this.get('length'); i < len; i++) {
         point = this.objectAt(i);
-        if (point.get('x') === tagX && point.get('y') == tagY) {
+        if (point.get('x') === tagX && point.get('y') === tagY) {
           stack.pushObject(i);
           stackIndex = stack.get('length') - 1;
           this._stackIndicesOfTagsByGuid[guid] = stackIndex;
