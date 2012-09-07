@@ -89,9 +89,9 @@ Smartgraphs.activityDocs["/shared/pick-a-point-on-a-line-sequence"] =
             "coordinatesInRange",
             "tag-1",
             1,
-            "null",
-            3,
-            "null"
+            null,
+            2,
+            null
           ],
           "step": "/shared/pick-a-point-on-a-line-sequence/page/1-introduction/step/5"
         }
@@ -150,9 +150,9 @@ Smartgraphs.activityDocs["/shared/pick-a-point-on-a-line-sequence"] =
             "coordinatesInRange",
             "tag-1",
             1,
-            "null",
-            3,
-            "null"
+            null,
+            2,
+            null
           ],
           "step": "/shared/pick-a-point-on-a-line-sequence/page/1-introduction/step/5"
         }
@@ -212,9 +212,9 @@ Smartgraphs.activityDocs["/shared/pick-a-point-on-a-line-sequence"] =
             "coordinatesInRange",
             "tag-1",
             1,
-            "null",
-            3,
-            "null"
+            null,
+            2,
+            null
           ],
           "step": "/shared/pick-a-point-on-a-line-sequence/page/1-introduction/step/5"
         }
@@ -431,4 +431,4 @@ Smartgraphs.activityDocs["/shared/pick-a-point-on-a-line-sequence"] =
   ],
   "variables": [],
   "units": []
-}
+};
