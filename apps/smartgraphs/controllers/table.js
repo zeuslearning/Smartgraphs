@@ -141,10 +141,10 @@ Smartgraphs.TableController = SC.ArrayController.extend( Smartgraphs.AnnotationS
     }
 
     datadef = Smartgraphs.activityObjectsController.findDatadef(datadefName);
-    if (options['pointType'] === undefined) {
+    if (options['point-type'] === undefined) {
       options['point-type'] = datadef.get('pointType');
     }
-    if (options['lineType'] === undefined) {
+    if (options['line-type'] === undefined) {
       options['line-type'] = datadef.get('lineType');
     }
     rep = datadef.getNewRepresentation(options);
