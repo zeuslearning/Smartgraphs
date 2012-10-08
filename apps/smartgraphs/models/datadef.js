@@ -151,6 +151,12 @@ Smartgraphs.Datadef = SC.Record.extend(
   dragValueY: null,
 
   /**
+   * Boolean value to indicate whether the datadef is active.
+   * @property {Boolean}
+   */
+  isActive : false,
+
+  /**
     Return a new DataRepresentation tied to an appropriate SampleSet for objects of this Datadef class. Options will
     eventually allow you to customize the DataRepresentation and reuse SampleSets.
 
