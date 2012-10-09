@@ -497,16 +497,16 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     var dataSpecs = config.data || [],
         self      = this,
         datarefNames = config.datarefs || [],
-        activeDataDefs = config.activeDataDefs || [];
+        activeDatadefs = config.activeDatadefs || [];
 
     // datadefs are re-ordered, keeping active datadefs at the end so that they are above inactive datadefs.
-    var activeDatadefLength = activeDataDefs.length;
+    var activeDatadefLength = activeDatadefs.length;
     var tempArray = [];
     if (activeDatadefLength > 0) {
       for (var i = 0; i < dataSpecs.length; i++) {
         this.getDatadef(dataSpecs[i]).set('isActive', false);
-        for (var j = 0; j < activeDataDefs.length; j++) {
-          if (dataSpecs[i] === activeDataDefs[j]) {
+        for (var j = 0; j < activeDatadefs.length; j++) {
+          if (dataSpecs[i] === activeDatadefs[j]) {
             this.getDatadef(dataSpecs[i]).set('isActive', true);
             dataSpecs.splice(i, 1);
             i--;
@@ -514,7 +514,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
           }
         }
       }
-      dataSpecs = dataSpecs.concat(activeDataDefs); 
+      dataSpecs = dataSpecs.concat(activeDatadefs); 
     }
     this.clear();
 
@@ -558,6 +558,9 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       }
 
       datadef = self.getDatadef(datadefName);
+      if (options === undefined) {
+        options = [];
+      }
       if (options['point-type'] === undefined) {
         options['point-type'] = datadef.get('pointType');
       }

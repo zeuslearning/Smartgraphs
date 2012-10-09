@@ -141,6 +141,9 @@ Smartgraphs.TableController = SC.ArrayController.extend( Smartgraphs.AnnotationS
     }
 
     datadef = Smartgraphs.activityObjectsController.findDatadef(datadefName);
+    if (options === undefined) {
+      options = [];
+    }
     if (options['point-type'] === undefined) {
       options['point-type'] = datadef.get('pointType');
     }
