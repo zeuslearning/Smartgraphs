@@ -23,10 +23,12 @@ Smartgraphs.TableView = SC.View.extend(
   datadefBinding:           '*tableController.datadef',
   latestXBinding:           '*tableController.latestX',
   latestYBinding:           '*tableController.latestY',
+  
+  xUnitsAbbreviatedBinding: '*tableController.xUnits.abbreviation',
+  yUnitsAbbreviatedBinding: '*tableController.yUnits.abbreviation',
 
-  xLabelBinding: '*tableController.xLabel',
-  yLabelBinding: '*tableController.yLabel',
-
+  xPaneLabelBinding: '*tableController.xLabel',
+  yPaneLabelBinding: '*tableController.yLabel',
   recentTagIndexStackBinding: '*tableController.recentTagIndexStack',
 
   scrollView:   SC.outlet('tableColumnView.scrollView'),
@@ -34,6 +36,16 @@ Smartgraphs.TableView = SC.View.extend(
   xsView:       SC.outlet('columnsView.xsView'),
   ysView:       SC.outlet('columnsView.ysView'),
   backdropView: SC.outlet('columnsView.backdropView'),
+
+  xLabel: function () {
+    var xUnitsAbbreviated = this.get('xUnitsAbbreviated');
+    return xUnitsAbbreviated ? "%@ (%@)".fmt(this.get('xPaneLabel'), xUnitsAbbreviated) : this.get('xPaneLabel');
+  }.property('xUnitsAbbreviated', 'xPaneLabel').cacheable(),
+
+  yLabel: function () {
+    var yUnitsAbbreviated = this.get('yUnitsAbbreviated');
+    return yUnitsAbbreviated ? "%@ (%@)".fmt(this.get('yPaneLabel'), yUnitsAbbreviated) : this.get('yPaneLabel');
+  }.property('yUnitsAbbreviated', 'yPaneLabel').cacheable(),
 
   init: function () {
     this._viewsByClassAndId = {};
