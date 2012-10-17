@@ -147,9 +147,12 @@ Smartgraphs.TableController = SC.ArrayController.extend(Smartgraphs.AnnotationSu
       options['line-type'] = datadef.get('lineType');
     }
     rep = datadef.getNewRepresentation(options);
-
-    this.set('xLabel', config.xLabel);
-    this.set('yLabel', config.yLabel);
+    if (config.xLabel !== undefined) {
+      this.set('xLabel', config.xLabel);
+    }
+    if (config.yLabel !== undefined) {
+      this.set('yLabel', config.yLabel);
+    }
     this.set('datadef', datadef);
     this.set('dataRepresentation', rep);
     this.set('pointset', rep.get('pointset'));
