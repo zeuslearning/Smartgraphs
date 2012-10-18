@@ -7,11 +7,11 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
   "_rev": 1,
   "data_format_version": 6,
   "activity": {
-    "title": "Slope Tool with multiple dataset",
+    "title": "slope tool with multiple dataset",
     "url": "/shared/slope-tool-with-multiple-dataset",
     "owner": "shared",
     "pages": [
-      "/shared/slope-tool-with-multiple-dataset/page/1-page-1"
+      "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points"
     ],
     "axes": [
       "/shared/slope-tool-with-multiple-dataset/axes/1",
@@ -21,33 +21,27 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
   },
   "pages": [
     {
-      "name": "Page 1",
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
+      "name": "Velocity 1 (no picking points)",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
       "activity": "/shared/slope-tool-with-multiple-dataset",
       "index": 1,
-      "introText": "A car is moving on a road as shown with variable speeds.",
+      "introText": "A car is moving on a road as shown with variable speeds.What is the car's velocity between 2 and 8 seconds?",
       "steps": [
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/1",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/2",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/3",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/4",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/5",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/6",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/7",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/8",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/9",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/10",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/11",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/12",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/13",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/14",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/15",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/16",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/17",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/18",
-        "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/19"
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/1",
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/2",
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/3",
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/4",
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/5",
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/6",
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/7",
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/8",
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/9",
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/10",
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/11",
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/12",
+        "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/13"
       ],
-      "firstStep": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/1",
+      "firstStep": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/1",
       "contextVars": [
         {
           "name": "start-y",
@@ -237,9 +231,9 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
   ],
   "steps": [
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/1",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
-      "beforeText": "What is the average velocity of the car between 2 and 8 seconds? (in m / s)?",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/1",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
+      "beforeText": "What is the average velocity of the car between 2 and 8 seconds?",
       "paneConfig": "split",
       "panes": {
         "top": {
@@ -250,15 +244,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
           "annotations": [],
           "highlightedAnnotations": [],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -274,7 +268,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/2",
+      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/2",
       "responseTemplate": "/shared/slope-tool-with-multiple-dataset/response-templates/numeric-1",
       "submissibilityCriterion": [
         "isNumeric",
@@ -291,10 +285,10 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
               "responseField",
               1
             ],
-            1.1666666666666667,
+            1,
             0.1
           ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/19"
+          "step": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/13"
         }
       ],
       "isFinalStep": false,
@@ -310,529 +304,9 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       "substitutedExpressions": []
     },
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/2",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
-      "beforeText": "<p><strong>Incorrect.</strong></p>\n<p> Click on a \npoint between 2 and 8 for time. </p>\n<p>Then click \"OK\". </p>",
-      "paneConfig": "split",
-      "panes": {
-        "top": {
-          "type": "graph",
-          "title": "Velocity",
-          "xAxis": "/shared/slope-tool-with-multiple-dataset/axes/1",
-          "yAxis": "/shared/slope-tool-with-multiple-dataset/axes/2",
-          "annotations": [
-            "highlighted-point-1"
-          ],
-          "highlightedAnnotations": [],
-          "data": [
-            "SmallCar",
-            "averageVelocity"
-          ],
-          "datarefs": [
-            "dataref-1"
-          ],
-          "legends": [
-            "SmallCar",
-            "averageVelocity"
-          ],
-          "activeDatadefs": [
-            "averageVelocity"
-          ]
-        },
-        "bottom": {
-          "type": "table",
-          "data": "averageVelocity",
-          "xLabel": "Time",
-          "yLabel": "Distance",
-          "annotations": [
-            "highlighted-point-1"
-          ],
-          "highlightedAnnotations": []
-        }
-      },
-      "tools": [
-        {
-          "name": "tagging",
-          "setup": {
-            "tag": "tag-1",
-            "data": "averageVelocity"
-          }
-        }
-      ],
-      "submitButtonTitle": "OK",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/3",
-      "responseBranches": [
-        {
-          "criterion": [
-            "and",
-            [
-              ">=",
-              [
-                "coord",
-                "x",
-                "tag-1"
-              ],
-              2
-            ],
-            [
-              "<=",
-              [
-                "coord",
-                "x",
-                "tag-1"
-              ],
-              8
-            ]
-          ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/4"
-        }
-      ],
-      "isFinalStep": false
-    },
-    {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/3",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
-      "beforeText": "<p><strong>Incorrect.</strong></p>\n<p>The point you have selected is not \na \npoint between 2 and 8 for time.\nTry again.</p>\n<p> Click on a \npoint between 2 and 8 for time. </p>\n<p>Then click \"OK\". </p>",
-      "paneConfig": "split",
-      "panes": {
-        "top": {
-          "type": "graph",
-          "title": "Velocity",
-          "xAxis": "/shared/slope-tool-with-multiple-dataset/axes/1",
-          "yAxis": "/shared/slope-tool-with-multiple-dataset/axes/2",
-          "annotations": [
-            "highlighted-point-1"
-          ],
-          "highlightedAnnotations": [],
-          "data": [
-            "SmallCar",
-            "averageVelocity"
-          ],
-          "datarefs": [
-            "dataref-1"
-          ],
-          "legends": [
-            "SmallCar",
-            "averageVelocity"
-          ],
-          "activeDatadefs": [
-            "averageVelocity"
-          ]
-        },
-        "bottom": {
-          "type": "table",
-          "data": "averageVelocity",
-          "xLabel": "Time",
-          "yLabel": "Distance",
-          "annotations": [
-            "highlighted-point-1"
-          ],
-          "highlightedAnnotations": []
-        }
-      },
-      "tools": [
-        {
-          "name": "tagging",
-          "setup": {
-            "tag": "tag-1",
-            "data": "averageVelocity"
-          }
-        }
-      ],
-      "submitButtonTitle": "OK",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/3",
-      "responseBranches": [
-        {
-          "criterion": [
-            "and",
-            [
-              ">=",
-              [
-                "coord",
-                "x",
-                "tag-1"
-              ],
-              2
-            ],
-            [
-              "<=",
-              [
-                "coord",
-                "x",
-                "tag-1"
-              ],
-              8
-            ]
-          ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/4"
-        }
-      ],
-      "isFinalStep": false
-    },
-    {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/4",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
-      "beforeText": "<p>Now click on\na second \npoint between 2 and 8 for time.</p>\n<p>Then click \"OK\". </p>",
-      "paneConfig": "split",
-      "panes": {
-        "top": {
-          "type": "graph",
-          "title": "Velocity",
-          "xAxis": "/shared/slope-tool-with-multiple-dataset/axes/1",
-          "yAxis": "/shared/slope-tool-with-multiple-dataset/axes/2",
-          "annotations": [
-            "highlighted-point-1",
-            "highlighted-point-2"
-          ],
-          "highlightedAnnotations": [],
-          "data": [
-            "SmallCar",
-            "averageVelocity"
-          ],
-          "datarefs": [
-            "dataref-1"
-          ],
-          "legends": [
-            "SmallCar",
-            "averageVelocity"
-          ],
-          "activeDatadefs": [
-            "averageVelocity"
-          ]
-        },
-        "bottom": {
-          "type": "table",
-          "data": "averageVelocity",
-          "xLabel": "Time",
-          "yLabel": "Distance",
-          "annotations": [
-            "highlighted-point-1",
-            "highlighted-point-2"
-          ],
-          "highlightedAnnotations": []
-        }
-      },
-      "tools": [
-        {
-          "name": "tagging",
-          "setup": {
-            "tag": "tag-2",
-            "data": "averageVelocity"
-          }
-        }
-      ],
-      "submitButtonTitle": "OK",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/8",
-      "responseBranches": [
-        {
-          "criterion": [
-            "samePoint",
-            "tag-1",
-            "tag-2"
-          ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/6"
-        },
-        {
-          "criterion": [
-            "or",
-            [
-              "<",
-              [
-                "coord",
-                "x",
-                "tag-2"
-              ],
-              2
-            ],
-            [
-              ">",
-              [
-                "coord",
-                "x",
-                "tag-2"
-              ],
-              8
-            ]
-          ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/7"
-        }
-      ],
-      "isFinalStep": false
-    },
-    {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/5",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
-      "beforeText": "<p><strong>Incorrect.</strong></p>\n<p> Your points should be adjacent.</p>\n<p>Now click on\na second \npoint between 2 and 8 for time.</p>\n<p>Then click \"OK\". </p>",
-      "paneConfig": "split",
-      "panes": {
-        "top": {
-          "type": "graph",
-          "title": "Velocity",
-          "xAxis": "/shared/slope-tool-with-multiple-dataset/axes/1",
-          "yAxis": "/shared/slope-tool-with-multiple-dataset/axes/2",
-          "annotations": [
-            "highlighted-point-1",
-            "highlighted-point-2"
-          ],
-          "highlightedAnnotations": [],
-          "data": [
-            "SmallCar",
-            "averageVelocity"
-          ],
-          "datarefs": [
-            "dataref-1"
-          ],
-          "legends": [
-            "SmallCar",
-            "averageVelocity"
-          ],
-          "activeDatadefs": [
-            "averageVelocity"
-          ]
-        },
-        "bottom": {
-          "type": "table",
-          "data": "averageVelocity",
-          "xLabel": "Time",
-          "yLabel": "Distance",
-          "annotations": [
-            "highlighted-point-1",
-            "highlighted-point-2"
-          ],
-          "highlightedAnnotations": []
-        }
-      },
-      "tools": [
-        {
-          "name": "tagging",
-          "setup": {
-            "tag": "tag-2",
-            "data": "averageVelocity"
-          }
-        }
-      ],
-      "submitButtonTitle": "OK",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/8",
-      "responseBranches": [
-        {
-          "criterion": [
-            "samePoint",
-            "tag-1",
-            "tag-2"
-          ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/6"
-        },
-        {
-          "criterion": [
-            "or",
-            [
-              "<",
-              [
-                "coord",
-                "x",
-                "tag-2"
-              ],
-              2
-            ],
-            [
-              ">",
-              [
-                "coord",
-                "x",
-                "tag-2"
-              ],
-              8
-            ]
-          ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/7"
-        }
-      ],
-      "isFinalStep": false
-    },
-    {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/6",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
-      "beforeText": "<p><strong>Incorrect.</strong></p>\n<p> You have selected the same point twice.</p>\n<p>Now click on\na second \npoint between 2 and 8 for time.</p>\n<p>Then click \"OK\". </p>",
-      "paneConfig": "split",
-      "panes": {
-        "top": {
-          "type": "graph",
-          "title": "Velocity",
-          "xAxis": "/shared/slope-tool-with-multiple-dataset/axes/1",
-          "yAxis": "/shared/slope-tool-with-multiple-dataset/axes/2",
-          "annotations": [
-            "highlighted-point-1",
-            "highlighted-point-2"
-          ],
-          "highlightedAnnotations": [],
-          "data": [
-            "SmallCar",
-            "averageVelocity"
-          ],
-          "datarefs": [
-            "dataref-1"
-          ],
-          "legends": [
-            "SmallCar",
-            "averageVelocity"
-          ],
-          "activeDatadefs": [
-            "averageVelocity"
-          ]
-        },
-        "bottom": {
-          "type": "table",
-          "data": "averageVelocity",
-          "xLabel": "Time",
-          "yLabel": "Distance",
-          "annotations": [
-            "highlighted-point-1",
-            "highlighted-point-2"
-          ],
-          "highlightedAnnotations": []
-        }
-      },
-      "tools": [
-        {
-          "name": "tagging",
-          "setup": {
-            "tag": "tag-2",
-            "data": "averageVelocity"
-          }
-        }
-      ],
-      "submitButtonTitle": "OK",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/8",
-      "responseBranches": [
-        {
-          "criterion": [
-            "samePoint",
-            "tag-1",
-            "tag-2"
-          ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/6"
-        },
-        {
-          "criterion": [
-            "or",
-            [
-              "<",
-              [
-                "coord",
-                "x",
-                "tag-2"
-              ],
-              2
-            ],
-            [
-              ">",
-              [
-                "coord",
-                "x",
-                "tag-2"
-              ],
-              8
-            ]
-          ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/7"
-        }
-      ],
-      "isFinalStep": false
-    },
-    {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/7",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
-      "beforeText": "<p><strong>Incorrect.</strong></p>\n<p> The point you have selected is not \na \npoint between 2 and 8 for time.  \nTry again.</p>\n<p>Now click on\na second \npoint between 2 and 8 for time.</p>\n<p>Then click \"OK\". </p>",
-      "paneConfig": "split",
-      "panes": {
-        "top": {
-          "type": "graph",
-          "title": "Velocity",
-          "xAxis": "/shared/slope-tool-with-multiple-dataset/axes/1",
-          "yAxis": "/shared/slope-tool-with-multiple-dataset/axes/2",
-          "annotations": [
-            "highlighted-point-1",
-            "highlighted-point-2"
-          ],
-          "highlightedAnnotations": [],
-          "data": [
-            "SmallCar",
-            "averageVelocity"
-          ],
-          "datarefs": [
-            "dataref-1"
-          ],
-          "legends": [
-            "SmallCar",
-            "averageVelocity"
-          ],
-          "activeDatadefs": [
-            "averageVelocity"
-          ]
-        },
-        "bottom": {
-          "type": "table",
-          "data": "averageVelocity",
-          "xLabel": "Time",
-          "yLabel": "Distance",
-          "annotations": [
-            "highlighted-point-1",
-            "highlighted-point-2"
-          ],
-          "highlightedAnnotations": []
-        }
-      },
-      "tools": [
-        {
-          "name": "tagging",
-          "setup": {
-            "tag": "tag-2",
-            "data": "averageVelocity"
-          }
-        }
-      ],
-      "submitButtonTitle": "OK",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/8",
-      "responseBranches": [
-        {
-          "criterion": [
-            "samePoint",
-            "tag-1",
-            "tag-2"
-          ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/6"
-        },
-        {
-          "criterion": [
-            "or",
-            [
-              "<",
-              [
-                "coord",
-                "x",
-                "tag-2"
-              ],
-              2
-            ],
-            [
-              ">",
-              [
-                "coord",
-                "x",
-                "tag-2"
-              ],
-              8
-            ]
-          ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/7"
-        }
-      ],
-      "isFinalStep": false
-    },
-    {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/8",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
-      "beforeText": "<p> Here is the line connecting the two points. </p>\n<p> What is the average velocity of the car between 2 and 8 seconds? (in m / s)? </p>",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/2",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
+      "beforeText": "<p> Here is the line connecting the two points. </p>\n<p> What is the average velocity of the car between 2 and 8 seconds? </p>",
       "paneConfig": "split",
       "panes": {
         "top": {
@@ -847,15 +321,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
           ],
           "highlightedAnnotations": [],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -874,7 +348,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/9",
+      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/3",
       "responseTemplate": "/shared/slope-tool-with-multiple-dataset/response-templates/numeric-1",
       "submissibilityCriterion": [
         "isNumeric",
@@ -898,7 +372,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             ],
             0.1
           ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/19"
+          "step": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/13"
         }
       ],
       "isFinalStep": false,
@@ -914,9 +388,9 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       "substitutedExpressions": []
     },
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/9",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
-      "beforeText": "<p><strong>Incorrect.</strong></p>\n<p> What is the average velocity of the car between 2 and 8 seconds? (in m / s)? </p>\n<p>Hint: Recall that the velocity is \nthe change in  distance\ndivided by the change in time.</p>",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/3",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
+      "beforeText": "<p><strong>Incorrect.</strong></p>\n<p> What is the average velocity of the car between 2 and 8 seconds? </p>\n<p>Hint: Recall that the velocity is \nthe change in  distance\ndivided by the change in time.</p>",
       "paneConfig": "split",
       "panes": {
         "top": {
@@ -931,15 +405,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
           ],
           "highlightedAnnotations": [],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -958,7 +432,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/10",
+      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/4",
       "responseTemplate": "/shared/slope-tool-with-multiple-dataset/response-templates/numeric-1",
       "submissibilityCriterion": [
         "isNumeric",
@@ -982,7 +456,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             ],
             0.1
           ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/19"
+          "step": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/13"
         }
       ],
       "isFinalStep": false,
@@ -998,8 +472,8 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       "substitutedExpressions": []
     },
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/10",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/4",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
       "beforeText": "<p><strong>Incorrect.</strong></p>\n<p>What was the change in\ndistance between the two points?</p>\n<p>Hint: Look at the graph.</p>",
       "paneConfig": "split",
       "panes": {
@@ -1017,15 +491,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             "rise-arrow1"
           ],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -1044,7 +518,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/11",
+      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/5",
       "responseTemplate": "/shared/slope-tool-with-multiple-dataset/response-templates/numeric-1",
       "submissibilityCriterion": [
         "isNumeric",
@@ -1072,7 +546,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             ],
             0.1
           ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/13"
+          "step": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/7"
         }
       ],
       "isFinalStep": false,
@@ -1087,8 +561,8 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       ]
     },
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/11",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/5",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
       "beforeText": "<p><strong>Incorrect.</strong></p>\n<p>What was the change in\ndistance between the two points?</p>\n<p>Hint: Look at the table and the graph.</p>",
       "paneConfig": "split",
       "panes": {
@@ -1106,15 +580,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             "rise-arrow1"
           ],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -1135,7 +609,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/12",
+      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/6",
       "responseTemplate": "/shared/slope-tool-with-multiple-dataset/response-templates/numeric-1",
       "submissibilityCriterion": [
         "isNumeric",
@@ -1163,7 +637,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             ],
             0.1
           ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/13"
+          "step": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/7"
         }
       ],
       "isFinalStep": false,
@@ -1179,8 +653,8 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       "substitutedExpressions": []
     },
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/12",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/6",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
       "beforeText": "<p><strong>Incorrect.</strong></p>\n<p>The change is\n<b>%@</b> - <b>%@</b>, \nor <b>%@</b>.</p>",
       "paneConfig": "split",
       "panes": {
@@ -1198,15 +672,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             "rise-arrow1"
           ],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -1227,7 +701,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
         }
       },
       "submitButtonTitle": "Continue",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/13",
+      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/7",
       "isFinalStep": false,
       "substitutedExpressions": [
         "end-y",
@@ -1236,8 +710,8 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       ]
     },
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/13",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/7",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
       "beforeText": "<p>What was the change in\ntime between the two points?</p>\n<p>Hint: Look at the graph.</p>",
       "paneConfig": "split",
       "panes": {
@@ -1256,15 +730,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             "run-arrow1"
           ],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -1283,7 +757,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/14",
+      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/8",
       "responseTemplate": "/shared/slope-tool-with-multiple-dataset/response-templates/numeric-1",
       "submissibilityCriterion": [
         "isNumeric",
@@ -1311,7 +785,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             ],
             0.1
           ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/16"
+          "step": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/10"
         }
       ],
       "isFinalStep": false,
@@ -1326,8 +800,8 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       ]
     },
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/14",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/8",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
       "beforeText": "<p><strong>Incorrect.</strong></p>\n<p>What was the change in\ntime between the two points?</p>\n<p>Hint: Look at the graph and the table.</p>",
       "paneConfig": "split",
       "panes": {
@@ -1346,15 +820,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             "run-arrow1"
           ],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -1375,7 +849,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/15",
+      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/9",
       "responseTemplate": "/shared/slope-tool-with-multiple-dataset/response-templates/numeric-1",
       "submissibilityCriterion": [
         "isNumeric",
@@ -1403,7 +877,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             ],
             0.1
           ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/16"
+          "step": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/10"
         }
       ],
       "isFinalStep": false,
@@ -1418,8 +892,8 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       ]
     },
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/15",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/9",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
       "beforeText": "<p><strong>Incorrect.</strong></p>\n<p>The change \nbetween the points is <b>%@</b> - <b>%@</b>, \nor <b>%@</b>.</p>",
       "paneConfig": "split",
       "panes": {
@@ -1438,15 +912,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             "run-arrow1"
           ],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -1467,7 +941,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
         }
       },
       "submitButtonTitle": "Continue",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/16",
+      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/10",
       "isFinalStep": false,
       "substitutedExpressions": [
         "end-x",
@@ -1476,8 +950,8 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       ]
     },
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/16",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/10",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
       "beforeText": "<p>\n  If the change in distance is %@\n  and the change in time is %@\n  then what is the velocity in m/s?\n</p>",
       "paneConfig": "split",
       "panes": {
@@ -1493,15 +967,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
           ],
           "highlightedAnnotations": [],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -1520,7 +994,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/17",
+      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/11",
       "responseTemplate": "/shared/slope-tool-with-multiple-dataset/response-templates/numeric-1",
       "submissibilityCriterion": [
         "isNumeric",
@@ -1544,7 +1018,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             ],
             0.1
           ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/19"
+          "step": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/13"
         }
       ],
       "isFinalStep": false,
@@ -1563,8 +1037,8 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       ]
     },
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/17",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/11",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
       "beforeText": "<p><strong>Incorrect.</strong></p>\n<p>\n  If the change in distance is %@\n  and the change in time is %@\n  then what is the velocity in m/s?\n</p>\n<p>\n  Hint: Remember that it is \n  the change in distance \n  <b>divided by</b> \n  the change in time.\n</p>",
       "paneConfig": "split",
       "panes": {
@@ -1580,15 +1054,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
           ],
           "highlightedAnnotations": [],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -1607,7 +1081,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
         }
       },
       "submitButtonTitle": "Check My Answer",
-      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/18",
+      "defaultBranch": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/12",
       "responseTemplate": "/shared/slope-tool-with-multiple-dataset/response-templates/numeric-1",
       "submissibilityCriterion": [
         "isNumeric",
@@ -1631,7 +1105,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             ],
             0.1
           ],
-          "step": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/19"
+          "step": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/13"
         }
       ],
       "isFinalStep": false,
@@ -1650,8 +1124,8 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       ]
     },
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/18",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/12",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
       "beforeText": "<p><strong>Incorrect.</strong></p>\n<p>\nIf the change in distance is %@\nand the change in time is %@,\nthe velocity is \n<b>%@</b> divided by <b>%@</b>, \nor <b>%@</b> m/s.</p>",
       "paneConfig": "split",
       "panes": {
@@ -1667,15 +1141,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
           ],
           "highlightedAnnotations": [],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -1704,9 +1178,9 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       ]
     },
     {
-      "url": "/shared/slope-tool-with-multiple-dataset/page/1-page-1/step/19",
-      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-page-1",
-      "beforeText": "<p><b>Correct!</b></p>\n<p>The velocity is <b>1.17</b> m/s.</p>",
+      "url": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points/step/13",
+      "activityPage": "/shared/slope-tool-with-multiple-dataset/page/1-velocity-1-no-picking-points",
+      "beforeText": "<p><b>Correct!</b></p>\n<p>The velocity is <b>1.00</b> m/s.</p>",
       "paneConfig": "split",
       "panes": {
         "top": {
@@ -1721,15 +1195,15 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
           ],
           "highlightedAnnotations": [],
           "data": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "datarefs": [
             "dataref-1"
           ],
           "legends": [
-            "SmallCar",
-            "averageVelocity"
+            "averageVelocity",
+            "SmallCar"
           ],
           "activeDatadefs": [
             "averageVelocity"
@@ -1787,17 +1261,6 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       "type": "UnorderedDataPoints",
       "records": [
         {
-          "url": "/shared/slope-tool-with-multiple-dataset/datadefs/SmallCar",
-          "name": "SmallCar",
-          "activity": "/shared/slope-tool-with-multiple-dataset",
-          "xUnits": "/shared/slope-tool-with-multiple-dataset/units/seconds",
-          "yUnits": "/shared/slope-tool-with-multiple-dataset/units/meters",
-          "points": [],
-          "pointType": "none",
-          "lineType": "connected",
-          "lineSnapDistance": 0.5
-        },
-        {
           "url": "/shared/slope-tool-with-multiple-dataset/datadefs/averageVelocity",
           "name": "averageVelocity",
           "activity": "/shared/slope-tool-with-multiple-dataset",
@@ -1806,7 +1269,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
           "points": [
             [
               0,
-              1
+              0
             ],
             [
               1,
@@ -1850,6 +1313,17 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
             ]
           ],
           "lineSnapDistance": 0
+        },
+        {
+          "url": "/shared/slope-tool-with-multiple-dataset/datadefs/SmallCar",
+          "name": "SmallCar",
+          "activity": "/shared/slope-tool-with-multiple-dataset",
+          "xUnits": "/shared/slope-tool-with-multiple-dataset/units/seconds",
+          "yUnits": "/shared/slope-tool-with-multiple-dataset/units/meters",
+          "points": [],
+          "pointType": "none",
+          "lineType": "connected",
+          "lineSnapDistance": 0.5
         }
       ]
     }
@@ -1886,7 +1360,7 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       "activity": "/shared/slope-tool-with-multiple-dataset",
       "name": "tag-2",
       "x": 8,
-      "y": 8
+      "y": 7
     }
   ],
   "annotations": [
@@ -2013,4 +1487,4 @@ Smartgraphs.activityDocs["/shared/slope-tool-with-multiple-dataset"] =
       "pluralName": "seconds"
     }
   ]
-}
+};
