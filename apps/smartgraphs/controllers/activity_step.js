@@ -97,7 +97,8 @@ Smartgraphs.activityStepController = SC.ObjectController.create(
           showCrossHairs: (config.showCrossHairs === undefined) ? false : config.showCrossHairs,
           showGraphGrid: (config.showGraphGrid === undefined) ? false : config.showGraphGrid,
           showToolTipCoords : (config.showToolTipCoords === undefined) ? false : config.showToolTipCoords,
-          activeDatadefs: (config.activeDatadefs === undefined) ? [] : config.activeDatadefs
+          activeDatadefs: (config.activeDatadefs === undefined) ? [] : config.activeDatadefs,
+          legends: config.legends
         });
         return;
       case 'table':
