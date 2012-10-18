@@ -101,6 +101,11 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
   graphableDataObjects: null,
 
   /**
+   An array of legends which are to be displayed. 
+   */
+  arrLegends: null,
+
+  /**
     @property {Smartgraphs.Datadef[]}
 
     A list of all the Datadefs added to this graph 
@@ -476,6 +481,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     this.set('showCrossHairs', null);
     this.set('showToolTipCoords', null);
     this.set('graphableDataObjects', []);
+    this.set('arrLegends', []);
     this.set('dataRepresentations', []);
     this.clearAnnotations();
     this.clearDatadefs();
@@ -497,6 +503,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     var dataSpecs = config.data || [],
         self      = this,
         datarefNames = config.datarefs || [],
+        legendTexts = config.legends || [],
         activeDatadefs = config.activeDatadefs || [];
 
     // datadefs are re-ordered, keeping active datadefs at the end so that they are above inactive datadefs.
@@ -530,6 +537,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     var xMin = this.getAxis(config.xAxis).get("min");
     var yMin = this.getAxis(config.yAxis).get("min");
     var widthMultiplier = 15;
+    var arrLegendElements = [];
     if (parseInt(yMin, 10) < 0 || parseInt(xMin, 10) < 0) {
       widthMultiplier = 21;
     }
@@ -569,7 +577,22 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       }
       rep = datadef.getNewRepresentation(options);
       self.addDataRepresentation(rep);
+
+      /* Generates and sets arrLegends array, which is binded in the GraphView so that
+         it can be displayed. */
+      if (legendTexts.length > 0) {
+        for (var i = 0; i < legendTexts.length; i++) {
+          if (legendTexts[i] === datadef.get('name')) {
+            var Obj = { color: rep.color, text: legendTexts[i] };
+            arrLegendElements.push(Obj);
+          }
+        }
+      }
     });
+
+    if (legendTexts.length > 0) {
+      this.set('arrLegends', arrLegendElements);
+    }
 
     if (datarefNames) {
       datarefNames.forEach(function (datarefName) {
