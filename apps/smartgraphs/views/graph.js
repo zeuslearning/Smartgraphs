@@ -1413,6 +1413,12 @@ Smartgraphs.GraphView = SC.View.extend(
           var position = this.getLegendPosition();
           this.set('initialTopPos', position.top);
           this.set('initialLeftPos', position.left);
+          if (layout.top > position.top) {
+            this.adjust('top', position.top);
+          }
+          if (layout.left > position.left) {
+            this.adjust('left', position.left);
+          }
         }
       }.observes('maxWidth', 'maxHeight'),
 
