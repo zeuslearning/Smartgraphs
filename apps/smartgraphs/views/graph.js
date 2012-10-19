@@ -1406,36 +1406,34 @@ Smartgraphs.GraphView = SC.View.extend(
         }
       },
 
-      updateLayer: function () {
-        this.set('defaultValue', false);
-      },
-
       didLayoutChange: function () {
         var layout = { top: this.initialTopPos, left: this.initialLeftPos, width: this.maxWidth, height: this.maxHeight, zIndex: 2 };
         this.set('layout', layout);
         if (!this.defaultValue) {
-          this.updateLegendPosition();
+          var position = this.getLegendPosition();
+          this.set('initialTopPos', position.top);
+          this.set('initialLeftPos', position.left);
         }
       }.observes('maxWidth', 'maxHeight'),
 
-      parentViewDidResize: function () {
-        this.updateLegendPosition();
-      },
-
-      updateLegendPosition: function () {
+      getLegendPosition: function () {
         var parentFrame = this.getPath('parentView.frame');
         var layout = this.layout;
         var topBound = parentFrame.height - layout.height;
         var leftBound = parentFrame.width - layout.width;
+        var position = { top: topBound, left: leftBound };
+        return position;
+      },
 
-        this.set('initialTopPos', topBound);
-        this.set('initialLeftPos', leftBound);
+      parentViewDidResize: function () {
+        var position = this.getLegendPosition();
+        var layout = this.layout;
 
-        if (layout.top > topBound) {
-          this.adjust('top', topBound);
+        if (layout.top > position.top) {
+          this.adjust('top', position.top);
         }
-        if (layout.left > leftBound) {
-          this.adjust('left', leftBound);
+        if (layout.left > position.left) {
+          this.adjust('left', position.left);
         }
       },
 
