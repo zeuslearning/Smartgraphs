@@ -1361,6 +1361,7 @@ Smartgraphs.GraphView = SC.View.extend(
       maxHeight: 0,
       initialTopPos: 0,
       initialLeftPos: 0,
+      graphController: SC.outlet('parentView.graphController'),
 
       childViews: 'legendHeadingView'.w(),
 
@@ -1373,6 +1374,34 @@ Smartgraphs.GraphView = SC.View.extend(
       },
 
       initialize: function (legendElements) {
+        var graphControllerObject = this.get('graphController');
+        var legendTitle, legendType;
+        if (!(legendElements instanceof Array)) {
+          legendTitle = legendElements.title;
+          legendType = legendElements.type;
+          legendElements = legendElements.datadefs;
+        }
+        var noOfElements = legendElements.length;
+        var arrLegendElements = [];
+        var obj = null;
+        for (var i = 0; i < noOfElements; i++) {
+          var datadef = graphControllerObject.getDatadef(legendElements[i]);
+          var graphViewObject = this.parentView;
+          datadef.addObserver('deviationValue', graphViewObject, graphViewObject.arrLegendElementsDidChange);
+          var datadefColor = datadef.get('color');
+          if (legendType === 'name' || legendType === undefined) {
+            obj = { color : datadefColor, text: legendElements[i] };
+          }
+          else if (legendType === 'AvgSumOfDeviation') {
+            var datadefDeviationValue = datadef.get('deviationValue');
+            if (datadefDeviationValue === null) {
+              continue;
+            }
+            obj = { color : datadefColor, text: datadefDeviationValue };
+          }
+          arrLegendElements.push(obj);
+        }
+        legendElements = arrLegendElements;
         // to remove the legend elements
         var nLength = this.childViews.length;
         var index = 1;
@@ -1390,6 +1419,9 @@ Smartgraphs.GraphView = SC.View.extend(
         }
         else {
           this.set('isVisible', YES);
+        }
+        if (legendTitle !== undefined) {
+          this.legendHeadingView.set('value', legendTitle);
         }
         var topOffset = legendHeadingHeight + this.topPadding;
         var newChild = null;

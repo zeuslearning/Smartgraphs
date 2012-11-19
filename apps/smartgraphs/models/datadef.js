@@ -53,6 +53,12 @@ Smartgraphs.Datadef = SC.Record.extend(
   name: SC.Record.attr(String),
 
   /**
+   * Deviation of this datadef from reference ScatterPlot.
+   * @property {Number|null}
+   */
+  deviationValue: null,
+
+  /**
     The Activity this datadef is part of.
 
     @property {Smartgraphs.Activity}
