@@ -74,6 +74,13 @@ Smartgraphs.Datadef = SC.Record.extend(
   yUnits: SC.Record.toOne('Smartgraphs.Unit'),
 
   /**
+    Color used to represent this datadef.
+
+    @property {String|null}
+  */
+  color: SC.Record.attr(String),
+
+  /**
     x-value of currently selected point, or null if no point is selected. Transient.
 
     @property {Number|null}

@@ -669,6 +669,11 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       The DataRepresentation we are requesting a color for
   */
   getColorForDataRepresentation: function (rep) {
+    var datadefColor = this.getDatadef(rep.get('name')).get('color');
+    if (datadefColor) {
+      return datadefColor;
+    }
+
     var defaultColor = rep.get('defaultColor'),
         used = this.get('dataRepresentations').getEach('color'),
         colors,
