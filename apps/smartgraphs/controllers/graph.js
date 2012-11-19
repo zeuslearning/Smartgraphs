@@ -503,7 +503,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     var dataSpecs = config.data || [],
         self      = this,
         datarefNames = config.datarefs || [],
-        legendTexts = config.legends || [],
+        legendDetails = config.legends || undefined,
         activeDatadefs = config.activeDatadefs || [];
     
     if (dataSpecs.length === 1 && activeDatadefs.length === 1) {
@@ -589,25 +589,20 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       }
       rep = datadef.getNewRepresentation(options);
       self.addDataRepresentation(rep);
+    });
 
-      /* Generates and sets arrLegends array, which is binded in the GraphView so that
-         it can be displayed. */
-      if (legendTexts.length > 0) {
-        for (var i = 0; i < legendTexts.length; i++) {
-          if (legendTexts[i] === datadef.get('name')) {
-            var Obj = { color: rep.color, text: legendTexts[i] };
-            arrLegendElements.push(Obj);
+    if (legendDetails !== undefined) {
+      var referenceDatadef = legendDetails.referenceDatadef; 
+      if (referenceDatadef !== undefined) {
+        var len = legendDetails.datadefs.length;
+        for (var k = 0; k < len; k++) {
+          var datadef = legendDetails.datadefs[k];
+          if (datadef !== referenceDatadef) {
+            this.getDatadef(datadef).set('referenceDatadefName', referenceDatadef);
           }
         }
       }
-    });
-    var dataReps = this.get('dataRepresentations') || [];
-    for (var k = 0; k < dataReps.length; k++) {
-      var rep = dataReps[k];
-      rep.addObserver('graphableObjects', this, this.graphableObjectsDidChange);
-    }
-    if (legendTexts.length > 0) {
-      this.set('arrLegends', arrLegendElements);
+      this.set('arrLegends', legendDetails);
     }
 
     if (datarefNames) {
