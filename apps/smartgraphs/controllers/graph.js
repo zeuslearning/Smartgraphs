@@ -593,6 +593,12 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       self.addDataRepresentation(rep);
     });
 
+    var dataReps = this.get('dataRepresentations') || [];
+    for (var k = 0; k < dataReps.length; k++) {
+      var rep = dataReps[k];
+      rep.addObserver('graphableObjects', this, this.graphableObjectsDidChange);
+    }
+
     if (legendDetails !== undefined) {
       var referenceDatadef = legendDetails.referenceDatadef; 
       if (referenceDatadef !== undefined) {
@@ -680,15 +686,26 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
         i, len;
 
     if (defaultColor && !used.contains(defaultColor)) {
+      if (datadef) {
+        datadef.set('color', defaultColor);
+      }
       return defaultColor;
     }
 
     colors = this.get('colors');
     for (i = 0, len = colors.get('length'); i < len; i++) {
-      if ( !used.contains(colors.objectAt(i)) ) return colors.objectAt(i);
+      if (!used.contains(colors.objectAt(i))) {
+        if (datadef) {
+          datadef.set('color', colors.objectAt(i));
+        }
+        return colors.objectAt(i);
+      }
     }
 
     // just default to the first color if none available
+    if (datadef) {
+      datadef.set('color', colors.objectAt(0));
+    }
     return colors.objectAt(0);
   },
 
