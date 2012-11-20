@@ -500,6 +500,8 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       A hash with config options
   */
   setupGraph: function (config) {
+    // config.data Array contains either String or Array.
+    // Depending on the content, dataset's name is fetched.
     var dataSpecs = config.data || [],
         self      = this,
         datarefNames = config.datarefs || [],
@@ -513,19 +515,19 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       // datadefs are re-ordered, keeping active datadefs at the end so that they are above inactive datadefs.
       var activeDatadefLength = activeDatadefs.length;
       var tempArray = [];
-      var dataSpec = "";
       if (activeDatadefLength > 0) {
         for (var i = 0; i < dataSpecs.length; i++) {
+          var datadefName = "";
           if (SC.typeOf(dataSpecs[i]) === SC.T_STRING) {
-            dataSpec = dataSpecs[i];
+            datadefName = dataSpecs[i];
           }
           else {
-            dataSpec = dataSpecs[i][0];
+            datadefName = dataSpecs[i][0];
           }
-          this.getDatadef(dataSpec).set('isActive', false);
+          this.getDatadef(datadefName).set('isActive', false);
           for (var j = 0; j < activeDatadefs.length; j++) {
-            if (dataSpec === activeDatadefs[j]) {
-              this.getDatadef(dataSpec).set('isActive', true);
+            if (datadefName === activeDatadefs[j]) {
+              this.getDatadef(datadefName).set('isActive', true);
               dataSpecs.splice(i, 1);
               i--;
               break;
@@ -664,9 +666,12 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       The DataRepresentation we are requesting a color for
   */
   getColorForDataRepresentation: function (rep) {
-    var datadefColor = this.getDatadef(rep.get('name')).get('color');
-    if (datadefColor) {
-      return datadefColor;
+    var datadef = this.getDatadef(rep.get('name'));
+    if (datadef) {
+      var datadefColor = datadef.get('color');
+      if (datadefColor) {
+        return datadefColor;
+      }
     }
 
     var defaultColor = rep.get('defaultColor'),
