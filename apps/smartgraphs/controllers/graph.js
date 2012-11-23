@@ -502,7 +502,8 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
   setupGraph: function (config) {
     // config.data Array contains either String or Array.
     // Depending on the content, dataset's name is fetched.
-    var dataSpecs = config.data || [],
+    // Giving a copy of config.data to dataspecs
+    var dataSpecs = config.data.concat([]) || [],
         self      = this,
         datarefNames = config.datarefs || [],
         legendDetails = config.legends || undefined,
@@ -603,8 +604,8 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       var referenceDatadef = legendDetails.referenceDatadef; 
       if (referenceDatadef !== undefined) {
         var len = legendDetails.datadefs.length;
-        for (var k = 0; k < len; k++) {
-          var datadef = legendDetails.datadefs[k];
+        for (var m = 0; m < len; m++) {
+          var datadef = legendDetails.datadefs[m];
           if (datadef !== referenceDatadef) {
             this.getDatadef(datadef).set('referenceDatadefName', referenceDatadef);
           }
