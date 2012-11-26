@@ -1427,6 +1427,7 @@ Smartgraphs.GraphView = SC.View.extend(
         // View shouldn't be visible when there are no legends.
         if (len === 0) {
           this.set('maxHeight', 0);
+          this.set('defaultValue', false);
           this.set('isVisible', NO);
           return;
         }
