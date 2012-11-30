@@ -502,13 +502,15 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
   setupGraph: function (config) {
     // config.data Array contains either String or Array.
     // Depending on the content, dataset's name is fetched.
-    // Giving a copy of config.data to dataspecs
-    var dataSpecs = config.data.concat([]) || [],
+
+    var dataSpecs = config.data || [],
         self      = this,
         datarefNames = config.datarefs || [],
         legendDetails = config.legends || undefined,
         activeDatadefs = config.activeDatadefs || [];
-    
+
+    // Giving a copy of config.data to dataspecs
+    dataSpecs = dataSpecs.concat([]);
     if (dataSpecs.length === 1 && activeDatadefs.length === 1) {
       this.getDatadef(activeDatadefs[0]).set('isActive', true);
     }
