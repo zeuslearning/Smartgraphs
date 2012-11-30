@@ -94,16 +94,14 @@ Smartgraphs.UnorderedDataPoints = Smartgraphs.Datadef.extend(
         var xRef = referencePoints[j][0];
         var yRef = referencePoints[j][1];
         if (slope === 0) {
-          constant = y1;
-          deviation = Math.abs(constant - xRef);
+          deviation = yRef;
         }
         else if (slope === Infinity || slope === (-Infinity)) {
-          constant = x1;
-          deviation = Math.abs(constant - yRef);
+          deviation = Infinity;
         }
         else {
           constant = y2 - slope * x2;
-          deviation = Math.abs((slope * xRef - yRef + constant)) / Math.sqrt((slope * slope) + 1);
+          deviation = (xRef * slope + constant) - yRef;
         }
         avgDeviation += Math.pow(deviation, 2);
       }
