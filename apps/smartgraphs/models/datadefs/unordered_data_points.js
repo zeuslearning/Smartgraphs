@@ -105,7 +105,7 @@ Smartgraphs.UnorderedDataPoints = Smartgraphs.Datadef.extend(
         }
         avgDeviation += Math.pow(deviation, 2);
       }
-      avgDeviation = (Math.round(avgDeviation / len * 100) / 100).toFixed(2);
+      avgDeviation = Math.sqrt((Math.round(avgDeviation / len * 100) / 100).toFixed(2));
       this.set('deviationValue', avgDeviation);
     }
   }.observes('*points.[]')
