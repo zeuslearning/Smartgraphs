@@ -81,7 +81,7 @@ Smartgraphs.UnorderedDataPoints = Smartgraphs.Datadef.extend(
     var points = this.get('points');
 
     if (points.length >= 2) {
-      var avgDeviation = 0, deviation = 0, constant = 0;
+      var sumOfSqaures = 0, deviation = 0, constant = 0;
 
       var y2 = points[1][1];
       var y1 = points[0][1];
@@ -103,10 +103,10 @@ Smartgraphs.UnorderedDataPoints = Smartgraphs.Datadef.extend(
           constant = y2 - slope * x2;
           deviation = (xRef * slope + constant) - yRef;
         }
-        avgDeviation += Math.pow(deviation, 2);
+        sumOfSqaures += Math.pow(deviation, 2);
       }
-      avgDeviation = Math.sqrt((Math.round(avgDeviation / len * 100) / 100)).toFixed(2);
-      this.set('deviationValue', avgDeviation);
+      sumOfSqaures = (Math.round(sumOfSqaures * 100) / 100).toFixed(2);
+      this.set('deviationValue', sumOfSqaures);
     }
   }.observes('*points.[]')
 });
