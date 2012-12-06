@@ -65,7 +65,7 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
             "datadef-1"
           ],
           "legends": {
-            "title": "Distance measure",
+            "title": "Sum of squares",
             "type": "AvgSumOfDeviation",
             "referenceDatadef": "scatter-points",
             "datadefs": [
@@ -109,24 +109,24 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
         {
           "criterion": [
             "withinAbsTolerance",
-            0.8833916697189806,
+            14.827236000448883,
             [
               "deviationValue",
               "datadef-1"
             ],
-            0.1325087504578471
+            14.827236000448885
           ],
           "step": "/shared/best-fit-sequence/page/1-best-fit-sequence-page-1/step/9"
         },
         {
           "criterion": [
             "withinAbsTolerance",
-            0.8833916697189806,
+            14.827236000448883,
             [
               "deviationValue",
               "datadef-1"
             ],
-            0.17667833394379615
+            29.65447200089777
           ],
           "step": "/shared/best-fit-sequence/page/1-best-fit-sequence-page-1/step/3"
         }
@@ -157,7 +157,7 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
             "datadef-1"
           ],
           "legends": {
-            "title": "Distance measure",
+            "title": "Sum of squares",
             "type": "AvgSumOfDeviation",
             "referenceDatadef": "scatter-points",
             "datadefs": [
@@ -207,24 +207,24 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
         {
           "criterion": [
             "withinAbsTolerance",
-            0.8833916697189806,
+            14.827236000448883,
             [
               "deviationValue",
               "datadef-1"
             ],
-            0.1325087504578471
+            14.827236000448885
           ],
           "step": "/shared/best-fit-sequence/page/1-best-fit-sequence-page-1/step/9"
         },
         {
           "criterion": [
             "withinAbsTolerance",
-            0.8833916697189806,
+            14.827236000448883,
             [
               "deviationValue",
               "datadef-1"
             ],
-            0.17667833394379615
+            29.65447200089777
           ],
           "step": "/shared/best-fit-sequence/page/1-best-fit-sequence-page-1/step/5"
         }
@@ -255,7 +255,7 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
             "datadef-1"
           ],
           "legends": {
-            "title": "Distance measure",
+            "title": "Sum of squares",
             "type": "AvgSumOfDeviation",
             "referenceDatadef": "scatter-points",
             "datadefs": [
@@ -305,24 +305,24 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
         {
           "criterion": [
             "withinAbsTolerance",
-            0.8833916697189806,
+            14.827236000448883,
             [
               "deviationValue",
               "datadef-1"
             ],
-            0.1325087504578471
+            14.827236000448885
           ],
           "step": "/shared/best-fit-sequence/page/1-best-fit-sequence-page-1/step/9"
         },
         {
           "criterion": [
             "withinAbsTolerance",
-            0.8833916697189806,
+            14.827236000448883,
             [
               "deviationValue",
               "datadef-1"
             ],
-            0.17667833394379615
+            29.65447200089777
           ],
           "step": "/shared/best-fit-sequence/page/1-best-fit-sequence-page-1/step/5"
         }
@@ -353,7 +353,7 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
             "datadef-1"
           ],
           "legends": {
-            "title": "Distance measure",
+            "title": "Sum of squares",
             "type": "AvgSumOfDeviation",
             "referenceDatadef": "scatter-points",
             "datadefs": [
@@ -403,24 +403,24 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
         {
           "criterion": [
             "withinAbsTolerance",
-            0.8833916697189806,
+            14.827236000448883,
             [
               "deviationValue",
               "datadef-1"
             ],
-            0.1325087504578471
+            14.827236000448885
           ],
           "step": "/shared/best-fit-sequence/page/1-best-fit-sequence-page-1/step/9"
         },
         {
           "criterion": [
             "withinAbsTolerance",
-            0.8833916697189806,
+            14.827236000448883,
             [
               "deviationValue",
               "datadef-1"
             ],
-            0.17667833394379615
+            29.65447200089777
           ],
           "step": "/shared/best-fit-sequence/page/1-best-fit-sequence-page-1/step/7"
         }
@@ -451,7 +451,7 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
             "datadef-1"
           ],
           "legends": {
-            "title": "Distance measure",
+            "title": "Sum of squares",
             "type": "AvgSumOfDeviation",
             "referenceDatadef": "scatter-points",
             "datadefs": [
@@ -501,24 +501,24 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
         {
           "criterion": [
             "withinAbsTolerance",
-            0.8833916697189806,
+            14.827236000448883,
             [
               "deviationValue",
               "datadef-1"
             ],
-            0.1325087504578471
+            14.827236000448885
           ],
           "step": "/shared/best-fit-sequence/page/1-best-fit-sequence-page-1/step/9"
         },
         {
           "criterion": [
             "withinAbsTolerance",
-            0.8833916697189806,
+            14.827236000448883,
             [
               "deviationValue",
               "datadef-1"
             ],
-            0.17667833394379615
+            29.65447200089777
           ],
           "step": "/shared/best-fit-sequence/page/1-best-fit-sequence-page-1/step/7"
         }
@@ -549,7 +549,7 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
             "datadef-1"
           ],
           "legends": {
-            "title": "Distance measure",
+            "title": "Sum of squares",
             "type": "AvgSumOfDeviation",
             "referenceDatadef": "scatter-points",
             "datadefs": [
@@ -599,12 +599,12 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
         {
           "criterion": [
             "withinAbsTolerance",
-            0.8833916697189806,
+            14.827236000448883,
             [
               "deviationValue",
               "datadef-1"
             ],
-            0.1325087504578471
+            14.827236000448885
           ],
           "step": "/shared/best-fit-sequence/page/1-best-fit-sequence-page-1/step/9"
         }
@@ -635,7 +635,7 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
             "datadef-1"
           ],
           "legends": {
-            "title": "Distance measure",
+            "title": "Sum of squares",
             "type": "AvgSumOfDeviation",
             "referenceDatadef": "scatter-points",
             "datadefs": [
@@ -685,12 +685,12 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
         {
           "criterion": [
             "withinAbsTolerance",
-            0.8833916697189806,
+            14.827236000448883,
             [
               "deviationValue",
               "datadef-1"
             ],
-            0.1325087504578471
+            14.827236000448885
           ],
           "step": "/shared/best-fit-sequence/page/1-best-fit-sequence-page-1/step/9"
         }
@@ -725,7 +725,7 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
             "dataref-1"
           ],
           "legends": {
-            "title": "Distance measure",
+            "title": "Sum of squares",
             "type": "AvgSumOfDeviation",
             "referenceDatadef": "scatter-points",
             "datadefs": [
@@ -776,7 +776,7 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
             "dataref-1"
           ],
           "legends": {
-            "title": "Distance measure",
+            "title": "Sum of squares",
             "type": "AvgSumOfDeviation",
             "referenceDatadef": "scatter-points",
             "datadefs": [
@@ -807,14 +807,14 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
       "url": "/shared/best-fit-sequence/axes/1",
       "min": 0,
       "max": 10,
-      "nSteps": 5,
+      "nSteps": 10,
       "label": "x"
     },
     {
       "url": "/shared/best-fit-sequence/axes/2",
       "min": 0,
       "max": 10,
-      "nSteps": 7,
+      "nSteps": 10,
       "label": "y"
     }
   ],
@@ -968,4 +968,4 @@ Smartgraphs.activityDocs["/shared/best-fit-sequence"] =
   ],
   "variables": [],
   "units": []
-}
+};
