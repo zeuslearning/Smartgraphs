@@ -503,7 +503,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     // config.data Array contains either String or Array.
     // Depending on the content, dataset's name is fetched.
 
-    var dataSpecs = config.data || [],
+    var dataSpecs = config.data ? config.data.concat([]) : [],
         self      = this,
         datarefNames = config.datarefs || [],
         legendDetails = config.legends || undefined,
