@@ -69,7 +69,6 @@ Smartgraphs.LineToAxisView = RaphaelViews.RaphaelView.extend(
 
     /** Collect Raphael attributes for the linePath into attrs */
     var attrs;
-    // TODO: Handle points not in the 1st quadrant and handle lines to the x-axis
     var startingPoint = {x: annotation.get('x'), y: annotation.get('y')};
     if (startingPoint.x != null && startingPoint.y != null) {
       var linePathStartingCoords = graphView.coordinatesForPoint(startingPoint.x, startingPoint.y);
@@ -78,10 +77,18 @@ Smartgraphs.LineToAxisView = RaphaelViews.RaphaelView.extend(
         var axis = annotation.get('axis');
         if (axis == "x") {
           // Make a linePathEndingCoords that matches point on the x-axis
-          linePathEndingCoords = graphView.coordinatesForPoint(startingPoint.x, 0);
+          if (startingPoint.y > 0) { // First or fourth quadrants, line goes down
+              linePathEndingCoords = graphView.coordinatesForPoint(startingPoint.x, Math.max(0, graphView.yAxis.get('min')));
+          } else { // Second or third quadrants, line goes up
+              linePathEndingCoords = graphView.coordinatesForPoint(startingPoint.x, Math.min(0, graphView.yAxis.get('max')));
+          }
         } else {
           // By default, make a linePathEndingCoords that matches point on the y-axis
-          linePathEndingCoords = graphView.coordinatesForPoint(0, startingPoint.y);
+          if (startingPoint.x > 0) { // First or second quadrants, line goes right to left
+              linePathEndingCoords = graphView.coordinatesForPoint(Math.max(0, graphView.xAxis.get('min')), startingPoint.y);
+          } else { // Third or fourth quadrants, line goes left to right
+              linePathEndingCoords = graphView.coordinatesForPoint(Math.min(0, graphView.xAxis.get('max')), startingPoint.y);
+          }
         }
 
         if (linePathEndingCoords) {
