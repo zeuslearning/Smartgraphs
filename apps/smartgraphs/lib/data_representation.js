@@ -42,12 +42,14 @@ Smartgraphs.DataRepresentation = SC.Object.extend(
         graphableObjects.push(pointset);
       }
     }
-    else if (options['point-type'] !== "none") {
+    else {
       pointset = Smartgraphs.Pointset.create({
         dataRepresentation: this
       });
       this.set('pointset', pointset);
-      graphableObjects.push(pointset);
+      if (options['point-type'] !== "none") {
+        graphableObjects.push(pointset);
+      }
     }
 
     if (options['color']) {
@@ -98,10 +100,9 @@ Smartgraphs.DataRepresentation = SC.Object.extend(
   _pointsDidChange: function () {
     var samplePoints = this.getPath('sampleset.points') || [],    // FIXME I don't know why this.get('points') doesn't work
         pointset     = this.get('pointset'),
-        pointStyle   = this.get('pointStyle'),
         line         = this.get('line');
 
-    if (pointset && pointStyle !== "none") {
+    if (pointset) {
       pointset.set('points', samplePoints.map(function (pair) {
         return Smartgraphs.Point.create({ x: pair[0], y: pair[1] });
       }));
