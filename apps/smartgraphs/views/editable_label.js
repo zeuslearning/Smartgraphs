@@ -173,6 +173,8 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
 
     if (pane.get('childViews').contains(this.textFieldView)) {
       pane.removeChild(this.textFieldView);
+      $('body').unbind('mousedown', this.mousedownHandler).unbind('touchstart', this.mousedownHandler);
+      this.textFieldView.resignFirstResponder();
     }
   },
 
