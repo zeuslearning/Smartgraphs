@@ -610,7 +610,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   }),
 
   remove: function () {
-    if (this.get('isRemovalEnabled')) this.get('controller').labelViewRemoveLabel(this.get('item'));
+    if (this.get('isRemovalEnabled')) {
+      this.get('controller').labelViewRemoveLabel(this.get('item'));
+      this.didRemoveFromGraphView();
+    }
   }
 
 });
