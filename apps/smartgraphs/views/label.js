@@ -52,7 +52,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   yOffsetBinding: '*item.yOffset',
 
   isRemovalEnabledBinding: '*item.isRemovalEnabled',
-
+  isEditableBinding: '*item.isEditable',
+  
   // graphScale isn't a real property, just a token we use to invalidate (xCoord, yCoord)
   xCoord: function () {
     return this.get('graphView').coordinatesForPoint(this.get('x'), 0).x;
@@ -477,7 +478,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     },
 
     labelTextView: Smartgraphs.EditableLabelView.design({
-      isEditable: YES,
+      labelView:     SC.outlet('parentView.parentLabelView'),
+      isEditableBinding: '.labelView.isEditable',
       fontSize: 14
     }),
 
