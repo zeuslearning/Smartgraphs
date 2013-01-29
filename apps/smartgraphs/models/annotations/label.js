@@ -79,6 +79,13 @@ Smartgraphs.Label = Smartgraphs.Annotation.extend(
   */
   hasEditedFirstTime: NO,
 
+  /**
+    Makes a label editable/non-editable depending upon this property.
+
+    @property {Boolean}
+  */
+  isEditable: NO,
+
   labelSet: null,
 
   isRemovalEnabled: function () {
