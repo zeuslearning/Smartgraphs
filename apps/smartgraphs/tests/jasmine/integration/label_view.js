@@ -122,7 +122,7 @@ describe("LabelView behavior", function () {
       var labelView;
 
       beforeEach( function () {
-        labelView = graphView.getPath('annotationsHolder.childViews').objectAt(0);
+        labelView = graphView.getPath('topAnnotationHolder.childViews').objectAt(0);
       });
 
       it("should be the correct class for a Label object", function () {
