@@ -36,7 +36,7 @@ Smartgraphs.GraphView = SC.View.extend(
 
   padding: { top: 15, right: 15, bottom: 45, left: 45 },
 
-  childViews: 'titleView tooltipView graphCanvasView legendView'.w(),
+  childViews: 'titleView tooltipView graphCanvasView topAnnotationHolder legendView'.w(),
 
   init: function () {
     sc_super();
@@ -163,6 +163,9 @@ Smartgraphs.GraphView = SC.View.extend(
       if (item.get('isOverlayAnnotation')) {
         this.get('overlayAnnotationsHolder').appendChild(view);
       }
+      else if (item.get('isTopAnnotation')) {
+        this.get('topAnnotationHolder').appendChild(view);
+      }
       else {
         this.get('annotationsHolder').appendChild(view);
       }
@@ -212,6 +215,9 @@ Smartgraphs.GraphView = SC.View.extend(
           else if (itemType === 'annotation') {
             if (item.get('isOverlayAnnotation')) {
               this.get('overlayAnnotationsHolder').appendChild(view);
+            }
+            else if (item.get('isTopAnnotation')) {
+              this.get('topAnnotationHolder').appendChild(view);
             }
             else {
               this.get('annotationsHolder').appendChild(view);
@@ -379,7 +385,82 @@ Smartgraphs.GraphView = SC.View.extend(
       graphController.updateToolTip(point, coords);
       return;
     }
+  }),
 
+  topAnnotationHolder: RaphaelViews.RaphaelCanvasView.design({
+
+    layout: { zIndex: 1 },
+
+    graphView: SC.outlet('parentView'),
+    requestedCursorStyleBinding: '.graphView.requestedCursorStyle',
+
+    init: function () {
+      sc_super();
+
+      var cursor = SC.Cursor.create();
+      cursor.bind('cursorStyle', this, 'requestedCursorStyle');
+      this.set('cursor', cursor);
+    },
+    didCreateLayer: function () {
+      sc_super();
+      var self = this;
+      /* "this.childNodes && evt.target === this.childNodes[0]"
+       * The above condition is to check whether the events are fired on 'topAnnotationHolder' or its children.
+       * If the events are fired on 'topAnnotationHolder', they are to be propagated to the layers beneath it.
+      */
+      this.$().mousemove(function (evt) {
+        if (this.childNodes && evt.target === this.childNodes[0]) {
+          self.handleEvent(evt);
+        }
+        else{
+          return YES;
+        }
+      });
+
+      this.$().mousedown(function (evt) {
+        if (this.childNodes && evt.target === this.childNodes[0]) {
+          self.handleEvent(evt);
+        }
+        else{
+          return YES;
+        }
+      });
+
+      this.$().mouseup(function (evt) {
+        if (this.childNodes && evt.target === this.childNodes[0]) {
+          self.handleEvent(evt);
+        }
+        else{
+          return YES;
+        }
+      });
+    },
+
+    handleEvent: function (evt) {
+      // Stop propagation. If we let the mousemove event bubble, the SproutCore root responder will think we were the
+      // "last hovered" view, which screws up its calculation of hover.
+      evt.stopPropagation();
+
+      // Find the element UNDER us at the location of the mouse event
+      this.$().hide();
+      var el = document.elementFromPoint(evt.clientX, evt.clientY);     // should work in IE!
+
+      // Also hide the 'overlayAnnotationHolder' to propagate the events through it.
+      if(SC.View.views[el.parentNode.id] === this.get('graphView').overlayAnnotationsHolder) {
+        $(el).hide();
+        var el2 = document.elementFromPoint(evt.clientX, evt.clientY);     // should work in IE!
+        $(el).show();
+        el = el2;
+      }
+      this.$().show();
+      // Set the event target to be the element beneath us. Because 'event' is a jQuery-normalized event, 'target' is a
+      // normal R/W property
+      evt.target = el;
+
+      // NOW let SproutCore think the event happened directly to the element below us. It will handle forwarding
+      // mouseDown, mouseMoved, mouseExited, mouseEntered events to the SC.Views beneath us.
+      SC.Event.handle.call(document, evt);
+    }
   }),
 
   graphCanvasView: RaphaelViews.RaphaelCanvasView.design({

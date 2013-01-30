@@ -86,6 +86,13 @@ Smartgraphs.Label = Smartgraphs.Annotation.extend(
   */
   isEditable: NO,
 
+  /**
+    Whether to display this annotation in front of all the annotations, axes, graph title and data views.
+
+    @property {Boolean}
+  */
+  isTopAnnotation: true,
+
   labelSet: null,
 
   isRemovalEnabled: function () {

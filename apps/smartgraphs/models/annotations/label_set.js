@@ -20,6 +20,13 @@ Smartgraphs.LabelSet = Smartgraphs.Annotation.extend(
 
   labels: SC.Record.toMany('Smartgraphs.Label'),
 
+  /**
+    Whether to display this annotation in front of all the data views.
+
+    @property {Boolean}
+  */
+  isTopAnnotation: true,
+
   isRemovalEnabled: NO,
 
   createChildLabel: function () {
