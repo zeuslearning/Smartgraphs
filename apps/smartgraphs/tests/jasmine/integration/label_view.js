@@ -723,8 +723,13 @@ describe("LabelView behavior", function () {
 
         describe("after double clicking the label view, to edit it", function () {
 
-          runBeforeEach( function () {
-            labelBodyView.doubleClick();
+          beforeEach( function () {
+            SC.run(function () {
+              labelRecord.set('isEditable', YES);
+            });
+            SC.run(function () {
+              labelBodyView.doubleClick();
+            });
           });
 
           it("should have an associated textarea", function () {
