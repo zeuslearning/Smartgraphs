@@ -102,6 +102,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   didCreateLayer: function () {
     sc_super();
     this.$().css('cursor', 'default');
+    this.get('item').set('view', this);
   },
 
   viewDidResize: function () {
@@ -614,7 +615,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   remove: function () {
     if (this.get('isRemovalEnabled')) {
       this.get('controller').labelViewRemoveLabel(this.get('item'));
-      this.didRemoveFromGraphView();
     }
   }
 
