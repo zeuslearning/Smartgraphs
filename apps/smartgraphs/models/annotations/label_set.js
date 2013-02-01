@@ -29,6 +29,11 @@ Smartgraphs.LabelSet = Smartgraphs.Annotation.extend(
 
   isRemovalEnabled: NO,
 
+  /*
+   * View associated with this annotation.
+   */
+  view: null,
+
   createChildLabel: function () {
     var label = this.get('store').createRecord(Smartgraphs.Label, {
       activity: this.getPath('activity.id'),
@@ -43,6 +48,8 @@ Smartgraphs.LabelSet = Smartgraphs.Annotation.extend(
 
   removeLabel: function (label) {
     this.get('labels').removeObject(label);
+    var labelView = label.get('view');
+    labelView.didRemoveFromGraphView();
   },
 
   enableRemoval: function () {

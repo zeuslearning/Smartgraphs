@@ -95,6 +95,12 @@ Smartgraphs.Label = Smartgraphs.Annotation.extend(
 
   labelSet: null,
 
+  /*
+   * View associated with this annotation.
+   */
+
+  view: null,
+
   isRemovalEnabled: function () {
     if (this.get('labelSet')) {
       return this.getPath('labelSet.isRemovalEnabled');
