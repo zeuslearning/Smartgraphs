@@ -447,7 +447,9 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
     startDrag: function (evt) {
       this.setPath('parentLabelView.isBodyDragging', YES);
-
+      if (this.labelTextView.textFieldView.get('value') !== null) {
+        this.labelTextView.set('text', this.labelTextView.textFieldView.get('value'));
+      }
       this._isDragging = YES;
       this._dragX = evt.pageX;
       this._dragY = evt.pageY;
