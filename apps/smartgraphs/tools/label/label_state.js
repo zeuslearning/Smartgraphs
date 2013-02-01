@@ -152,7 +152,10 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
           this.getPath('toolRoot.annotation').enableRemoval();
         },
         dataPointSelected: function (context, args) {
-          if (this.getPath('toolRoot.markOnDataPoints')) {
+          if (!Smartgraphs.taggingTool.tagName) {
+            return;
+          }
+          if (this.getPath('toolRoot.markOnDataPoints') === true) {
             var label = this.getPath('toolRoot.annotation');
             var labelTextView = label.view.labelTextView();
             if (labelTextView.get('isEditing')) {
@@ -163,6 +166,9 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
           }
         },
         mouseDownAtPoint: function (context, args) {
+          if (!Smartgraphs.taggingTool.tagName) {
+            return;
+          }
           var label = this.getPath('toolRoot.annotation');
           var labelTextView = label.view.labelTextView();
           if (labelTextView.get('isEditing')) {
