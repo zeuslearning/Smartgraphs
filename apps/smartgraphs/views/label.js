@@ -430,7 +430,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       return NO;
     },
 
-    doubleClick: function(evt) {
+    doubleClick: function (evt) {
       this.labelTextView.beginEditing();
       return YES;
     },
@@ -447,7 +447,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
     startDrag: function (evt) {
       this.setPath('parentLabelView.isBodyDragging', YES);
-      if (this.labelTextView.textFieldView.get('value') !== null) {
+      if (this.labelTextView.textFieldView.get('value') || this.labelTextView.textFieldView.get('value') === "") {
         this.labelTextView.set('text', this.labelTextView.textFieldView.get('value'));
       }
       this._isDragging = YES;
