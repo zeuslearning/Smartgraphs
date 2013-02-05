@@ -138,7 +138,6 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
           label.set('y', args.y);
           label.set('shouldMarkTargetPoint', args.shouldMarkTargetPoint);
           label.set('createdByLabelTool', YES);
-          label.set('isEditable', YES);
 
           Smartgraphs.labelTool.appendLabel(this, label);
           this.gotoState('ADDED');
@@ -149,7 +148,12 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
       ADDED: SC.State.design({
         toolRoot: SC.outlet('parentState.toolRoot'),
         enterState: function () {
-          this.getPath('toolRoot.annotation').enableRemoval();
+          var label = this.getPath('toolRoot.annotation');
+          label.enableRemoval();
+          label.set('isEditable', YES);
+        },
+        exitState: function () {
+          this.getPath('toolRoot.annotation').set('isEditable', NO);
         },
         dataPointSelected: function (context, args) {
           if (!Smartgraphs.taggingTool.tagName) {
