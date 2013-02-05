@@ -412,16 +412,24 @@ Smartgraphs.GraphView = SC.View.extend(
         if (this.childNodes && evt.target === this.childNodes[0]) {
           self.handleEvent(evt);
         }
-        else{
+        else {
           return YES;
         }
       });
 
       this.$().mousedown(function (evt) {
         if (this.childNodes && evt.target === this.childNodes[0]) {
-          self.handleEvent(evt);
+          var label = self.getActiveLabel();
+          if (label) {
+            var labelTextView = label.labelTextView();
+            labelTextView.commitEditing();
+            return;
+          }
+          else {
+            self.handleEvent(evt);
+          }
         }
-        else{
+        else {
           return YES;
         }
       });
@@ -430,10 +438,36 @@ Smartgraphs.GraphView = SC.View.extend(
         if (this.childNodes && evt.target === this.childNodes[0]) {
           self.handleEvent(evt);
         }
-        else{
+        else {
           return YES;
         }
       });
+    },
+
+    getActiveLabel: function () {
+      var topAnnotationHolder = this;
+      var labelSet, label, labelTextView;
+      for (var i = 0; i < topAnnotationHolder.childViews.length; i++) {
+        var childLabel = topAnnotationHolder.childViews[i];
+        if (childLabel.kindOf(Smartgraphs.LabelSetView)) {
+          labelSet = childLabel;
+          for (var j = 0; j < labelSet.childViews.length; j++) {
+            var currLabel = labelSet.childViews[j]; 
+            labelTextView = currLabel.labelTextView();
+            if (labelTextView.get('isEditing')) {
+              label = currLabel;
+              return label;
+            }
+          }
+        }
+        else if (childLabel.kindOf(Smartgraphs.LabelView)) {
+          labelTextView = childLabel.labelTextView();
+          if (labelTextView.get('isEditing')) {
+            label = childLabel;
+            return label;
+          }
+        }
+      }
     },
 
     handleEvent: function (evt) {
