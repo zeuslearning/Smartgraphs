@@ -409,39 +409,49 @@ Smartgraphs.GraphView = SC.View.extend(
        * If the events are fired on 'topAnnotationHolder', they are to be propagated to the layers beneath it.
       */
       this.$().mousemove(function (evt) {
-        if (this.childNodes && evt.target === this.childNodes[0]) {
-          self.handleEvent(evt);
+        if (self.checkDescendent(evt.target, this)) {
+          return YES;
         }
         else {
-          return YES;
+          self.handleEvent(evt);
         }
       });
 
       this.$().mousedown(function (evt) {
-        if (this.childNodes && evt.target === this.childNodes[0]) {
+        if (self.checkDescendent(evt.target, this)) {
           var label = self.getActiveLabel();
           if (label) {
             var labelTextView = label.labelTextView();
-            labelTextView.commitEditing();
-            return;
+            var activeLabelElement = label.get('layer');
+            if (!self.checkDescendent(evt.target, activeLabelElement)) {
+              labelTextView.commitEditing();
+            }
           }
-          else {
-            self.handleEvent(evt);
-          }
+          return YES;
         }
         else {
-          return YES;
+          self.handleEvent(evt);
         }
       });
 
       this.$().mouseup(function (evt) {
-        if (this.childNodes && evt.target === this.childNodes[0]) {
-          self.handleEvent(evt);
-        }
-        else {
+        if (self.checkDescendent(evt.target, this)) {
           return YES;
         }
+        else {
+          self.handleEvent(evt);
+        }
       });
+    },
+
+    checkDescendent: function (element, descendent) {
+      var arrDescendents = $(element).parentsUntil("#" + descendent.parentNode.id);
+      var noOfDescendents = arrDescendents.length;
+      var lastDescendent = arrDescendents[noOfDescendents - 1];
+      if (noOfDescendents > 1 && lastDescendent && lastDescendent === descendent) {
+        return true;
+      }
+      return false;
     },
 
     getActiveLabel: function () {
@@ -1037,6 +1047,7 @@ Smartgraphs.GraphView = SC.View.extend(
 
         graphCanvasView: SC.outlet('parentView.graphCanvasView'),
         graphView: SC.outlet('parentView.graphView'),
+        topAnnotationHolder: SC.outlet('graphView.topAnnotationHolder'),
 
         didCreateLayer: function () {
           // cache these rather than lookup the jquery object (graphView.$()) per mouse event
@@ -1088,6 +1099,17 @@ Smartgraphs.GraphView = SC.View.extend(
         },
 
         _mouseDownOrTouchStart: function (evt) {
+          /*
+           * In IE9, events are fired directly on inputAreaView instead of topAnnotationHolder.
+           * So the loss of focus from label's textarea is checked here.
+           */
+          var topAnnotationHolder = this.getPath('topAnnotationHolder');
+          var label = topAnnotationHolder.getActiveLabel();
+          if (label) {
+            var labelTextView = label.labelTextView();
+            labelTextView.commitEditing();
+            return;
+          }
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
 
