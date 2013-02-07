@@ -316,6 +316,9 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     childViews: 'labelTextView removeButtonView'.w(),
 
     parentLabelView: SC.outlet('parentView'),
+    labelView:     SC.outlet('parentLabelView'),
+    graphView:     SC.outlet('labelView.graphView'),
+    topAnnotationHolder: SC.outlet('graphView.topAnnotationHolder'),
 
     displayProperties:   'bodyXCoord bodyYCoord width height stroke strokeWidth fill cornerRadius'.w(),
 
@@ -453,6 +456,29 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       this._isDragging = YES;
       this._dragX = evt.pageX;
       this._dragY = evt.pageY;
+      var topAnnotationHolder = this.getPath('topAnnotationHolder');
+
+      var frameWidth = topAnnotationHolder.$().width();
+      var frameHeight = topAnnotationHolder.$().height();
+      var labelWidth = this.width();
+      var labelHeight = this.height();
+      var labelTop = this.get('bodyYCoord');
+      var labelLeft = this.get('bodyXCoord');
+      var xOffset = this.get('xOffset');
+      var yOffset = this.get('yOffset');
+      var widthBound = frameWidth - labelWidth;
+      var heightBound = frameHeight - labelHeight;
+
+      this._mouseDownInfo = {
+        minXOffset: xOffset - labelLeft,
+        maxXOffset: widthBound - labelLeft + xOffset,
+        minYOffset: yOffset - labelTop,
+        maxYOffset: heightBound - labelTop + yOffset,
+        xMIN: evt.pageX - labelLeft,
+        xMAX: evt.pageX - labelLeft + widthBound,
+        yMIN: evt.pageY - labelTop,
+        yMAX: evt.pageY - labelTop + heightBound
+      };
 
       // our layer doesn't respect SC.Cursor, so set the cursors manually
       this.$().css('cursor', 'move');
@@ -463,10 +489,31 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       var xOffset = this.get('xOffset'),
           yOffset = this.get('yOffset');
 
-      if (!this._isDragging) return;
+      if (!this._isDragging) { 
+        return;
+      }
 
-      this.set('xOffset', xOffset + evt.pageX - this._dragX);
-      this.set('yOffset', yOffset + evt.pageY - this._dragY);
+      var info = this._mouseDownInfo,
+          currXOffset, currYOffset;
+
+      currXOffset = xOffset + evt.pageX - this._dragX;
+      if (evt.pageX < info.xMIN) {
+        currXOffset = info.minXOffset;
+      }
+      if (evt.pageX > info.xMAX) {
+        currXOffset = info.maxXOffset;
+      }
+      this.set('xOffset', currXOffset);
+
+      currYOffset = yOffset + evt.pageY - this._dragY;
+      if (evt.pageY < info.yMIN) {
+        currYOffset = info.minYOffset;
+      }
+      if (evt.pageY > info.yMAX) {
+        currYOffset = info.maxYOffset;
+      }
+      this.set('yOffset', currYOffset);
+
       this._dragX = evt.pageX;
       this._dragY = evt.pageY;
     },
