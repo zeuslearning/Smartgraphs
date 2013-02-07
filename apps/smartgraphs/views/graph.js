@@ -445,10 +445,10 @@ Smartgraphs.GraphView = SC.View.extend(
     },
 
     checkDescendent: function (element, descendent) {
-      var arrDescendents = $(element).parentsUntil("#" + descendent.parentNode.id);
+      var arrDescendents = $(element).parentsUntil("#" + descendent.id);
       var noOfDescendents = arrDescendents.length;
       var lastDescendent = arrDescendents[noOfDescendents - 1];
-      if (noOfDescendents > 1 && lastDescendent && lastDescendent === descendent) {
+      if (lastDescendent && lastDescendent.tagName !== 'HTML') {
         return true;
       }
       return false;
