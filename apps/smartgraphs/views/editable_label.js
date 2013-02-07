@@ -233,8 +233,10 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
   },
 
   commitEditing: function () {
+    $('body').unbind('mousedown', this.mousedownHandler).unbind('touchstart', this.mousedownHandler);
     this.set('text', this.textFieldView.get('value'));
     this.set('isEditing', NO);
+    this.textFieldView.resignFirstResponder();
   }
 
 });
