@@ -1099,6 +1099,8 @@ Smartgraphs.GraphView = SC.View.extend(
         },
 
         _mouseDownOrTouchStart: function (evt) {
+          this._graphController = this._graphView.get('graphController');
+
           /*
            * In IE9, events are fired directly on inputAreaView instead of topAnnotationHolder.
            * So the loss of focus from label's textarea is checked here.
@@ -1113,7 +1115,6 @@ Smartgraphs.GraphView = SC.View.extend(
           var coords = this.coordsForEvent(evt),
               point = this._graphView.pointForCoordinates(coords.x, coords.y);
 
-          this._graphController = this._graphView.get('graphController');
           return this._graphController.inputAreaMouseDown(point.x, point.y);
         },
 
