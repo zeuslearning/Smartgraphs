@@ -97,6 +97,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
   },
 
   destroy: function () {
+    this.set('isEditing', NO);
     this.bindings.forEach(function (binding) {
       binding.disconnect();
     });
