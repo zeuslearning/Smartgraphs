@@ -114,10 +114,15 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     var isPositionUpdateRequired = this.get('isPositionUpdateRequired');
 
     if (isPositionUpdateRequired) {
+      this.beginPropertyChanges();
+
       // Position related calculations
       this.avoidOverlapsWithOtherLabels();
       this.avoidAxes();
       this.checkConnectingLineLength();
+
+      this.endPropertyChanges();
+
       this.getLabelBodyWithinBounds();
       this.set('isPositionUpdateRequired', NO);
     }
