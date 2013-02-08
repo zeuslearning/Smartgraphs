@@ -108,6 +108,36 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     this.set('bodyYCoord',   yCoord + yOffset - height);
     this.set('anchorYCoord', yCoord + yOffset);
 
+    var originalX = this.get('bodyXCoord');
+    var originalY = this.get('bodyYCoord');
+    var graphView = this.get('graphView');
+
+    if (graphView) {
+      var item = this.get('item');
+      var arrLabelsLayout = graphView.get('arrLabelsLayout');
+      var obj = this.checkObjectInArray(item);
+      if (!obj) {
+        obj = {
+          item: item,
+          right: this.get('bodyXCoord') + width,
+          bottom: this.get('bodyYCoord') + height,
+          left: this.get('bodyXCoord'),
+          top: this.get('bodyYCoord'),
+          width: width,
+          height: height
+        };
+        arrLabelsLayout.push(obj);
+      }
+      else {
+        obj.item = item;
+        obj.right = this.get('bodyXCoord') + width;
+        obj.bottom = this.get('bodyYCoord') + height;
+        obj.left = this.get('bodyXCoord');
+        obj.top = this.get('bodyYCoord');
+        obj.width = width;
+        obj.height = height;
+      }
+    }
   }.observes('xCoord', 'yCoord', 'xOffset', 'yOffset', 'labelBodyWidth', 'labelBodyHeight'),
 
   // Do all the position calculation in here.
@@ -131,7 +161,58 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
   // Check overlapping with other labels
   avoidOverlapsWithOtherLabels: function () {
-    
+    this.beginPropertyChanges();
+    var originalX = this.get('bodyXCoord');
+    var originalY = this.get('bodyYCoord');
+    var graphView = this.get('graphView');
+
+    if (graphView) {
+      var item = this.get('item');
+      var arrLabelsLayout = graphView.get('arrLabelsLayout');
+      var obj = this.checkLabelInArray(item);
+
+      var newPositionedObj = this.getNewPosition(arrLabelsLayout, obj);
+      if (newPositionedObj) {
+        this.set('xOffset', newPositionedObj.left - originalX + this.xOffset);
+        this.set('yOffset', newPositionedObj.top - originalY + this.yOffset);
+      }
+    }
+    this.endPropertyChanges();
+  },
+
+  getNewPosition: function (arrLabelsLayout, obj) {
+    if (arrLabelsLayout.length === 1) {
+      return obj;
+    }
+
+    var newPositionedObj = obj;
+    for (var i = 0; i < arrLabelsLayout.length; i++) {
+      if (arrLabelsLayout[i] === obj) {
+        continue;
+      }
+      var tempNewPos = this.getNewPostionLayout(arrLabelsLayout[i], newPositionedObj);
+      if (tempNewPos !== null) {
+        newPositionedObj = tempNewPos;
+      }
+      else {
+        continue;
+      }
+      if (newPositionedObj) {
+        var bFlag = false;
+        for (var j = 0; j < arrLabelsLayout.length; j++) {
+          if (j !== i && arrLabelsLayout[j] !== obj) {
+            if (this.checkOverlap(arrLabelsLayout[j], newPositionedObj)) {
+              bFlag = true;
+              break; 
+            }
+          }
+        }
+        if (!bFlag) {
+          return newPositionedObj;
+        }
+      }
+    }
+    return obj;
   },
 
   // Check overlapping with axes
@@ -183,6 +264,62 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     }
 
     this.endPropertyChanges();
+  },
+
+  checkLabelInArray: function (item) {
+    var graphView = this.get('graphView');
+    var arrObjects = graphView.get('arrLabelsLayout');
+
+    for (var i = 0; i < arrObjects.length; i++) {
+      if (arrObjects[i].item === item) {
+        return arrObjects[i];
+      }
+    }
+    return null;
+  },
+
+  getNewPostionLayout: function (rectA, rectB) {
+    var bOverlap = this.checkOverlap(rectA, rectB);
+    if (bOverlap) {
+      var newRect = {
+        top: rectB.top,
+        bottom: rectB.bottom,
+        left: rectB.left,
+        right: rectB.right,
+        width: rectB.width,
+        height: rectB.height
+      };
+      var gap = 15;
+      if (rectA.left <= rectB.left) {
+        newRect.left = rectA.right + gap;
+        newRect.right = newRect.left + rectB.width;
+      }
+      else {
+        newRect.left = rectA.left - rectB.width - gap;
+        newRect.right = newRect.left + rectB.width;
+      }
+      if (rectA.top <= rectB.top) {
+        newRect.top = rectA.bottom + gap;
+        newRect.bottom = newRect.top + rectB.height;
+      }
+      else {
+        newRect.top = rectA.top - rectB.height - gap;
+        newRect.bottom = newRect.top + rectB.height;
+      }
+      return newRect;
+    }
+    else {
+      return null;
+    }
+  },
+
+  checkOverlap: function (rectA, rectB) {
+    var bOverlap = this.intersectRect(rectA, rectB);
+    return bOverlap;
+  },
+
+  intersectRect: function (r1, r2) {
+    return !(r2.left > r1.right || r2.right < r1.left || r2.top > r1.bottom || r2.bottom < r1.top);
   },
 
   didCreateLayer: function () {
@@ -760,8 +897,24 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   }),
 
   remove: function () {
+    this.removeLabelFromArray();
     if (this.get('isRemovalEnabled')) {
       this.get('controller').labelViewRemoveLabel(this.get('item'));
+    }
+  },
+
+  removeLabelFromArray: function () {
+    var graphView = this.get('graphView');
+    var item = this.get('item');
+    if (graphView) {
+      var arrTemp = graphView.get('arrLabelsLayout');
+      var newArray = [];
+      for (var i = 0; i < arrTemp.length; i++) {
+        if (arrTemp[i].item !== item) {
+          newArray.push(arrTemp[i]);
+        }
+      }
+      graphView.set('arrLabelsLayout', newArray);
     }
   }
 
