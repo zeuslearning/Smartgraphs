@@ -53,6 +53,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   xOffsetBinding: '*item.xOffset',
   yOffsetBinding: '*item.yOffset',
 
+  isPositionUpdateRequiredBinding: '*item.isPositionUpdateRequired',
+
   isRemovalEnabledBinding: '*item.isRemovalEnabled',
   isEditableBinding: '*item.isEditable',
   
@@ -108,6 +110,36 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
   }.observes('xCoord', 'yCoord', 'xOffset', 'yOffset', 'labelBodyWidth', 'labelBodyHeight'),
 
+  // Do all the position calculation in here.
+  updateLabelPosition: function () {
+    var isPositionUpdateRequiredBinding = this.get('isPositionUpdateRequiredBinding');
+
+    if (isPositionUpdateRequiredBinding) {
+      // Position related calculations
+      this.avoidOverlapsWithOtherLabels();
+      this.avoidAxes();
+      this.checkConnectingLineLength();
+      this.getLabelBodyWithinBounds();
+
+      this.set('isPositionUpdateRequiredBinding', NO);
+    }
+  }.observes('isPositionUpdateRequired'),
+
+  // Check overlapping with other labels
+  avoidOverlapsWithOtherLabels: function () {
+    
+  },
+
+  // Check overlapping with axes
+  avoidAxes: function () {
+    
+  },
+
+  // Check connecting line's length'
+  checkConnectingLineLength: function () {
+    
+  },
+
   getLabelBodyWithinBounds: function () {
     var xCoord  = this.get('xCoord'),
         yCoord  = this.get('yCoord'),
@@ -153,6 +185,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     sc_super();
     this.$().css('cursor', 'default');
     this.get('item').set('view', this);
+    this.set('isPositionUpdateRequired', YES);
   },
 
   viewDidResize: function () {
