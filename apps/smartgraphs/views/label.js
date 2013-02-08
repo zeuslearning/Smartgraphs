@@ -114,7 +114,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     if (graphView) {
       var item = this.get('item');
       var arrLabelsLayout = graphView.get('arrLabelsLayout');
-      var obj = this.checkObjectInArray(item);
+      var obj = this.checkLabelInArray(item);
       if (!obj) {
         obj = {
           item: item,
