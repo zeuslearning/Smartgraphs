@@ -176,6 +176,7 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
 
             label.set('x', args.x);
             label.set('y', args.y);
+            label.set('isPositionUpdateRequired', YES);
           }
         },
         mouseDownAtPoint: function (context, args) {
@@ -193,6 +194,7 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
           if (point) {
             label.set('x', point.x);
             label.set('y', point.y);
+            label.set('isPositionUpdateRequired', YES);
           }
         },
         removeLabel: function (context, args) {
