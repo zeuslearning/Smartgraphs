@@ -96,6 +96,13 @@ Smartgraphs.Label = Smartgraphs.Annotation.extend(
   labelSet: null,
 
   /**
+    Minimum distance of the anchor from the target point.
+
+    @property {Number}
+  */
+  minDistanceFromPoint: 85,
+
+  /**
    * Set this variable when automatic position of the label is to be decided.
    */
   isPositionUpdateRequired: null,

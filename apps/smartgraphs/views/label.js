@@ -51,6 +51,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   xOffsetBinding: '*item.xOffset',
   yOffsetBinding: '*item.yOffset',
 
+  minDistanceFromPointBinding: '*item.minDistanceFromPoint',
+
   isPositionUpdateRequiredBinding: '*item.isPositionUpdateRequired',
 
   isRemovalEnabledBinding: '*item.isRemovalEnabled',
@@ -219,9 +221,28 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     
   },
 
-  // Check connecting line's length'
+  // Check connecting line's length
   checkConnectingLineLength: function () {
-    
+    var xCoord  = this.get('xCoord'),
+        yCoord  = this.get('yCoord'),
+        xOffset = this.get('xOffset'),
+        yOffset = this.get('yOffset'),
+        height  = this.get('labelBodyHeight'),
+        width   = this.get('labelBodyWidth'),
+        connectorDistanceX = xOffset + width / 2,
+        connectorDistanceY = yOffset;
+
+    // Calculating length of line
+    var length = Math.sqrt(connectorDistanceX * connectorDistanceX + connectorDistanceY * connectorDistanceY);
+    var minDistance = this.get('minDistanceFromPoint');
+    if (length < minDistance) {
+      var multiplyFactor = minDistance / length;
+      var newXOffset  = (multiplyFactor *  connectorDistanceX) - width / 2;
+      var newYOffset = connectorDistanceY * multiplyFactor;
+
+      this.set('xOffset', newXOffset);
+      this.set('yOffset', newYOffset);
+    }
   },
 
   getLabelBodyWithinBounds: function () {
