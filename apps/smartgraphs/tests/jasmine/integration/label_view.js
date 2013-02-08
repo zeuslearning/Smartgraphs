@@ -227,7 +227,8 @@ describe("LabelView behavior", function () {
           });
 
           it("should translate the bodyXCoord by delta(xCoord)", function () {
-            expect(newBodyXCoord - oldBodyXCoord).toEqual(dx);
+            // Using toFixed method to avoid rounding errors
+            expect((newBodyXCoord - oldBodyXCoord).toFixed(2)).toEqual(dx.toFixed(2));
           });
 
           it("should translate the bodyYCoord by delta(yCoord)", function () {
