@@ -98,7 +98,7 @@ Smartgraphs.Label = Smartgraphs.Annotation.extend(
   /**
    * Set this variable when automatic position of the label is to be decided.
    */
-  isPositionUpdateRequired: NO,
+  isPositionUpdateRequired: null,
 
   /*
    * View associated with this annotation.

@@ -112,16 +112,15 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
   // Do all the position calculation in here.
   updateLabelPosition: function () {
-    var isPositionUpdateRequiredBinding = this.get('isPositionUpdateRequiredBinding');
+    var isPositionUpdateRequired = this.get('isPositionUpdateRequired');
 
-    if (isPositionUpdateRequiredBinding) {
+    if (isPositionUpdateRequired) {
       // Position related calculations
       this.avoidOverlapsWithOtherLabels();
       this.avoidAxes();
       this.checkConnectingLineLength();
       this.getLabelBodyWithinBounds();
-
-      this.set('isPositionUpdateRequiredBinding', NO);
+      this.set('isPositionUpdateRequired', NO);
     }
   }.observes('isPositionUpdateRequired'),
 
@@ -185,7 +184,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     sc_super();
     this.$().css('cursor', 'default');
     this.get('item').set('view', this);
-    this.set('isPositionUpdateRequired', YES);
+
+    if (this.get('isPositionUpdateRequired') === null) {
+      this.set('isPositionUpdateRequired', YES);
+    }
   },
 
   viewDidResize: function () {
