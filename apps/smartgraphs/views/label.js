@@ -96,6 +96,12 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
         height  = this.get('labelBodyHeight'),
         width   = this.get('labelBodyWidth');
 
+    if (!(xCoord && isNaN(xCoord) && yCoord && isNaN(yCoord) && xOffset && isNaN(xOffset) && yOffset && isNaN(yOffset))) {
+      if (this.get('isPositionUpdateRequired') === null || this.get('isPositionUpdateRequired') === undefined) {
+        this.set('isPositionUpdateRequired', YES);
+      }
+    }
+
     // Calculation of xOffset and yOffset when label is not being dragged.
     // Checks and calculation to keep labels within the graph pane.
     if (!this.isBodyDragging) {
@@ -149,8 +155,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       this.beginPropertyChanges();
 
       // Position related calculations
-      this.avoidOverlapsWithOtherLabels();
       this.avoidAxes();
+      this.avoidOverlapsWithOtherLabels();
       this.checkConnectingLineLength();
 
       this.endPropertyChanges();
@@ -218,7 +224,33 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
   // Check overlapping with axes
   avoidAxes: function () {
-    
+    var xCoord  = this.get('xCoord'),
+        yCoord  = this.get('yCoord'),
+        xOffset = this.get('xOffset'),
+        yOffset = this.get('yOffset');
+
+    var graphView = this.get('graphView');
+    var strokeWidth = this.get('labelBodyView').strokeWidth();
+    var xAxis = graphView.get('xAxis');
+    var yAxis = graphView.get('yAxis');
+
+    var topLeft = graphView.coordinatesForPoint(xAxis.get('min'), yAxis.get('max'));
+    var bottomRight = graphView.coordinatesForPoint(xAxis.get('max'), yAxis.get('min'));
+
+    var left = topLeft.x;
+    var bottom = bottomRight.y - 2 * strokeWidth;
+
+    this.beginPropertyChanges();
+
+    if ((xCoord + xOffset) < left) {
+      this.set('xOffset', left - xCoord);
+    }
+
+    if ((yCoord + yOffset) > bottom) {
+      this.set('yOffset', bottom - yCoord);
+    }
+
+    this.endPropertyChanges();
   },
 
   // Check connecting line's length
@@ -346,10 +378,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     sc_super();
     this.$().css('cursor', 'default');
     this.get('item').set('view', this);
-
-    if (this.get('isPositionUpdateRequired') === null) {
-      this.set('isPositionUpdateRequired', YES);
-    }
   },
 
   viewDidResize: function () {
