@@ -95,37 +95,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     // Calculation of xOffset and yOffset when label is not being dragged.
     // Checks and calculation to keep labels within the graph pane.
     if (!this.isBodyDragging) {
-
-      var graphView = this.get('graphView');
-      var strokeWidth = this.get('labelBodyView').strokeWidth();
-      var xAxis = graphView.get('xAxis');
-      var yAxis = graphView.get('yAxis');
-      var padding = graphView.get('padding');
-      var topLeft = graphView.coordinatesForPoint(xAxis.get('min'), yAxis.get('max'));
-      var bottomRight = graphView.coordinatesForPoint(xAxis.get('max'), yAxis.get('min'));
-      var left = topLeft.x - padding.left;
-      var right = bottomRight.x + padding.right - 2 * strokeWidth;
-      var top = topLeft.y - padding.top;
-      var bottom = bottomRight.y + padding.bottom - 2 * strokeWidth;
-
-      this.beginPropertyChanges();
-
-      if ((xCoord + xOffset) < left) {
-        this.set('xOffset', left - xCoord);
-      }
-      else if ((xCoord + xOffset + width) > right) {
-        this.set('xOffset', right - width - xCoord);
-      }
-
-      if ((yCoord + yOffset) < top) {
-        this.set('yOffset', top - yCoord + height);
-      }
-      else if ((yCoord + yOffset + height) > bottom) {
-        this.set('yOffset', bottom - yCoord);
-      }
-
-      this.endPropertyChanges();
-
+      this.getLabelBodyWithinBounds();
       xOffset = this.get('xOffset');
       yOffset = this.get('yOffset');
     }
@@ -136,6 +106,47 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     this.set('anchorYCoord', yCoord + yOffset);
 
   }.observes('xCoord', 'yCoord', 'xOffset', 'yOffset', 'labelBodyWidth', 'labelBodyHeight'),
+
+  getLabelBodyWithinBounds: function () {
+    var xCoord  = this.get('xCoord'),
+        yCoord  = this.get('yCoord'),
+        xOffset = this.get('xOffset'),
+        yOffset = this.get('yOffset'),
+        height  = this.get('labelBodyHeight'),
+        width   = this.get('labelBodyWidth');
+    var graphView = this.get('graphView');
+    var strokeWidth = this.get('labelBodyView').strokeWidth();
+    var padding = graphView.get('padding');
+    var xAxis = graphView.get('xAxis');
+    var yAxis = graphView.get('yAxis');
+
+    var topLeft = graphView.coordinatesForPoint(xAxis.get('min'), yAxis.get('max'));
+    var bottomRight = graphView.coordinatesForPoint(xAxis.get('max'), yAxis.get('min'));
+
+    var bounds = {};
+    bounds.left = topLeft.x - padding.left;
+    bounds.right = bottomRight.x + padding.right - 2 * strokeWidth - width;
+    bounds.top = topLeft.y - padding.top + height;
+    bounds.bottom = bottomRight.y + padding.bottom - 2 * strokeWidth;
+
+    this.beginPropertyChanges();
+
+    if ((xCoord + xOffset) < bounds.left) {
+      this.set('xOffset', bounds.left - xCoord);
+    }
+    else if ((xCoord + xOffset) > bounds.right) {
+      this.set('xOffset', bounds.right - xCoord);
+    }
+
+    if ((yCoord + yOffset) < bounds.top) {
+      this.set('yOffset', bounds.top - yCoord);
+    }
+    else if ((yCoord + yOffset) > bounds.bottom) {
+      this.set('yOffset', bounds.bottom - yCoord);
+    }
+
+    this.endPropertyChanges();
+  },
 
   didCreateLayer: function () {
     sc_super();
