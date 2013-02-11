@@ -455,26 +455,16 @@ Smartgraphs.GraphView = SC.View.extend(
 
     getActiveLabel: function () {
       var topAnnotationsHolder = this;
-      var labelSet, label;
       var topAnnotationChildViews = topAnnotationsHolder.get('childViews');
 
       for (var i = 0; i < topAnnotationChildViews.length; i++) {
         var childLabel = topAnnotationChildViews[i];
         if (childLabel.kindOf(Smartgraphs.LabelSetView)) {
-          labelSet = childLabel;
-          var labelsetChildViews = labelSet.get('childViews');
-          for (var j = 0; j < labelsetChildViews.length; j++) {
-            var currLabel = labelsetChildViews[j]; 
-            if (currLabel.get('isEditing')) {
-              label = currLabel;
-              return label;
-            }
-          }
+          return childLabel.get('activeLabel');
         }
         else if (childLabel.kindOf(Smartgraphs.LabelView)) {
           if (childLabel.get('isEditing')) {
-            label = childLabel;
-            return label;
+            return childLabel;
           }
         }
       }
