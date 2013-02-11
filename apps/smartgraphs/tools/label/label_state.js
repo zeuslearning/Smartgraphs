@@ -30,7 +30,7 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
   /**
     Name of the dataset associated with this tool.
 
-    @property {Boolean}
+    @property {String}
   */
   datadefName: null,
   /**
@@ -40,6 +40,13 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
   */
   annotation: null,
 
+  /**
+    Whether to allow label annotation to shift with change in coordinates.
+
+    @property {Boolean}
+  */
+  allowCoordinatesChange: NO,
+
   initialSubstate: 'OFF',
 
   OFF: SC.State.design({
@@ -48,6 +55,9 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
       parentState.set('annotationName', args.annotationName);
       parentState.set('markOnDataPoints', args.markOnDataPoints);
       parentState.set('datadefName', args.datadefName);
+      if (args.allowCoordinatesChange) {
+        parentState.set('allowCoordinatesChange', args.allowCoordinatesChange);
+      }
 
       this.gotoState(parentState.get('name') + '.ON');
     }
@@ -157,7 +167,8 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
           this.getPath('toolRoot.annotation').set('isEditable', NO);
         },
         dataPointSelected: function (context, args) {
-          if (!Smartgraphs.taggingTool.tagName) {
+          var allowCoordinatesChange = this.getPath('toolRoot.allowCoordinatesChange');
+          if (!allowCoordinatesChange) {
             return;
           }
           if (this.getPath('toolRoot.markOnDataPoints') === true) {
@@ -170,7 +181,8 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
           }
         },
         mouseDownAtPoint: function (context, args) {
-          if (!Smartgraphs.taggingTool.tagName) {
+          var allowCoordinatesChange = this.getPath('toolRoot.allowCoordinatesChange');
+          if (!allowCoordinatesChange) {
             return;
           }
           var label = this.getPath('toolRoot.annotation');
