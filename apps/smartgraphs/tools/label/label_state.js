@@ -95,8 +95,6 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
         this.get('statechart').sendAction('addLabel', this, {x: args.x, y: args.y, shouldMarkTargetPoint: YES});
       }
       else {
-        var toolName = Smartgraphs.taggingTool.state;
-        var taggingTool = Smartgraphs.statechart.getState(toolName);
         var datadefName = this.getPath('toolRoot.datadefName');
         var dataRepresentation = context.getDataRepresentation(datadefName);
         var point = dataRepresentation.getNearestPoint(args);
@@ -189,8 +187,6 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
           var labelView = label.get('view');
           labelView.commitEditing();
 
-          var toolName = Smartgraphs.taggingTool.state;
-          var taggingTool = Smartgraphs.statechart.getState(toolName);
           var datadefName = this.getPath('toolRoot.datadefName');
           var dataRepresentation = context.getDataRepresentation(datadefName);
           var point = dataRepresentation.getNearestPoint(args);
