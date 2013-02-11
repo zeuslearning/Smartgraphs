@@ -36,7 +36,7 @@ Smartgraphs.GraphView = SC.View.extend(
 
   padding: { top: 15, right: 15, bottom: 45, left: 45 },
 
-  childViews: 'titleView tooltipView graphCanvasView topAnnotationHolder legendView'.w(),
+  childViews: 'titleView tooltipView graphCanvasView topAnnotationsHolder legendView'.w(),
 
   init: function () {
     sc_super();
@@ -164,7 +164,7 @@ Smartgraphs.GraphView = SC.View.extend(
         this.get('overlayAnnotationsHolder').appendChild(view);
       }
       else if (item.get('isTopAnnotation')) {
-        this.get('topAnnotationHolder').appendChild(view);
+        this.get('topAnnotationsHolder').appendChild(view);
       }
       else {
         this.get('annotationsHolder').appendChild(view);
@@ -217,7 +217,7 @@ Smartgraphs.GraphView = SC.View.extend(
               this.get('overlayAnnotationsHolder').appendChild(view);
             }
             else if (item.get('isTopAnnotation')) {
-              this.get('topAnnotationHolder').appendChild(view);
+              this.get('topAnnotationsHolder').appendChild(view);
             }
             else {
               this.get('annotationsHolder').appendChild(view);
@@ -387,7 +387,7 @@ Smartgraphs.GraphView = SC.View.extend(
     }
   }),
 
-  topAnnotationHolder: RaphaelViews.RaphaelCanvasView.design({
+  topAnnotationsHolder: RaphaelViews.RaphaelCanvasView.design({
 
     layout: { zIndex: 1 },
 
@@ -405,8 +405,8 @@ Smartgraphs.GraphView = SC.View.extend(
       sc_super();
       var self = this;
       /* "this.childNodes && evt.target === this.childNodes[0]"
-       * The above condition is to check whether the events are fired on 'topAnnotationHolder' or its children.
-       * If the events are fired on 'topAnnotationHolder', they are to be propagated to the layers beneath it.
+       * The above condition is to check whether the events are fired on 'topAnnotationsHolder' or its children.
+       * If the events are fired on 'topAnnotationsHolder', they are to be propagated to the layers beneath it.
       */
       this.$().mousemove(function (evt) {
         if (self.checkDescendent(evt.target, this)) {
@@ -455,10 +455,10 @@ Smartgraphs.GraphView = SC.View.extend(
     },
 
     getActiveLabel: function () {
-      var topAnnotationHolder = this;
+      var topAnnotationsHolder = this;
       var labelSet, label, labelTextView;
-      for (var i = 0; i < topAnnotationHolder.childViews.length; i++) {
-        var childLabel = topAnnotationHolder.childViews[i];
+      for (var i = 0; i < topAnnotationsHolder.childViews.length; i++) {
+        var childLabel = topAnnotationsHolder.childViews[i];
         if (childLabel.kindOf(Smartgraphs.LabelSetView)) {
           labelSet = childLabel;
           for (var j = 0; j < labelSet.childViews.length; j++) {
@@ -1047,7 +1047,7 @@ Smartgraphs.GraphView = SC.View.extend(
 
         graphCanvasView: SC.outlet('parentView.graphCanvasView'),
         graphView: SC.outlet('parentView.graphView'),
-        topAnnotationHolder: SC.outlet('graphView.topAnnotationHolder'),
+        topAnnotationsHolder: SC.outlet('graphView.topAnnotationsHolder'),
 
         didCreateLayer: function () {
           // cache these rather than lookup the jquery object (graphView.$()) per mouse event
@@ -1102,11 +1102,11 @@ Smartgraphs.GraphView = SC.View.extend(
           this._graphController = this._graphView.get('graphController');
 
           /*
-           * In IE9, events are fired directly on inputAreaView instead of topAnnotationHolder.
+           * In IE9, events are fired directly on inputAreaView instead of topAnnotationsHolder.
            * So the loss of focus from label's textarea is checked here.
            */
-          var topAnnotationHolder = this.getPath('topAnnotationHolder');
-          var label = topAnnotationHolder.getActiveLabel();
+          var topAnnotationsHolder = this.getPath('topAnnotationsHolder');
+          var label = topAnnotationsHolder.getActiveLabel();
           if (label) {
             var labelTextView = label.labelTextView();
             labelTextView.commitEditing();
