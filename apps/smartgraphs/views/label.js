@@ -78,6 +78,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
   labelTextView: SC.outlet('labelBodyView.labelTextView'),
 
+  isEditingBinding: '.labelTextView.isEditing',
+
   didRemoveFromGraphView: function () {
     this.get('labelTextView').didRemoveFromGraphView();
   },
@@ -618,6 +620,12 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     if (this.get('isRemovalEnabled')) {
       this.get('controller').labelViewRemoveLabel(this.get('item'));
     }
-  }
+  },
 
+  commitEditing: function () {
+    var labelTextView = this.get('labelTextView');
+    if (this.get('isEditing')) {
+      labelTextView.commitEditing();
+    }
+  }
 });

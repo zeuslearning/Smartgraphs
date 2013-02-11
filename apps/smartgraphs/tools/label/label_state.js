@@ -162,10 +162,9 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
           }
           if (this.getPath('toolRoot.markOnDataPoints') === true) {
             var label = this.getPath('toolRoot.annotation');
-            var labelTextView = label.view.labelTextView();
-            if (labelTextView.get('isEditing')) {
-              labelTextView.commitEditing();
-            }
+            var labelView = label.get('view');
+            labelView.commitEditing();
+
             label.set('x', args.x);
             label.set('y', args.y);
           }
@@ -175,10 +174,9 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
             return;
           }
           var label = this.getPath('toolRoot.annotation');
-          var labelTextView = label.view.labelTextView();
-          if (labelTextView.get('isEditing')) {
-            labelTextView.commitEditing();
-          }
+          var labelView = label.get('view');
+          labelView.commitEditing();
+
           var toolName = Smartgraphs.taggingTool.state;
           var taggingTool = Smartgraphs.statechart.getState(toolName);
           var datadefName = this.getPath('toolRoot.datadefName');

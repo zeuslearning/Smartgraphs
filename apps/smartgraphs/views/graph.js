@@ -421,10 +421,9 @@ Smartgraphs.GraphView = SC.View.extend(
         if (self.checkDescendent(evt.target, this)) {
           var label = self.getActiveLabel();
           if (label) {
-            var labelTextView = label.labelTextView();
             var activeLabelElement = label.get('layer');
             if (!self.checkDescendent(evt.target, activeLabelElement)) {
-              labelTextView.commitEditing();
+              label.commitEditing();
             }
           }
           return YES;
@@ -456,23 +455,24 @@ Smartgraphs.GraphView = SC.View.extend(
 
     getActiveLabel: function () {
       var topAnnotationsHolder = this;
-      var labelSet, label, labelTextView;
-      for (var i = 0; i < topAnnotationsHolder.childViews.length; i++) {
-        var childLabel = topAnnotationsHolder.childViews[i];
+      var labelSet, label;
+      var topAnnotationChildViews = topAnnotationsHolder.get('childViews');
+
+      for (var i = 0; i < topAnnotationChildViews.length; i++) {
+        var childLabel = topAnnotationChildViews[i];
         if (childLabel.kindOf(Smartgraphs.LabelSetView)) {
           labelSet = childLabel;
-          for (var j = 0; j < labelSet.childViews.length; j++) {
-            var currLabel = labelSet.childViews[j]; 
-            labelTextView = currLabel.labelTextView();
-            if (labelTextView.get('isEditing')) {
+          var labelsetChildViews = labelSet.get('childViews');
+          for (var j = 0; j < labelsetChildViews.length; j++) {
+            var currLabel = labelsetChildViews[j]; 
+            if (currLabel.get('isEditing')) {
               label = currLabel;
               return label;
             }
           }
         }
         else if (childLabel.kindOf(Smartgraphs.LabelView)) {
-          labelTextView = childLabel.labelTextView();
-          if (labelTextView.get('isEditing')) {
+          if (childLabel.get('isEditing')) {
             label = childLabel;
             return label;
           }
@@ -1108,8 +1108,7 @@ Smartgraphs.GraphView = SC.View.extend(
           var topAnnotationsHolder = this.getPath('topAnnotationsHolder');
           var label = topAnnotationsHolder.getActiveLabel();
           if (label) {
-            var labelTextView = label.labelTextView();
-            labelTextView.commitEditing();
+            label.commitEditing();
             return;
           }
           var coords = this.coordsForEvent(evt),
