@@ -30,7 +30,7 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
   /**
     Name of the dataset associated with this tool.
 
-    @property {Boolean}
+    @property {String}
   */
   datadefName: null,
   /**
@@ -40,6 +40,13 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
   */
   annotation: null,
 
+  /**
+    Whether to allow label annotation to shift with change in coordinates.
+
+    @property {Boolean}
+  */
+  allowCoordinatesChange: NO,
+
   initialSubstate: 'OFF',
 
   OFF: SC.State.design({
@@ -48,6 +55,9 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
       parentState.set('annotationName', args.annotationName);
       parentState.set('markOnDataPoints', args.markOnDataPoints);
       parentState.set('datadefName', args.datadefName);
+      if (args.allowCoordinatesChange) {
+        parentState.set('allowCoordinatesChange', args.allowCoordinatesChange);
+      }
 
       this.gotoState(parentState.get('name') + '.ON');
     }
@@ -85,10 +95,9 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
         this.get('statechart').sendAction('addLabel', this, {x: args.x, y: args.y, shouldMarkTargetPoint: YES});
       }
       else {
-        var toolName = Smartgraphs.taggingTool.state;
-        var taggingTool = Smartgraphs.statechart.getState(toolName);
         var datadefName = this.getPath('toolRoot.datadefName');
-        var point = taggingTool.getNearestPoint(args, datadefName, context);
+        var dataRepresentation = context.getDataRepresentation(datadefName);
+        var point = dataRepresentation.getNearestPoint(args);
         if (point !== null) {
           this.get('statechart').sendAction('addLabel', this, {x: point.x, y: point.y, shouldMarkTargetPoint: NO});
         }
@@ -157,33 +166,32 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
           this.getPath('toolRoot.annotation').set('isEditable', NO);
         },
         dataPointSelected: function (context, args) {
-          if (!Smartgraphs.taggingTool.tagName) {
+          var allowCoordinatesChange = this.getPath('toolRoot.allowCoordinatesChange');
+          if (!allowCoordinatesChange) {
             return;
           }
           if (this.getPath('toolRoot.markOnDataPoints') === true) {
             var label = this.getPath('toolRoot.annotation');
-            var labelTextView = label.view.labelTextView();
-            if (labelTextView.get('isEditing')) {
-              labelTextView.commitEditing();
-            }
+            var labelView = label.get('view');
+            labelView.commitEditing();
+
             label.set('x', args.x);
             label.set('y', args.y);
             label.set('isPositionUpdateRequired', YES);
           }
         },
         mouseDownAtPoint: function (context, args) {
-          if (!Smartgraphs.taggingTool.tagName) {
+          var allowCoordinatesChange = this.getPath('toolRoot.allowCoordinatesChange');
+          if (!allowCoordinatesChange) {
             return;
           }
           var label = this.getPath('toolRoot.annotation');
-          var labelTextView = label.view.labelTextView();
-          if (labelTextView.get('isEditing')) {
-            labelTextView.commitEditing();
-          }
-          var toolName = Smartgraphs.taggingTool.state;
-          var taggingTool = Smartgraphs.statechart.getState(toolName);
+          var labelView = label.get('view');
+          labelView.commitEditing();
+
           var datadefName = this.getPath('toolRoot.datadefName');
-          var point = taggingTool.getNearestPoint(args, datadefName, context);
+          var dataRepresentation = context.getDataRepresentation(datadefName);
+          var point = dataRepresentation.getNearestPoint(args);
           if (point) {
             label.set('x', point.x);
             label.set('y', point.y);

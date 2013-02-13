@@ -48,8 +48,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   xBinding:       '*item.x',
   yBinding:       '*item.y',
 
-  topAnnotationHolderBinding: '*graphView.topAnnotationHolder',
-
   xOffsetBinding: '*item.xOffset',
   yOffsetBinding: '*item.yOffset',
 
@@ -84,12 +82,13 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
   labelTextView: SC.outlet('labelBodyView.labelTextView'),
 
+  isEditingBinding: '.labelTextView.isEditing',
+
   didRemoveFromGraphView: function () {
     this.get('labelTextView').didRemoveFromGraphView();
   },
 
   coordsDidChange: function () {
-    var topAnnotationHolder = this.get('topAnnotationHolder');
     var xCoord  = this.get('xCoord'),
         yCoord  = this.get('yCoord'),
         xOffset = this.get('xOffset'),
@@ -736,10 +735,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       this._isDragging = YES;
       this._dragX = evt.pageX;
       this._dragY = evt.pageY;
-      var topAnnotationHolder = this.getPath('topAnnotationHolder');
+      var graphView = this.getPath('graphView');
 
-      var frameWidth = topAnnotationHolder.$().width();
-      var frameHeight = topAnnotationHolder.$().height();
+      var frameWidth = graphView.$().width();
+      var frameHeight = graphView.$().height();
       var labelWidth = this.width();
       var labelHeight = this.height();
       var labelTop = this.get('bodyYCoord');
@@ -965,6 +964,12 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       }
       graphView.set('arrLabelsLayout', newArray);
     }
-  }
+  },
 
+  commitEditing: function () {
+    var labelTextView = this.get('labelTextView');
+    if (this.get('isEditing')) {
+      labelTextView.commitEditing();
+    }
+  }
 });

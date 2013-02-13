@@ -42,12 +42,14 @@ Smartgraphs.DataRepresentation = SC.Object.extend(
         graphableObjects.push(pointset);
       }
     }
-    else if (options['point-type'] !== "none") {
+    else {
       pointset = Smartgraphs.Pointset.create({
         dataRepresentation: this
       });
       this.set('pointset', pointset);
-      graphableObjects.push(pointset);
+      if (options['point-type'] !== "none") {
+        graphableObjects.push(pointset);
+      }
     }
 
     if (options['color']) {
@@ -98,10 +100,9 @@ Smartgraphs.DataRepresentation = SC.Object.extend(
   _pointsDidChange: function () {
     var samplePoints = this.getPath('sampleset.points') || [],    // FIXME I don't know why this.get('points') doesn't work
         pointset     = this.get('pointset'),
-        pointStyle   = this.get('pointStyle'),
         line         = this.get('line');
 
-    if (pointset && pointStyle !== "none") {
+    if (pointset) {
       pointset.set('points', samplePoints.map(function (pair) {
         return Smartgraphs.Point.create({ x: pair[0], y: pair[1] });
       }));
@@ -131,5 +132,30 @@ Smartgraphs.DataRepresentation = SC.Object.extend(
       var pointset = this.get('pointset');
       pointset.set('points', [pointsetPoint]);
     }
+  },
+
+  getNearestPoint: function (point) {
+    if (this.get('lineStyle') === "connected" && this.get('pointStyle') === "none") {
+      var linePoints = this.getPath('line.points');
+      if (linePoints) {
+        var pointsetPoint = null;
+        var lineSnapDistance = this.getPath('datadef.lineSnapDistance');
+        var minDistance = lineSnapDistance;
+       // Loop to get nearest datadef point from click within lineSnapDistance
+        for (var i = linePoints.get('length') - 1; i >= 0; i--) {
+          var linePoint = { x: linePoints[i][0], y: linePoints[i][1] };
+          var distance = Math.sqrt(Math.pow(linePoint.x - point.x, 2) + Math.pow(linePoint.y - point.y, 2));
+          if (distance < lineSnapDistance) {
+            if (distance < minDistance) {
+              minDistance = distance;
+              pointsetPoint = linePoint;
+            }
+          }
+        }
+        return pointsetPoint;
+      }
+    }
+    return null;
   }
+
 });

@@ -122,7 +122,7 @@ describe("LabelView behavior", function () {
       var labelView;
 
       beforeEach( function () {
-        labelView = graphView.getPath('topAnnotationHolder.childViews').objectAt(0);
+        labelView = graphView.getPath('topAnnotationsHolder.childViews').objectAt(0);
       });
 
       it("should be the correct class for a Label object", function () {
@@ -232,15 +232,15 @@ describe("LabelView behavior", function () {
           });
 
           it("should translate the bodyYCoord by delta(yCoord)", function () {
-            expect(newBodyYCoord - oldBodyYCoord).toEqual(dy);
+            expect((newBodyYCoord - oldBodyYCoord).toFixed(2)).toEqual(dy.toFixed(2));
           });
 
           it("should translate the AnchorXCoord by delta(xCoord)", function () {
-            expect(newAnchorXCoord - oldAnchorXCoord).toEqual(dx);
+            expect((newAnchorXCoord - oldAnchorXCoord).toFixed(2)).toEqual(dx.toFixed(2));
           });
 
           it("should translate the AnchorYCoord by delta(yCoord)", function () {
-            expect(newAnchorYCoord - oldAnchorYCoord).toEqual(dy);
+            expect((newAnchorYCoord - oldAnchorYCoord).toFixed(2)).toEqual(dy.toFixed(2));
           });
         });
 
@@ -566,8 +566,8 @@ describe("LabelView behavior", function () {
             });
 
             it("should not affect (xOffset, yOffset) of the label record", function () {
-              expect(labelRecord.get('xOffset')).toEqual(xOffset);
-              expect(labelRecord.get('yOffset')).toEqual(yOffset);
+              expect(labelRecord.get('xOffset').toFixed(2)).toEqual(xOffset.toFixed(2));
+              expect(labelRecord.get('yOffset').toFixed(2)).toEqual(yOffset.toFixed(2));
             });
 
             it("should not affect the textarea offset", function () {
@@ -585,8 +585,8 @@ describe("LabelView behavior", function () {
             });
 
             it("should update (xOffset, yOffset) of the label record by (+5, +5)", function () {
-              expect(labelRecord.get('xOffset')).toEqual(xOffset + 5);
-              expect(labelRecord.get('yOffset')).toEqual(yOffset + 5);
+              expect(labelRecord.get('xOffset').toFixed(2)).toEqual((xOffset + 5).toFixed(2));
+              expect(labelRecord.get('yOffset').toFixed(2)).toEqual((yOffset + 5).toFixed(2));
             });
 
             it("should update the textarea offset by (+5, +5)", function () {
@@ -611,8 +611,8 @@ describe("LabelView behavior", function () {
               });
 
               it("should update (xOffset, yOffset) of the label record by (+10, +10)", function () {
-                expect(labelRecord.get('xOffset')).toEqual(xOffset + 10);
-                expect(labelRecord.get('yOffset')).toEqual(yOffset + 10);
+                expect(labelRecord.get('xOffset').toFixed(2)).toEqual((xOffset + 10).toFixed(2));
+                expect(labelRecord.get('yOffset').toFixed(2)).toEqual((yOffset + 10).toFixed(2));
               });
 
               it("should update the textarea offset by (+10, +10)", function () {
