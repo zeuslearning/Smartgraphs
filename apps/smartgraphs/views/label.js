@@ -458,10 +458,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       this._isDragging = YES;
       this._dragX = evt.pageX;
       this._dragY = evt.pageY;
-      var topAnnotationHolder = this.getPath('topAnnotationHolder');
+      var graphView = this.getPath('graphView');
 
-      var frameWidth = topAnnotationHolder.$().width();
-      var frameHeight = topAnnotationHolder.$().height();
+      var frameWidth = graphView.$().width();
+      var frameHeight = graphView.$().height();
       var labelWidth = this.width();
       var labelHeight = this.height();
       var labelTop = this.get('bodyYCoord');
