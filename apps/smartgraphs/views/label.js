@@ -92,11 +92,47 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
         height  = this.get('labelBodyHeight'),
         width   = this.get('labelBodyWidth');
 
-    // need to calculate an offset more intelligently, but for now...
+    // Calculation of xOffset and yOffset when label is not being dragged.
+    // Checks and calculation to keep labels within the graph pane.
+    if (!this.isBodyDragging) {
+
+      var graphView = this.get('graphView');
+      var strokeWidth = this.get('labelBodyView').strokeWidth();
+      var xAxis = graphView.get('xAxis');
+      var yAxis = graphView.get('yAxis');
+      var padding = graphView.get('padding');
+      var topLeft = graphView.coordinatesForPoint(xAxis.get('min'), yAxis.get('max'));
+      var bottomRight = graphView.coordinatesForPoint(xAxis.get('max'), yAxis.get('min'));
+      var left = topLeft.x - padding.left;
+      var right = bottomRight.x + padding.right - 2 * strokeWidth;
+      var top = topLeft.y - padding.top;
+      var bottom = bottomRight.y + padding.bottom - 2 * strokeWidth;
+
+      this.beginPropertyChanges();
+
+      if ((xCoord + xOffset) < left) {
+        this.set('xOffset', left - xCoord);
+      }
+      else if ((xCoord + xOffset + width) > right) {
+        this.set('xOffset', right - width - xCoord);
+      }
+
+      if ((yCoord + yOffset) < top) {
+        this.set('yOffset', top - yCoord + height);
+      }
+      else if ((yCoord + yOffset + height) > bottom) {
+        this.set('yOffset', bottom - yCoord);
+      }
+
+      this.endPropertyChanges();
+
+      xOffset = this.get('xOffset');
+      yOffset = this.get('yOffset');
+    }
 
     this.set('bodyXCoord',   xCoord + xOffset);
-    this.set('bodyYCoord',   yCoord + yOffset - height);
     this.set('anchorXCoord', xCoord + xOffset + width / 2);
+    this.set('bodyYCoord',   yCoord + yOffset - height);
     this.set('anchorYCoord', yCoord + yOffset);
 
   }.observes('xCoord', 'yCoord', 'xOffset', 'yOffset', 'labelBodyWidth', 'labelBodyHeight'),
@@ -505,7 +541,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       if (evt.pageX > info.xMAX) {
         currXOffset = info.maxXOffset;
       }
-      this.set('xOffset', currXOffset);
+      
 
       currYOffset = yOffset + evt.pageY - this._dragY;
       if (evt.pageY < info.yMIN) {
@@ -514,10 +550,14 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       if (evt.pageY > info.yMAX) {
         currYOffset = info.maxYOffset;
       }
-      this.set('yOffset', currYOffset);
 
       this._dragX = evt.pageX;
       this._dragY = evt.pageY;
+
+      this.parentLabelView.beginPropertyChanges();
+      this.set('xOffset', currXOffset);
+      this.set('yOffset', currYOffset);
+      this.parentLabelView.endPropertyChanges();
     },
 
     endDrag: function (evt) {
