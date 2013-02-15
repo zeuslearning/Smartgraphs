@@ -110,13 +110,22 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       yOffset = this.get('yOffset');
     }
 
-    this.set('bodyXCoord',   xCoord + xOffset);
-    this.set('anchorXCoord', xCoord + xOffset + width / 2);
-    this.set('bodyYCoord',   yCoord + yOffset - height);
-    this.set('anchorYCoord', yCoord + yOffset);
+    var bodyXCoord = xCoord + xOffset;
+    var bodyYCoord = yCoord + yOffset - height;
 
-    var originalX = this.get('bodyXCoord');
-    var originalY = this.get('bodyYCoord');
+    this.set('bodyXCoord', bodyXCoord);
+    this.set('bodyYCoord', bodyYCoord);
+
+    var point = { x: xCoord, y: yCoord },
+        centreOfLabel = { x: bodyXCoord + width / 2, y: bodyYCoord + height / 2 };
+    var newAnchorPosition = this.getAnchorPosition(point, centreOfLabel);
+    if (newAnchorPosition.anchorX) {
+      this.set('anchorXCoord', newAnchorPosition.anchorX);
+    }
+    if (newAnchorPosition.anchorY) {
+      this.set('anchorYCoord', newAnchorPosition.anchorY);
+    }
+
     var graphView = this.get('graphView');
 
     if (graphView) {
@@ -126,10 +135,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       if (!obj) {
         obj = {
           item: item,
-          right: this.get('bodyXCoord') + width,
-          bottom: this.get('bodyYCoord') + height,
-          left: this.get('bodyXCoord'),
-          top: this.get('bodyYCoord'),
+          right: bodyXCoord + width,
+          bottom: bodyYCoord + height,
+          left: bodyXCoord,
+          top: bodyYCoord,
           width: width,
           height: height
         };
@@ -137,15 +146,47 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       }
       else {
         obj.item = item;
-        obj.right = this.get('bodyXCoord') + width;
-        obj.bottom = this.get('bodyYCoord') + height;
-        obj.left = this.get('bodyXCoord');
-        obj.top = this.get('bodyYCoord');
+        obj.right = bodyXCoord + width;
+        obj.bottom = bodyYCoord + height;
+        obj.left = bodyXCoord;
+        obj.top = bodyYCoord;
         obj.width = width;
         obj.height = height;
       }
     }
   }.observes('xCoord', 'yCoord', 'xOffset', 'yOffset', 'labelBodyWidth', 'labelBodyHeight'),
+
+  getAnchorPosition: function (point, centreOfLabel) {
+    var height  = this.get('labelBodyHeight'),
+        width   = this.get('labelBodyWidth'),
+        anchorX = 0, anchorY = 0;
+
+    var slope = (point.y - centreOfLabel.y) / (point.x - centreOfLabel.x);
+
+    var height_Bound = slope * width / 2;
+    var width_Bound = (height / 2) / slope;
+
+    if ((- height / 2) <= height_Bound && height_Bound <= (height / 2)) {
+      if (point.x > centreOfLabel.x) {
+        anchorX = centreOfLabel.x + width / 2;
+      }
+      if (point.x < centreOfLabel.x) {
+        anchorX = centreOfLabel.x - width / 2;
+      }
+      anchorY = centreOfLabel.y;
+    }
+
+    if ((- width / 2) <= width_Bound && width_Bound <= (width / 2)) {
+      if (point.y < centreOfLabel.y) {
+        anchorY = centreOfLabel.y - height / 2;
+      }
+      if (point.y > centreOfLabel.y) {
+        anchorY = centreOfLabel.y + height / 2;
+      }
+      anchorX = centreOfLabel.x;
+    }
+    return { anchorX: anchorX, anchorY: anchorY };
+  },
 
   // Do all the position calculation in here.
   updateLabelPosition: function () {
