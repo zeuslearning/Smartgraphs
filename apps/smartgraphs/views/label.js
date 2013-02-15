@@ -724,6 +724,16 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     },
 
     startDrag: function (evt) {
+      var parentOfLabel = this.getPath('labelView.parentView');
+      // If the label is child of LabelSet, bring LabelSet on the top.
+      if (parentOfLabel.kindOf(Smartgraphs.LabelSetView)) {
+        var topAnnotationsHolder = parentOfLabel.get('parentView');
+        topAnnotationsHolder.appendChild(parentOfLabel);
+      }
+      // To bring the label on top.
+      var labelView = this.get('labelView');
+      parentOfLabel.appendChild(labelView);
+
       this.setPath('parentLabelView.isBodyDragging', YES);
       if (this.labelTextView.textFieldView.get('value') || this.labelTextView.textFieldView.get('value') === "") {
         var self = this;
