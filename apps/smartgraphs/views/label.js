@@ -420,7 +420,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     if (!this.isLabelWithinAxes(position)) {
       score += 4;
     }
-    if (this.getConnectingLineLength(position) <= minDistance) {
+    if (Math.round(this.getConnectingLineLength(position)) < minDistance) {
       score += 2;
     }
     return score;
