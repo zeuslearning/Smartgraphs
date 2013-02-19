@@ -893,6 +893,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     bottomMargin:             12,
     isHighlightedBinding:     '.parentLabelView.isBodyDragging',
 
+    moveToTopPending:         NO,   // Set this property to move label to top in the labelSet. Label is moved to top on mouse-up
+
     width: function () {
       var textWidth = this.get('textWidth');
       if (textWidth) {
@@ -1000,8 +1002,20 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       if (parentOfLabel.kindOf(Smartgraphs.LabelSetView)) {
         var topAnnotationsHolder = parentOfLabel.get('parentView');
         topAnnotationsHolder.appendChild(parentOfLabel);
+        var labels = parentOfLabel.getPath('item.labels');
+        for (var i = 0; i < labels.length(); i++) {
+          var label = labels.objectAt(i);
+          if (this.getPath('labelView.item.url') === label.get('url')) {
+            // If label is already at top then no need to move it
+            if (i != labels.length() - 1) {
+              this.set('moveToTopPending', YES);
+            }
+            break;
+          }
+        }
       }
-      // To bring the label on top.
+      // To temporarily bring the label on top. Actual moving on top is deferred until mouse-up
+      // is encountered to avoid highlighting issues
       var labelView = this.get('labelView');
       parentOfLabel.appendChild(labelView);
 
@@ -1088,6 +1102,19 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       this._isDragging = NO;
 
       this.$().css('cursor', 'default');
+
+      // Bring label on top if it was pending
+      if (this.get('moveToTopPending')) {
+        this.set('moveToTopPending', NO);
+        var parentOfLabel = this.getPath('labelView.parentView');
+        // If the label is child of LabelSet, bring LabelSet on the top.
+        if (parentOfLabel.kindOf(Smartgraphs.LabelSetView)) {
+          var labels = parentOfLabel.getPath('item.labels');
+          var label = this.getPath('parentLabelView.item');
+          labels.removeObject(label);
+          labels.pushObject(label);
+        }
+      }
       return YES;
     },
 
