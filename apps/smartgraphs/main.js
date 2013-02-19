@@ -65,12 +65,16 @@ Smartgraphs.sendGaEvent = function(key,value) {
     return;
   }
   Smartgraphs.sendGAEvent_last_hash_key = hash_key;
-  if (!!_gaq) {
+  if (!!_gaq && window.location.hostname !== 'localhost') {
     _gaq.push(["_trackEvent", "SmartGraphs Activities", key, value]);
     console.log("sent analytics %s", hash_key);
   }
-  else {
-    console.log("couldn't send analytics %s", hash_key);
+  else if (window.location.hostname === 'localhost') {
+    console.log("Didn't send analytics: running on localhost. Would have sent %s", hash_key);
+  } else if (!_gaq) {
+    console.log("Didn't send analytics: _gaq not defined. Would have sent %s", hash_key);
+  } else {
+    console.log("Couldn't send analytics: unsure why. Would have sent %s", hash_key);
   }
 };
 
