@@ -57,7 +57,13 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
   isRemovalEnabledBinding: '*item.isRemovalEnabled',
   isEditableBinding: '*item.isEditable',
-  
+
+  calculatedTextWidthBinding: '*item.calculatedTextWidth',
+  calculatedTextHeightBinding: '*item.calculatedTextHeight',
+
+  maxTextFieldWidthBinding: '*item.maxTextFieldWidth',
+  maxCharactersBinding: '*item.maxCharacters',
+
   // graphScale isn't a real property, just a token we use to invalidate (xCoord, yCoord)
   xCoord: function () {
     return this.get('graphView').coordinatesForPoint(this.get('x'), 0).x;

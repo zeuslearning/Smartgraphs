@@ -20,7 +20,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
   textFieldView:       null,  // defined on init
   fontSize:            12,
 
-  displayProperties:   'displayText textColor displayText x y raphTextY isEditing width height'.w(),
+  displayProperties:   'displayText textColor x y raphTextY isEditing width height'.w(),
 
   labelBodyView:       SC.outlet('parentView'),
   labelView:           SC.outlet('labelBodyView.parentLabelView'),
@@ -36,13 +36,19 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
   leftMarginBinding:   '.labelBodyView.leftMargin',
   topMarginBinding:    '.labelBodyView.topMargin',
 
+  maxTextFieldWidthBinding: '.labelView.maxTextFieldWidth',
+  maxCharactersBinding: '.labelView.maxCharacters',
+
+  calculatedTextHeightBinding: '.labelView.calculatedTextHeight',
+  calculatedTextWidthBinding: '.labelView.calculatedTextWidth',
+
   // Bounds need to be calculated by Raphael:
   minHeight: function () {
-    return this.get('isEditing') ? this.get('fontSize') * 1.2 * 3 : 18;
+    return this.get('isEditing') ? this.get('fontSize') * 1.2 * 3: 18;
   }.property('isEditing').cacheable(),
 
   minWidth: function () {
-    return this.get('isEditing') ? this.get('fontSize') * 1.2 * 10 : 80;
+    return this.get('isEditing') ? this.get('maxTextFieldWidth') : 80;
   }.property('isEditing').cacheable(),
 
   // our parent view is going to modify our position
@@ -66,16 +72,79 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
   }.property('y', 'height').cacheable(),
 
   displayText: function () {
-    return this.get('text');
+    var text = this.get('text');
+    var arrWrappedText = [];
+
+    var maxCharacters = 0;
+    var raphaelText = this.get('raphaelObject');
+    if (text && raphaelText) {
+      var counter = 0, i = 0;
+      while (i < text.length) {
+        if (text.charAt(i) === '\n') {
+          text = text.replace('\n', ' ');
+        }
+
+        raphaelText.attr('text', text.substring(0, i + 1));
+        var bounds = raphaelText.getBBox();
+        var textWidth = bounds.width;
+        var textHeight = bounds.height;
+
+        if (textWidth > (this.get('maxTextFieldWidth'))) {
+          maxCharacters = i;
+          var textParts = this.getTextPartsOnLineBreak(text, maxCharacters);
+          
+          arrWrappedText[counter] = textParts.beforeText;
+          text = textParts.afterText;
+          counter++;
+          i = 0;
+        }
+        else {
+          arrWrappedText[counter] = text;
+        }
+        i++;
+      }
+
+      text = '';
+      for (var j = 0; j < arrWrappedText.length; j++) {
+        if (j === arrWrappedText.length - 1) {
+          text += arrWrappedText[j];
+        }
+        else {
+          text += arrWrappedText[j] + '\n';
+        }
+      }
+    }
+    return text;
   }.property('text').cacheable(),
+
+  getTextPartsOnLineBreak: function (text, index) {
+    var maxLimit = index;
+    for (var pos = index, cnt = 0; text.charAt(pos) != " "; pos--, cnt++) {
+      index = pos;
+      if (cnt === maxLimit) {
+        index = maxLimit - 1;
+        break;
+      }
+    }
+    return { beforeText : text.substring(0, index), afterText: text.substring(index + 1, text.length) };
+  },
 
   init: function () {
     var labelView = this;
-
     sc_super();
+    var maxCharacters = labelView.getPath('labelView.item.maxCharacters');
 
     this.textFieldView = SC.TextFieldView.create({
       isTextArea: YES,
+      maxLength: maxCharacters,
+      noOfLines: 1,
+
+      continuouslyUpdatesValue: YES,
+
+      init: function () {
+        sc_super();
+        this.set('maxLength', maxCharacters);
+      },
 
       // For some reason, SC.TextFieldView doesn't implement touchStart and touchEnd. In this particular case,
       // the result is that the Mobile Safari keyboard does not show up in response to touches. The touchStart and
@@ -98,6 +167,69 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
             labelView.commitEditing();
           }
         }
+      },
+
+      getTextLayout: function (textArea) {
+        var h = 0, w = 0;
+        var div = document.createElement('div');
+        document.body.appendChild(div);
+
+        $(div).css({
+          position: 'absolute',
+          display: 'none',
+          height: 'auto',
+          width: 'auto'
+        });
+
+        $(div).html(this.get('value'));
+
+        var styles = ['font-size', 'font-style', 'font-weight', 'font-family', 'line-height', 'text-transform', 'letter-spacing'];
+        $(styles).each(function () {
+          var s = this.toString();
+          $(div).css(s, $(textArea).css(s));
+        });
+
+        h = $(div).outerHeight();
+        w = $(div).outerWidth();
+
+        $(div).remove();
+        return { width: w, height: h };
+      },
+
+
+      fieldValueDidChange: function () {
+        sc_super();
+        var noOfLines = this.get('noOfLines');
+        if (!labelView.get('isEditing')) {
+          return;
+        }
+        labelView.set('text', '');
+        var text = this.get('value');
+
+        var maxWidth = labelView.get('maxTextFieldWidth');
+
+        var textArea = this.$input()[0];
+        $(textArea).css('overflow', 'hidden');
+        var newLayout = this.getTextLayout(textArea);
+        var calculatedTextWidth = 0;
+        var calculatedTextHeight;
+        if (newLayout.width > (maxWidth)) {
+          calculatedTextWidth = maxWidth;
+          noOfLines = parseInt(newLayout.width / maxWidth) + 1;
+          this.set('noOfLines', noOfLines);
+        }
+        else {
+          calculatedTextWidth = newLayout.width;
+          this.set('noOfLines', 1);
+        }
+
+        calculatedTextHeight = this.get('noOfLines') * newLayout.height; 
+
+        labelView.beginPropertyChanges();
+        labelView.set('calculatedTextHeight', calculatedTextHeight);
+        labelView.set('calculatedTextWidth', calculatedTextWidth);
+        labelView.endPropertyChanges();
+
       },
 
       willLoseFirstResponder: function () {
@@ -128,15 +260,16 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
         width           = this.get('width'),
         height          = this.get('height'),
         text            = this.get('displayText'),
+        self = this,
 
-        attrs = {
-          x:             x,
-          y:             raphTextY,
-          fill:          this.get('textColor'),
-          text:          text,
-          'font-size':   this.get('fontSize'),
-          'text-anchor': 'start'
-        },
+    attrs = {
+      x:             x,
+      y:             raphTextY,
+      fill:          this.get('textColor'),
+      text:          text,
+      'font-size':   this.get('fontSize'),
+      'text-anchor': 'start'
+    },
 
         isEditing       = this.get('isEditing'),
 
@@ -148,7 +281,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
           var offset;
 
           if (isEditing) {
-            textFieldView.set('value', text);
+           // textFieldView.set('value', self.get('text'));
             offset = graphCanvasView.$().offset();
             textFieldView.set('layout', {
               top:    offset.top + y,
@@ -209,15 +342,21 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
     if (raphaelText) {
       raphaelText.attr('text', this.get('displayText'));
       bounds = raphaelText.getBBox();
-      width  = bounds.width  < minWidth  ? minWidth  : bounds.width;
-      height = bounds.height < minHeight ? minHeight : bounds.height;
+      if (this.get('isEditing')) {
+        width  = this.get('calculatedTextWidth') < minWidth  ? minWidth  : this.get('calculatedTextWidth');
+        height = this.get('calculatedTextHeight') < minHeight ? minHeight : this.get('calculatedTextHeight');
+      }
+      else {
+        width  = bounds.width < minWidth  ? minWidth  : bounds.width;
+        height = bounds.height < minHeight ? minHeight : bounds.height;
+      }
 
       this.beginPropertyChanges();
       this.set('width',  width);
       this.set('height', height);
       this.endPropertyChanges();
     }
-  }.observes('displayText', 'minWidth', 'minHeight'),
+  }.observes('displayText', 'minWidth', 'minHeight', 'calculatedTextWidth', 'calculatedTextHeight'),
 
   beginEditing: function () {
     var self = this;
@@ -229,6 +368,8 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
 
     if (this.get('isEditable')) {
       this.set('isEditing', YES);
+      this.setPath('textFieldView.value', self.get('text'));
+      self.set('text', '');
       $('body').bind('mousedown', this.mousedownHandler).bind('touchstart', this.mousedownHandler);
       return YES;
     }
