@@ -119,9 +119,7 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
 
     mouseDownAtPoint: function (context, args) {
       var toolRoot = this.get('toolRoot');
-      if (toolRoot.closeLabelIfInEditing()) {
-        return YES;
-      }
+      toolRoot.closeLabelIfInEditing();
 
       if (!this.parentState.markOnDataPoints) {
         this.get('statechart').sendAction('addLabel', this, {x: args.x, y: args.y, shouldMarkTargetPoint: YES});
@@ -139,9 +137,7 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
 
     dataPointSelected: function (context, args) {
       var toolRoot = this.get('toolRoot');
-      if (toolRoot.closeLabelIfInEditing()) {
-        return YES;
-      }
+      toolRoot.closeLabelIfInEditing();
       this.get('statechart').sendAction('addLabel', this, {x: args.x, y: args.y, shouldMarkTargetPoint: NO});
       return YES;
     },
@@ -204,9 +200,7 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
         },
         dataPointSelected: function (context, args) {
           var toolRoot = this.get('toolRoot');
-          if (toolRoot.closeLabelIfInEditing()) {
-            return YES;
-          }
+          toolRoot.closeLabelIfInEditing();
           var allowCoordinatesChange = this.getPath('toolRoot.allowCoordinatesChange');
           if (!allowCoordinatesChange) {
             return;
@@ -223,9 +217,7 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
         },
         mouseDownAtPoint: function (context, args) {
           var toolRoot = this.get('toolRoot');
-          if (toolRoot.closeLabelIfInEditing()) {
-            return YES;
-          }
+          toolRoot.closeLabelIfInEditing();
           var allowCoordinatesChange = this.getPath('toolRoot.allowCoordinatesChange');
           if (!allowCoordinatesChange) {
             return;
@@ -288,7 +280,7 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
           label.set('shouldMarkTargetPoint', args.shouldMarkTargetPoint);
           label.set('isEditable', YES);
 
-          var nMaxNoOfLabels = this.getPath('toolRoot.maxNoOfLabels'); 
+          var nMaxNoOfLabels = this.getPath('toolRoot.maxNoOfLabels');
           if (nMaxNoOfLabels) {
             var nTotalLabels = labelSet.getPath('labels.length');
             if (nTotalLabels === nMaxNoOfLabels) {
