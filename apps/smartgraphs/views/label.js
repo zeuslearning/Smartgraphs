@@ -842,7 +842,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
           raphaelPath,
           arrowP;
 
-      if (SC.none(xCoord) || SC.none(yCoord) || SC.none(anchorXCoord) || SC.none(anchorYCoord)) {
+      if (length < startRadius || SC.none(xCoord) || SC.none(yCoord) || SC.none(anchorXCoord) || SC.none(anchorYCoord)) {
         pathString = 'M 0 0';
       }
       else {
