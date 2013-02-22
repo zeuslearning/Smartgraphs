@@ -1026,13 +1026,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       parentOfLabel.appendChild(labelView);
 
       this.setPath('parentLabelView.isBodyDragging', YES);
-      if (this.labelTextView.textFieldView.get('value') || this.labelTextView.textFieldView.get('value') === "") {
-        var self = this;
-        // Wrapping this in the run loop so that we get updated height and width before starting the drag.
-        SC.run(function () {
-          self.labelTextView.set('text', self.labelTextView.textFieldView.get('value'));
-        });
-      }
+
       this._isDragging = YES;
       this._dragX = evt.pageX;
       this._dragY = evt.pageY;
