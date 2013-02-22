@@ -137,7 +137,6 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
     this.textFieldView = SC.TextFieldView.create({
       isTextArea: YES,
       maxLength: maxCharacters,
-      noOfLines: 1,
 
       continuouslyUpdatesValue: YES,
 
@@ -196,10 +195,8 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
         return { width: w, height: h };
       },
 
-
       fieldValueDidChange: function () {
         sc_super();
-        var noOfLines = this.get('noOfLines');
         if (!labelView.get('isEditing')) {
           return;
         }
@@ -215,21 +212,18 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
         var calculatedTextHeight;
         if (newLayout.width > (maxWidth)) {
           calculatedTextWidth = maxWidth;
-          noOfLines = parseInt(newLayout.width / maxWidth) + 1;
-          this.set('noOfLines', noOfLines);
         }
         else {
           calculatedTextWidth = newLayout.width;
-          this.set('noOfLines', 1);
         }
-
-        calculatedTextHeight = this.get('noOfLines') * newLayout.height; 
+        // noOfLines - This value will decide how many lines to show in the text-area.
+        var noOfLines = Math.ceil(textArea.scrollHeight / (labelView.get('fontSize') * 1.2));
+        calculatedTextHeight = noOfLines * newLayout.height; 
 
         labelView.beginPropertyChanges();
         labelView.set('calculatedTextHeight', calculatedTextHeight);
         labelView.set('calculatedTextWidth', calculatedTextWidth);
         labelView.endPropertyChanges();
-
       },
 
       willLoseFirstResponder: function () {
