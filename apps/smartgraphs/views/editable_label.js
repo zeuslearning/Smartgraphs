@@ -126,7 +126,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
         break;
       }
     }
-    return { beforeText : text.substring(0, index), afterText: text.substring(index + 1, text.length) };
+    return { beforeText : text.substring(0, index), afterText: text.substring(index, text.length) };
   },
 
   init: function () {
