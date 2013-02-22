@@ -120,7 +120,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
       }
     }
     return text;
-  }.property('text').cacheable(),
+  }.property('text', 'isEditing').cacheable(),
 
   getTextPartsOnLineBreak: function (text, index) {
     var maxLimit = index;
@@ -265,7 +265,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
       x:             x,
       y:             raphTextY,
       fill:          this.get('textColor'),
-      text:          text,
+      text:          text ? text : " ",     // Add a space when no text is there as IE8 shows undefined for blank text.
       'font-size':   this.get('fontSize'),
       'text-anchor': 'start'
     },
@@ -339,7 +339,8 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
         height;
 
     if (raphaelText) {
-      raphaelText.attr('text', this.get('displayText'));
+      var text = this.get('displayText');
+      raphaelText.attr('text', text ? text : " ");    // Add a space when no text is there as IE8 shows undefined for blank text.
       bounds = raphaelText.getBBox();
       if (this.get('isEditing')) {
         width  = this.get('calculatedTextWidth') < minWidth  ? minWidth  : this.get('calculatedTextWidth');
@@ -378,12 +379,34 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
   _mousedownHandler: function (evt) {
     var labelViewLayer = this.getPath('labelView.layer');
 
-    if ( evt.target !== this.textFieldView.$().find('textarea')[0] &&
+    if (evt.target !== this.textFieldView.$().find('textarea')[0] &&
          evt.target !== labelViewLayer &&
-         !$.contains(labelViewLayer, evt.target) )
-    {
+         !$.contains(labelViewLayer, evt.target)) {
       $('body').unbind('mousedown', this.mousedownHandler).unbind('touchstart', this.mousedownHandler);
       this.textFieldView.resignFirstResponder(); // see if this works better than jQuery's blur or focusout...
+      
+      var topAnnotationsHolder = this.getPath('graphView.topAnnotationsHolder');
+      var topAnnotationChildViews = topAnnotationsHolder.get('childViews');
+      var stopEvent = true;
+
+      for (var i = 0; i < topAnnotationChildViews.length; i++) {
+        var childLabel = topAnnotationChildViews[i];
+        if (childLabel.kindOf(Smartgraphs.LabelSetView) || childLabel.kindOf(Smartgraphs.LabelView)) {
+          var view = childLabel.get('layer');
+          if (view === evt.target || view.contains(evt.target)) {
+            stopEvent = false;
+          }
+        }
+        
+      }
+      if (stopEvent) {
+        if (evt.originalEvent.stopPropagation) {
+          evt.originalEvent.stopPropagation();
+        }
+        else {
+          evt.stopPropagation();
+        }
+      }
     }
   },
 
