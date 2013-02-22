@@ -72,6 +72,11 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
   }.property('y', 'height').cacheable(),
 
   displayText: function () {
+    // Returning the displayText as just a space so that when dragging in editing mode,
+    // it won't display two text in slow browsers
+    if (this.get('isEditing')) {
+      return ' ';
+    }
     var text = this.get('text');
     var arrWrappedText = [];
 
@@ -363,7 +368,6 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
     if (this.get('isEditable')) {
       this.set('isEditing', YES);
       this.setPath('textFieldView.value', self.get('text'));
-      self.set('text', '');
       $('body').bind('mousedown', this.mousedownHandler).bind('touchstart', this.mousedownHandler);
       return YES;
     }
@@ -389,8 +393,8 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
 
   commitEditing: function () {
     $('body').unbind('mousedown', this.mousedownHandler).unbind('touchstart', this.mousedownHandler);
-    this.set('text', this.textFieldView.get('value'));
     this.set('isEditing', NO);
+    this.set('text', this.textFieldView.get('value'));
     this.textFieldView.resignFirstResponder();
   }
 
