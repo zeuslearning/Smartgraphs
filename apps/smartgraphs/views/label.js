@@ -988,7 +988,9 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     },
 
     doubleClick: function (evt) {
-      this.labelTextView.beginEditing();
+      if (!this.getPath('labelTextView.isEditing')) {
+        this.labelTextView.beginEditing();
+      }
       return YES;
     },
 
