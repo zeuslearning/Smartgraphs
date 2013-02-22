@@ -259,6 +259,11 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
       exitState: function () {
         var labelSet = this.getPath('toolRoot.annotation');
         labelSet.disableRemoval();
+        var arrLabels = labelSet.get('labels');
+        for (var i = 0; i < arrLabels.length(); i++)
+        {
+          arrLabels.objectAt(i).set('isEditable', NO);
+        }
         Smartgraphs.labelTool.addLabelsFinished(this);
       },
 
