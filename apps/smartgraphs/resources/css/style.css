@@ -319,3 +319,10 @@ body.sc-theme {
 {
   border-radius: 5px;
 }
+
+/* hides most of the SVG graph when this classname is applied to a parent */
+.hideGraph svg g,
+.hideGraph svg text,
+.hideGraph svg path {
+  visibility: hidden;
+}
