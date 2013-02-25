@@ -1828,5 +1828,5 @@ Smartgraphs.GraphView = SC.View.extend(
           }
         })
       })
-    })
+  })
 });
