@@ -275,12 +275,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
           break;
         }
       }
-      
       if (j === arrSortedLayout.length) {
         arrSortedLayout.push(position);
       }
     }
-    
     return arrSortedLayout;
   },
 
@@ -292,7 +290,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     var originalPos = jQuery.extend({}, objPos);
 
     this.checkConnectingLineLength(objPos);
-    this.avoidAxes(objPos);
     this.getLabelBodyWithinGraphBounds(objPos);
     if (!this.checkOverlapWithOtherLabels(arrLabelsLayout, objPos) && this.giveScore(arrLabelsLayout, objPos) === 0) {
       return objPos;
@@ -307,7 +304,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       for (j = 0; j < priorityPositionList.length; j++) {
         objPos = this.getNewPostionLayout(labelPosRelative, objPos, priorityPositionList[j]);
         this.checkConnectingLineLength(objPos);
-        this.avoidAxes(objPos);
         this.getLabelBodyWithinGraphBounds(objPos);
         if (!this.checkOverlapWithOtherLabels(arrLabelsLayout, objPos) && this.giveScore(arrLabelsLayout, objPos) === 0) {
           return objPos;
@@ -327,7 +323,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       }
 
       // Threshold is based on allowing some criterias. 14 => Allow small length of line, allow axis overlap and allow 1/4th area overlap.
-      var threshold = 14;
+      var threshold = 6;
       var nDirectionChange = 0;
       var prevScore = score;
       var step = 3;
@@ -400,31 +396,28 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     var minDistance = this.get('minDistanceFromPoint');
 
     if (!this.isLabelWithinGraph(position)) {
-      score += 128;
+      score += 64;
     }
     if (bDetailed) {
       var overlapArea = this.getOverlapArea(arrLabelsLayout, position);
       var labelArea = position.width * position.height;
       if (overlapArea > labelArea * 3 / 4) {
-        score += 64;
-      }
-      else if (overlapArea > labelArea / 2) {
         score += 32;
       }
-      else if (overlapArea > labelArea / 4) {
+      else if (overlapArea > labelArea / 2) {
         score += 16;
       }
-      else if (overlapArea > 0) {
+      else if (overlapArea > labelArea / 4) {
         score += 8;
+      }
+      else if (overlapArea > 0) {
+        score += 4;
       }
     }
     else {
       if (this.checkOverlapWithOtherLabels(arrLabelsLayout, position)) {
-        score += 8;
+        score += 4;
       }
-    }
-    if (!this.isLabelWithinAxes(position)) {
-      score += 4;
     }
     if (Math.round(this.getConnectingLineLength(position)) < minDistance) {
       score += 2;
@@ -448,50 +441,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     }
     return area;
   },
-
-  // Check overlapping with axes
-  avoidAxes: function (rect) {
-    var graphView = this.get('graphView');
-    var strokeWidth = this.get('labelBodyView').strokeWidth();
-    var xAxis = graphView.get('xAxis');
-    var yAxis = graphView.get('yAxis');
-
-    var topLeft = graphView.coordinatesForPoint(xAxis.get('min'), yAxis.get('max'));
-    var bottomRight = graphView.coordinatesForPoint(xAxis.get('max'), yAxis.get('min'));
-
-    var left = topLeft.x + 2 * strokeWidth;
-    var bottom = bottomRight.y;
-
-    if (rect.left < left) {
-      rect.left = left;
-      rect.right = rect.left + rect.width;
-    }
-
-    if (rect.bottom > bottom) {
-      rect.bottom = bottom;
-      rect.top = rect.bottom - rect.height;
-    }
-  },
-
-  isLabelWithinAxes: function (rect) {
-    var graphView = this.get('graphView');
-    var strokeWidth = this.get('labelBodyView').strokeWidth();
-    var xAxis = graphView.get('xAxis');
-    var yAxis = graphView.get('yAxis');
-
-    var topLeft = graphView.coordinatesForPoint(xAxis.get('min'), yAxis.get('max'));
-    var bottomRight = graphView.coordinatesForPoint(xAxis.get('max'), yAxis.get('min'));
-
-    var left = topLeft.x + 2 * strokeWidth;
-    var bottom = bottomRight.y;
-
-    if ((rect.left < left) || (rect.bottom > bottom)) {
-      return false;
-    }
-
-    return true;
-  },
-
 
   // Check connecting line's length
   checkConnectingLineLength: function (rect) {
@@ -539,8 +488,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
   getLabelBodyWithinGraphBounds: function (rect) {
     var graphView = this.get('graphView');
-    var strokeWidth = this.get('labelBodyView').strokeWidth();
-    var padding = graphView.get('padding');
     var xAxis = graphView.get('xAxis');
     var yAxis = graphView.get('yAxis');
 
@@ -548,10 +495,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     var bottomRight = graphView.coordinatesForPoint(xAxis.get('max'), yAxis.get('min'));
 
     var bounds = {};
-    bounds.left = topLeft.x - padding.left;
-    bounds.right = bottomRight.x + padding.right - 2 * strokeWidth;
-    bounds.top = topLeft.y - padding.top;
-    bounds.bottom = bottomRight.y + padding.bottom - 2 * strokeWidth;
+    bounds.left = topLeft.x;
+    bounds.right = bottomRight.x;
+    bounds.top = topLeft.y;
+    bounds.bottom = bottomRight.y;
 
     if (rect.left < bounds.left) {
       rect.left = bounds.left;
@@ -591,8 +538,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
   isLabelWithinGraph: function (rect) {
     var graphView = this.get('graphView');
-    var strokeWidth = this.get('labelBodyView').strokeWidth();
-    var padding = graphView.get('padding');
     var xAxis = graphView.get('xAxis');
     var yAxis = graphView.get('yAxis');
 
@@ -600,10 +545,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     var bottomRight = graphView.coordinatesForPoint(xAxis.get('max'), yAxis.get('min'));
 
     var bounds = {};
-    bounds.left = topLeft.x - padding.left;
-    bounds.right = bottomRight.x + padding.right - 2 * strokeWidth;
-    bounds.top = topLeft.y - padding.top;
-    bounds.bottom = bottomRight.y + padding.bottom - 2 * strokeWidth;
+    bounds.left = topLeft.x;
+    bounds.right = bottomRight.x;
+    bounds.top = topLeft.y;
+    bounds.bottom = bottomRight.y;
 
     if ((rect.left < bounds.left) || (rect.right > bounds.right) || (rect.top < bounds.top) || (rect.bottom > bounds.bottom)) {
       return false;
@@ -1050,13 +995,18 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       this._dragX = evt.pageX;
       this._dragY = evt.pageY;
       var graphView = this.getPath('graphView');
+      var xAxis = graphView.get('xAxis');
+      var yAxis = graphView.get('yAxis');
+      var inputAreaTopLeft = graphView.coordinatesForPoint(xAxis.get('min'), yAxis.get('max'));
+      var inputAreaBottomRight = graphView.coordinatesForPoint(xAxis.get('max'), yAxis.get('min'));
+      var frameWidth = inputAreaBottomRight.x - inputAreaTopLeft.x;
+      var frameHeight = inputAreaBottomRight.y - inputAreaTopLeft.y;
 
-      var frameWidth = graphView.$().width();
-      var frameHeight = graphView.$().height();
+      var labelTop = this.get('bodyYCoord') - inputAreaTopLeft.y;
+      var labelLeft = this.get('bodyXCoord') - inputAreaTopLeft.x;
       var labelWidth = this.width();
       var labelHeight = this.height();
-      var labelTop = this.get('bodyYCoord');
-      var labelLeft = this.get('bodyXCoord');
+
       var xOffset = this.get('xOffset');
       var yOffset = this.get('yOffset');
       var widthBound = frameWidth - labelWidth;
@@ -1090,19 +1040,19 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
           currXOffset, currYOffset;
 
       currXOffset = xOffset + evt.pageX - this._dragX;
-      if (evt.pageX < info.xMIN) {
+      if (evt.pageX < info.xMIN || currXOffset < info.minXOffset) {
         currXOffset = info.minXOffset;
       }
-      if (evt.pageX > info.xMAX) {
+      if (evt.pageX > info.xMAX || currXOffset > info.maxXOffset) {
         currXOffset = info.maxXOffset;
       }
       
 
       currYOffset = yOffset + evt.pageY - this._dragY;
-      if (evt.pageY < info.yMIN) {
+      if (evt.pageY < info.yMIN || currYOffset < info.minYOffset) {
         currYOffset = info.minYOffset;
       }
-      if (evt.pageY > info.yMAX) {
+      if (evt.pageY > info.yMAX || currYOffset > info.maxYOffset) {
         currYOffset = info.maxYOffset;
       }
 
