@@ -571,6 +571,23 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       rect.top = rect.bottom - rect.height;
     }
   },
+  // Checks and limits the label within bounds while in edit mode. 
+  limitWithinBounds: function () {
+    var left = this.get('bodyXCoord'),
+        top = this.get('bodyYCoord'),
+        width = this.get('labelBodyWidth'),
+        height = this.get('labelBodyHeight'),
+        objPos = { left: left, right: left + width, top: top, bottom: top + height, width: width, height: height };
+    if (left && top && width && height) {
+      if (!this.isLabelWithinGraph(objPos)) {
+        this.getLabelBodyWithinGraphBounds(objPos);
+        this.beginPropertyChanges();
+        this.set('xOffset', objPos.left - this.get('xCoord'));
+        this.set('yOffset', objPos.bottom - this.get('yCoord'));
+        this.endPropertyChanges();
+      }
+    }
+  }.observes('labelBodyWidth', 'labelBodyHeight'),
 
   isLabelWithinGraph: function (rect) {
     var graphView = this.get('graphView');
@@ -1229,9 +1246,9 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       
       touchEnd: function (evt) {
         var offset = this.get('graphCanvasView').$().offset();
-        
+
         this.set('isHighlighted', NO);
-        
+
         if (   Math.abs(evt.pageX - this.get('centerX') - offset.left) < 50 
             && Math.abs(evt.pageY - this.get('centerY') - offset.top)  < 50)
         {
