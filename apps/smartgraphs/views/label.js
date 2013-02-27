@@ -54,6 +54,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   minDistanceFromPointBinding: '*item.minDistanceFromPoint',
 
   isPositionUpdateRequiredBinding: '*item.isPositionUpdateRequired',
+  allowCoordinatesChangeBinding: '*item.allowCoordinatesChange',
 
   isRemovalEnabledBinding: '*item.isRemovalEnabled',
   isEditableBinding: '*item.isEditable',
@@ -627,6 +628,29 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     this.notifyPropertyChange('graphScale');
   },
 
+  bringLabelOnTop: function () {
+  var parentOfLabel = this.get('parentView');
+  // If the label is child of LabelSet, bring LabelSet on the top.
+  if (parentOfLabel.kindOf(Smartgraphs.LabelSetView)) {
+    var topAnnotationsHolder = parentOfLabel.get('parentView');
+    topAnnotationsHolder.appendChild(parentOfLabel);
+    var labels = parentOfLabel.getPath('item.labels');
+    for (var i = 0; i < labels.length(); i++) {
+      var label = labels.objectAt(i);
+      if (this.getPath('item.url') === label.get('url')) {
+        // If label is already at top then no need to move it
+        if (i != labels.length() - 1) {
+          this.set('moveToTopPending', YES);
+        }
+        break;
+      }
+    }
+  }
+  // To temporarily bring the label on top. Actual moving on top is deferred until mouse-up
+  // is encountered to avoid highlighting issues
+  parentOfLabel.appendChild(this);
+  },
+
   childViews: 'targetPointView connectingLineView labelBodyView'.w(),
 
   targetPointView: RaphaelViews.RaphaelView.design(Smartgraphs.ArrowDrawing, {
@@ -640,6 +664,16 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     strokeBinding:       '.labelView.stroke',
     markerStyleBinding:  '.labelView.markerStyle',
     markerSizeBinding:   '.labelView.markerSize',
+    didCreateLayer: function () {
+      sc_super();
+      var allowCoordinatesChange = this.getPath('labelView.allowCoordinatesChange');
+      if (allowCoordinatesChange) {
+        this.$().css('cursor', 'move');
+      }
+      else {
+        this.$().css('cursor', 'default');
+      }
+    },
 
     // Using a computed property for 'isVisible' here
     // because the following locks up the jasmine test for some reason:
@@ -750,6 +784,127 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       elements.push('M', x , y);
       elements.push('L', x + diameter, y + diameter);
       return elements.join(' ');
+    },
+    mouseDown: function (evt) {
+      this.startDrag(evt);
+      return YES;
+    },
+
+    touchStart: function (evt) {
+      this.startDrag(evt);
+      return YES;
+    },
+
+    mouseUp: function (evt)  { return this._mouseUpOrTouchEnd(evt); },
+    touchEnd: function (evt) { return this._mouseUpOrTouchEnd(evt); },
+
+    _mouseUpOrTouchEnd: function (evt) {
+      var allowCoordinatesChange = this.getPath('labelView.allowCoordinatesChange');
+      if (allowCoordinatesChange === undefined || !allowCoordinatesChange) {
+        return YES;
+      }
+      this.endDrag(evt);
+      var now      = new Date().getTime(),// ms
+          interval = 202,                 // ms
+          maxTime  = 200;                 // ms
+
+      if (typeof this.lastUp != 'undefined' && this.lastUp) {
+        interval  = now - this.lastUp;
+        if (interval < maxTime) {
+          return YES;
+        }
+      }
+      this.lastUp = now;
+      return NO;
+    },
+
+    mouseDragged: function (evt) {
+      this.drag(evt);
+      return YES;
+    },
+
+    touchesDragged: function (evt) {
+      this.drag(evt);
+      return YES;
+    },
+    
+    startDrag: function (evt) {
+      var allowCoordinatesChange = this.getPath('labelView.allowCoordinatesChange');
+      if (allowCoordinatesChange === undefined || !allowCoordinatesChange) {
+        return YES;
+      }
+      this.setPath('labelView.isBodyDragging', YES);
+
+      var labelView = this.get('labelView');
+      labelView.bringLabelOnTop();
+
+      this._initialLabelPosition = {
+        offsetPointX: labelView.get('bodyXCoord'),
+        offsetPointY: labelView.get('bodyYCoord') + labelView.get('labelBodyHeight')
+      };
+      return YES;
+    },
+
+    setCursorStyle: function (cursorStyle) {
+      var previousCursorStyle = this.getPath('labelView.graphView.requestedCursorStyle');
+      if (previousCursorStyle !== cursorStyle) {
+        this.setPath('labelView.graphView.requestedCursorStyle', cursorStyle);
+      }
+    },
+
+    drag: function (evt) {
+      var allowCoordinatesChange = this.getPath('labelView.allowCoordinatesChange');
+      if (allowCoordinatesChange === undefined || !allowCoordinatesChange) {
+        return YES;
+      }
+      this.setCursorStyle('move');
+      /* Making coordsForEvent of graph view to work here ..... */
+      var graphView = this.getPath('labelView.graphView');
+      var graphOffset = graphView.$().offset(),
+          xAxis = graphView.get('xAxis'),
+          yAxis = graphView.get('yAxis'),
+          inputAreaTopLeft = graphView.coordinatesForPoint(xAxis.get('min'), yAxis.get('max')),
+          inputAreaBottomRight = graphView.coordinatesForPoint(xAxis.get('max'), yAxis.get('min')),
+          bounds = {xLeft: inputAreaTopLeft.x, yTop: inputAreaTopLeft.y, xRight: inputAreaBottomRight.x, yBottom: inputAreaBottomRight.y},
+          x           = evt.pageX - graphOffset.left,
+          y           = evt.pageY - graphOffset.top,
+          fraction;
+
+          // clip the event to the inputArea boundaries. Simple clipping seems to work fine
+      x = (x < bounds.xLeft) ? bounds.xLeft : (x > bounds.xRight)  ? bounds.xRight  : x;
+      y = (y < bounds.yTop)  ? bounds.yTop  : (y > bounds.yBottom) ? bounds.yBottom : y;
+      var logicalPoint = graphView.pointForCoordinates(x, y);
+
+      var labelView = this.get('labelView');
+      var initialPos = this._initialLabelPosition;
+
+      labelView.beginPropertyChanges();
+      labelView.set('x', logicalPoint.x);
+      labelView.set('y', logicalPoint.y);
+      labelView.set('xOffset', initialPos.offsetPointX - labelView.get('xCoord'));
+      labelView.set('yOffset', initialPos.offsetPointY - labelView.get('yCoord'));
+      labelView.endPropertyChanges();
+    },
+
+    mouseEntered: function () {
+      var allowCoordinatesChange = this.getPath('labelView.allowCoordinatesChange');
+      if (allowCoordinatesChange === undefined || !allowCoordinatesChange) {
+        return YES;
+      }
+      this.setCursorStyle('move');  
+    },
+
+    mouseExited: function () {
+      var allowCoordinatesChange = this.getPath('labelView.allowCoordinatesChange');
+      if (allowCoordinatesChange === undefined || !allowCoordinatesChange) {
+        return YES;
+      }
+      this.setCursorStyle('pointer');
+    },
+    endDrag: function (evt) {
+      this.setCursorStyle('pointer');
+      this.setPath('labelView.isBodyDragging', NO);
+      return YES;
     }
   }),
 
@@ -967,28 +1122,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     },
 
     startDrag: function (evt) {
-      var parentOfLabel = this.getPath('labelView.parentView');
-      // If the label is child of LabelSet, bring LabelSet on the top.
-      if (parentOfLabel.kindOf(Smartgraphs.LabelSetView)) {
-        var topAnnotationsHolder = parentOfLabel.get('parentView');
-        topAnnotationsHolder.appendChild(parentOfLabel);
-        var labels = parentOfLabel.getPath('item.labels');
-        for (var i = 0; i < labels.length(); i++) {
-          var label = labels.objectAt(i);
-          if (this.getPath('labelView.item.url') === label.get('url')) {
-            // If label is already at top then no need to move it
-            if (i != labels.length() - 1) {
-              this.set('moveToTopPending', YES);
-            }
-            break;
-          }
-        }
-      }
-      // To temporarily bring the label on top. Actual moving on top is deferred until mouse-up
-      // is encountered to avoid highlighting issues
       var labelView = this.get('labelView');
-      parentOfLabel.appendChild(labelView);
-
+      labelView.bringLabelOnTop();
       this.setPath('parentLabelView.isBodyDragging', YES);
 
       this._isDragging = YES;
