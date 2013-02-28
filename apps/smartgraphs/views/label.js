@@ -65,6 +65,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   maxTextFieldWidthBinding: '*item.maxTextFieldWidth',
   maxCharactersBinding: '*item.maxCharacters',
 
+  moveToTopPending:         NO,   // Set this property to move label to top in the labelSet. Label is moved to top on mouse-up
+
   // graphScale isn't a real property, just a token we use to invalidate (xCoord, yCoord)
   xCoord: function () {
     return this.get('graphView').coordinatesForPoint(this.get('x'), 0).x;
@@ -629,26 +631,41 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   },
 
   bringLabelOnTop: function () {
-  var parentOfLabel = this.get('parentView');
-  // If the label is child of LabelSet, bring LabelSet on the top.
-  if (parentOfLabel.kindOf(Smartgraphs.LabelSetView)) {
-    var topAnnotationsHolder = parentOfLabel.get('parentView');
-    topAnnotationsHolder.appendChild(parentOfLabel);
-    var labels = parentOfLabel.getPath('item.labels');
-    for (var i = 0; i < labels.length(); i++) {
-      var label = labels.objectAt(i);
-      if (this.getPath('item.url') === label.get('url')) {
-        // If label is already at top then no need to move it
-        if (i != labels.length() - 1) {
-          this.set('moveToTopPending', YES);
+    var parentOfLabel = this.get('parentView');
+    // If the label is child of LabelSet, bring LabelSet on the top.
+    if (parentOfLabel.kindOf(Smartgraphs.LabelSetView)) {
+      var topAnnotationsHolder = parentOfLabel.get('parentView');
+      topAnnotationsHolder.appendChild(parentOfLabel);
+      var labels = parentOfLabel.getPath('item.labels');
+      for (var i = 0; i < labels.length(); i++) {
+        var label = labels.objectAt(i);
+        if (this.getPath('item.url') === label.get('url')) {
+          // If label is already at top then no need to move it
+          if (i != labels.length() - 1) {
+            this.set('moveToTopPending', YES);
+          }
+          break;
         }
-        break;
       }
     }
-  }
   // To temporarily bring the label on top. Actual moving on top is deferred until mouse-up
   // is encountered to avoid highlighting issues
-  parentOfLabel.appendChild(this);
+    parentOfLabel.appendChild(this);
+  },
+
+  updateLabelPositionInRecords: function () {
+    // Bring label on top if it was pending
+    if (this.get('moveToTopPending')) {
+      this.set('moveToTopPending', NO);
+      var parentOfLabel = this.get('parentView');
+      // If the label is child of LabelSet, bring LabelSet on the top.
+      if (parentOfLabel.kindOf(Smartgraphs.LabelSetView)) {
+        var labels = parentOfLabel.getPath('item.labels');
+        var label = this.get('item');
+        labels.removeObject(label);
+        labels.pushObject(label);
+      }
+    }
   },
 
   childViews: 'targetPointView connectingLineView labelBodyView'.w(),
@@ -699,7 +716,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       return this.get('shouldMarkTargetPoint');
     }.property('shouldMarkTargetPoint').cacheable(),
 
-    renderCallback: function(raphaelCanvas, pathString, stroke) {
+    renderCallback: function (raphaelCanvas, pathString, stroke) {
       return raphaelCanvas.path(pathString).attr({ stroke: stroke });
     },
 
@@ -1016,8 +1033,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     bottomMargin:             12,
     isHighlightedBinding:     '.parentLabelView.isBodyDragging',
 
-    moveToTopPending:         NO,   // Set this property to move label to top in the labelSet. Label is moved to top on mouse-up
-
     width: function () {
       var textWidth = this.get('textWidth');
       if (textWidth) {
@@ -1204,21 +1219,9 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       this.drag(evt);
       this.setPath('parentLabelView.isBodyDragging', NO);
       this._isDragging = NO;
-
+      this.get('labelView').updateLabelPositionInRecords();
       this.$().css('cursor', 'default');
 
-      // Bring label on top if it was pending
-      if (this.get('moveToTopPending')) {
-        this.set('moveToTopPending', NO);
-        var parentOfLabel = this.getPath('labelView.parentView');
-        // If the label is child of LabelSet, bring LabelSet on the top.
-        if (parentOfLabel.kindOf(Smartgraphs.LabelSetView)) {
-          var labels = parentOfLabel.getPath('item.labels');
-          var label = this.getPath('parentLabelView.item');
-          labels.removeObject(label);
-          labels.pushObject(label);
-        }
-      }
       return YES;
     },
 
