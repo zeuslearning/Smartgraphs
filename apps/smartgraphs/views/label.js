@@ -41,6 +41,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   shouldMarkTargetPointBindingDefault: SC.Binding.oneWay(),
 
   isBodyDragging: NO,
+  isArrowDragging: NO,
 
   markerStyle: 'arrow', // 'arrow', 'x', or 'none'
   markerSize:  10,
@@ -668,6 +669,25 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     }
   },
 
+  mouseEntered: function (evt) {
+    var bArrowDragging = false;
+    if (this.get('isArrowDragging')) {
+      bArrowDragging = true;
+    }
+    else {
+      var labelInArrowDragMode = this.getPath('graphView.topAnnotationsHolder').getLabelInArrowDragMode();
+      if (labelInArrowDragMode) {
+        bArrowDragging = true;
+      }
+    }
+    if (bArrowDragging) {
+      this.$().css('cursor', 'move');
+    }
+    else {
+      this.$().css('cursor', 'default');
+    }
+  },
+
   childViews: 'targetPointView connectingLineView labelBodyView'.w(),
 
   targetPointView: RaphaelViews.RaphaelView.design(Smartgraphs.ArrowDrawing, {
@@ -875,6 +895,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
         return YES;
       }
       this.setCursorStyle('move');
+      this.setPath('labelView.isArrowDragging', YES);
       /* Making coordsForEvent of graph view to work here ..... */
       var graphView = this.getPath('labelView.graphView');
       var graphOffset = graphView.$().offset(),
@@ -908,7 +929,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       if (allowCoordinatesChange === undefined || !allowCoordinatesChange) {
         return YES;
       }
-      this.setCursorStyle('move');  
+      this.setCursorStyle('move');
     },
 
     mouseExited: function () {
@@ -920,6 +941,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     },
     endDrag: function (evt) {
       this.setCursorStyle('pointer');
+      this.get('labelView').updateLabelPositionInRecords();
+      this.setPath('labelView.isArrowDragging', NO);
       this.setPath('labelView.isBodyDragging', NO);
       return YES;
     }
@@ -1220,7 +1243,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       this.setPath('parentLabelView.isBodyDragging', NO);
       this._isDragging = NO;
       this.get('labelView').updateLabelPositionInRecords();
-      this.$().css('cursor', 'default');
+      this.$().css('cursor', ''); // Parent's cursor style will be inherited.
 
       return YES;
     },

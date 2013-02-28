@@ -457,6 +457,23 @@ Smartgraphs.GraphView = SC.View.extend(
       return false;
     },
 
+    getLabelInArrowDragMode: function () {
+      var topAnnotationsHolder = this;
+      var topAnnotationChildViews = topAnnotationsHolder.get('childViews');
+
+      for (var i = 0; i < topAnnotationChildViews.length; i++) {
+        var childLabel = topAnnotationChildViews[i];
+        if (childLabel.kindOf(Smartgraphs.LabelSetView)) {
+          return childLabel.get('labelInArrowDragMode');
+        }
+        else if (childLabel.kindOf(Smartgraphs.LabelView)) {
+          if (childLabel.get('isArrowDragging')) {
+            return childLabel;
+          }
+        }
+      }
+    },
+
     getLabelInEditMode: function () {
       var topAnnotationsHolder = this;
       var topAnnotationChildViews = topAnnotationsHolder.get('childViews');
