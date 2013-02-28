@@ -66,7 +66,7 @@ Smartgraphs.LABEL_TOOL = SC.State.extend(
   closeLabelIfInEditing: function () {
     var graphView = Smartgraphs.labelTool.graphViewForPane(this.get('pane'));
     var topAnnotationsHolder = graphView.getPath('topAnnotationsHolder');
-    var label = topAnnotationsHolder.getActiveLabel();
+    var label = topAnnotationsHolder.getLabelInEditMode();
     if (label) {
       label.commitEditing();
       return YES;
