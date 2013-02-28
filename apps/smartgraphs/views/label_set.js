@@ -27,7 +27,7 @@ Smartgraphs.LabelSetView = RaphaelViews.RaphaelCollectionView.extend({
     });
   },
 
-  activeLabel: function () {
+  labelInEditMode: function () {
     var childLabels = this.get('childViews');
     var noOfLabels = childLabels.length; 
     for (var i = 0; i < noOfLabels; i++) {

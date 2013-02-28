@@ -446,10 +446,10 @@ Smartgraphs.GraphView = SC.View.extend(
 
       this.$().mousedown(function (evt) {
         if (self.checkDescendent(evt.target, this)) {
-          var label = self.getActiveLabel();
+          var label = self.getLabelInEditMode();
           if (label) {
-            var activeLabelElement = label.get('layer');
-            if (!self.checkDescendent(evt.target, activeLabelElement)) {
+            var labelElementInEditMode = label.get('layer');
+            if (!self.checkDescendent(evt.target, labelElementInEditMode)) {
               label.commitEditing();
             }
           }
@@ -480,14 +480,14 @@ Smartgraphs.GraphView = SC.View.extend(
       return false;
     },
 
-    getActiveLabel: function () {
+    getLabelInEditMode: function () {
       var topAnnotationsHolder = this;
       var topAnnotationChildViews = topAnnotationsHolder.get('childViews');
 
       for (var i = 0; i < topAnnotationChildViews.length; i++) {
         var childLabel = topAnnotationChildViews[i];
         if (childLabel.kindOf(Smartgraphs.LabelSetView)) {
-          return childLabel.get('activeLabel');
+          return childLabel.get('labelInEditMode');
         }
         else if (childLabel.kindOf(Smartgraphs.LabelView)) {
           if (childLabel.get('isEditing')) {
@@ -1123,7 +1123,7 @@ Smartgraphs.GraphView = SC.View.extend(
            * So the loss of focus from label's textarea is checked here.
            */
           var topAnnotationsHolder = this.getPath('topAnnotationsHolder');
-          var label = topAnnotationsHolder.getActiveLabel();
+          var label = topAnnotationsHolder.getLabelInEditMode();
           if (label) {
             label.commitEditing();
             return;
