@@ -929,6 +929,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       if (allowCoordinatesChange === undefined || !allowCoordinatesChange) {
         return YES;
       }
+      var previousCursorStyle = this.getPath('labelView.graphView.requestedCursorStyle');
+      if (!this.getPath('labelView.isArrowDragging') && previousCursorStyle != 'move') {
+        this.set('previousCursorStyle', previousCursorStyle);
+      }
       this.setCursorStyle('move');
     },
 
@@ -937,10 +941,14 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       if (allowCoordinatesChange === undefined || !allowCoordinatesChange) {
         return YES;
       }
-      this.setCursorStyle('pointer');
+      if (!this.getPath('labelView.isArrowDragging')) {
+        this.setCursorStyle(this.get('previousCursorStyle'));
+      }
     },
     endDrag: function (evt) {
-      this.setCursorStyle('pointer');
+      if (this.getPath('labelView.isArrowDragging')) {
+        this.setCursorStyle(this.get('previousCursorStyle'));
+      }
       this.get('labelView').updateLabelPositionInRecords();
       this.setPath('labelView.isArrowDragging', NO);
       this.setPath('labelView.isBodyDragging', NO);
