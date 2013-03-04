@@ -894,6 +894,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       if (allowCoordinatesChange === undefined || !allowCoordinatesChange) {
         return YES;
       }
+      var previousCursorStyle = this.getPath('labelView.graphView.requestedCursorStyle');
+      if (previousCursorStyle != 'move') {
+        this.set('previousCursorStyle', previousCursorStyle);
+      }
       this.setCursorStyle('move');
       this.setPath('labelView.isArrowDragging', YES);
       /* Making coordsForEvent of graph view to work here ..... */
@@ -942,12 +946,18 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
         return YES;
       }
       if (!this.getPath('labelView.isArrowDragging')) {
-        this.setCursorStyle(this.get('previousCursorStyle'));
+        var previousCursorStyle = this.get('previousCursorStyle');
+        if (previousCursorStyle) {
+          this.setCursorStyle(this.get('previousCursorStyle'));
+        }
       }
     },
     endDrag: function (evt) {
       if (this.getPath('labelView.isArrowDragging')) {
-        this.setCursorStyle(this.get('previousCursorStyle'));
+        var previousCursorStyle = this.get('previousCursorStyle');
+        if (previousCursorStyle) {
+          this.setCursorStyle(this.get('previousCursorStyle'));
+        }
       }
       this.get('labelView').updateLabelPositionInRecords();
       this.setPath('labelView.isArrowDragging', NO);
