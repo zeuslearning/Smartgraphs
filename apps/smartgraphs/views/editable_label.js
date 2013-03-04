@@ -151,6 +151,8 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
       },
 
       didCreateLayer : function () {
+        sc_super();
+
         var view = this.$().find('textarea')[0];
         var self = this;
         // Handling the paste and cut events of the context menu
