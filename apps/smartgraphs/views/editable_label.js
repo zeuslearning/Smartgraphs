@@ -150,6 +150,21 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
         this.set('maxLength', maxCharacters);
       },
 
+      didCreateLayer : function () {
+        var view = this.$().find('textarea')[0];
+        var self = this;
+        // Handling the paste and cut events of the context menu
+        // We cannot handle the delete of context menu as there isn't any event for that.
+        view.onpaste = view.oncut = function () {
+          // Using timer so that we get the updated text.
+          setTimeout(function () {
+            self.fieldValueDidChange();
+            labelView.updateLayer();
+          }, 1);
+          return true;
+        };
+      },
+
       // For some reason, SC.TextFieldView doesn't implement touchStart and touchEnd. In this particular case,
       // the result is that the Mobile Safari keyboard does not show up in response to touches. The touchStart and
       // touchEnd implementations below seem to fix this.
@@ -200,8 +215,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
         return { width: w, height: h };
       },
 
-      fieldValueDidChange: function () {
-        sc_super();
+      updateText: function (textField) {
         if (!labelView.get('isEditing')) {
           return;
         }
@@ -210,9 +224,9 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
 
         var maxWidth = labelView.get('maxTextFieldWidth');
 
-        var textArea = this.$input()[0];
+        var textArea = textField.$input()[0];
         $(textArea).css('overflow', 'hidden');
-        var newLayout = this.getTextLayout(textArea);
+        var newLayout = textField.getTextLayout(textArea);
         var calculatedTextWidth = 0;
         var calculatedTextHeight;
         if (newLayout.width > (maxWidth)) {
@@ -229,6 +243,12 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
         labelView.set('calculatedTextHeight', calculatedTextHeight);
         labelView.set('calculatedTextWidth', calculatedTextWidth);
         labelView.endPropertyChanges();
+      },
+
+      fieldValueDidChange: function () {
+        sc_super();
+
+        this.updateText(this);
       },
 
       willLoseFirstResponder: function () {
