@@ -43,6 +43,10 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
   isBodyDragging: NO,
   isArrowDragging: NO,
 
+  isHighlighted: function () {
+    return this.get('isBodyDragging') || this.get('isArrowDragging');
+  }.property('isBodyDragging', 'isArrowDragging'),
+
   markerStyle: 'arrow', // 'arrow', 'x', or 'none'
   markerSize:  10,
 
@@ -720,7 +724,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     shouldMarkTargetPointBinding: '.labelView.shouldMarkTargetPoint',
     defaultFillBinding:           '.labelView.stroke',
     highlightedFillBinding:       '.labelView.highlightedStroke',
-    isHighlightedBinding:         '.labelView.isBodyDragging',
+    isHighlightedBinding:         '.labelView.isHighlighted',
 
     fill: function () {
       return this.get('isHighlighted') ? this.get('highlightedFill') : this.get('defaultFill');
@@ -841,17 +845,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
         return YES;
       }
       this.endDrag(evt);
-      var now      = new Date().getTime(),// ms
-          interval = 202,                 // ms
-          maxTime  = 200;                 // ms
-
-      if (typeof this.lastUp != 'undefined' && this.lastUp) {
-        interval  = now - this.lastUp;
-        if (interval < maxTime) {
-          return YES;
-        }
-      }
-      this.lastUp = now;
       return NO;
     },
 
@@ -870,7 +863,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       if (allowCoordinatesChange === undefined || !allowCoordinatesChange) {
         return YES;
       }
-      this.setPath('labelView.isBodyDragging', YES);
+      this.setPath('labelView.isArrowDragging', YES);
 
       var labelView = this.get('labelView');
       labelView.bringLabelOnTop();
@@ -961,7 +954,6 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       }
       this.get('labelView').updateLabelPositionInRecords();
       this.setPath('labelView.isArrowDragging', NO);
-      this.setPath('labelView.isBodyDragging', NO);
       return YES;
     }
   }),
@@ -977,7 +969,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
 
     defaultStrokeBinding:     '.labelView.stroke',
     highlightedStrokeBinding: '.labelView.highlightedStroke',
-    isHighlightedBinding:     '.labelView.isBodyDragging',
+    isHighlightedBinding:     '.labelView.isHighlighted',
     xCoordBinding:            '.labelView.xCoord',
     yCoordBinding:            '.labelView.yCoord',
     anchorXCoordBinding:      '.labelView.anchorXCoord',
@@ -1072,7 +1064,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     topMargin:                12, 
     rightMargin:              SC.platform.touch ? 30 : 20,
     bottomMargin:             12,
-    isHighlightedBinding:     '.parentLabelView.isBodyDragging',
+    isHighlightedBinding:     '.parentLabelView.isHighlighted',
 
     width: function () {
       var textWidth = this.get('textWidth');
@@ -1144,7 +1136,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     mouseUp: function (evt)  { return this._mouseUpOrTouchEnd(evt); },
     touchEnd: function (evt) { return this._mouseUpOrTouchEnd(evt); },
 
-    _mouseUpOrTouchEnd: function(evt) {
+    _mouseUpOrTouchEnd: function (evt) {
       this.endDrag(evt);
       var now      = new Date().getTime(),// ms
           interval = 202,                 // ms
@@ -1153,6 +1145,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       if (typeof this.lastUp != 'undefined' && this.lastUp) {
         interval  = now - this.lastUp;
         if (interval < maxTime) {
+          // reset 'lastUp' after detecting a doubleClick
+          this.lastUp = 0;
           return this.doubleClick(evt);
         }
       }
