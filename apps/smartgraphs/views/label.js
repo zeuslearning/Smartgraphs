@@ -894,7 +894,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     defaultStrokeWidth:       1,
     highlightedStrokeWidth:   2,
     leftMargin:               12,
-    topMargin:                12, 
+    topMargin:                12,
     rightMargin:              SC.platform.touch ? 30 : 20,
     bottomMargin:             12,
     isHighlightedBinding:     '.parentLabelView.isBodyDragging',
@@ -1065,7 +1065,7 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
       var xOffset = this.get('xOffset'),
           yOffset = this.get('yOffset');
 
-      if (!this._isDragging) { 
+      if (!this._isDragging) {
         return;
       }
 
@@ -1232,8 +1232,8 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
         
         this.set('isHighlighted', NO);
         
-        if (   Math.abs(evt.pageX - this.get('centerX') - offset.left) < 50 
-            && Math.abs(evt.pageY - this.get('centerY') - offset.top)  < 50)
+        if (   Math.abs(evt.pageX - this.get('centerX') - offset.left) < 50 &&
+               Math.abs(evt.pageY - this.get('centerY') - offset.top)  < 50)
         {
           this.get('labelView').remove();
         }

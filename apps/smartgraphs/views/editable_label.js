@@ -223,7 +223,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
         }
         // noOfLines - This value will decide how many lines to show in the text-area.
         var noOfLines = Math.ceil(textArea.scrollHeight / (labelView.get('fontSize') * 1.2));
-        calculatedTextHeight = noOfLines * newLayout.height; 
+        calculatedTextHeight = noOfLines * newLayout.height;
 
         labelView.beginPropertyChanges();
         labelView.set('calculatedTextHeight', calculatedTextHeight);

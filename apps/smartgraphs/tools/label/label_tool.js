@@ -35,7 +35,7 @@ Smartgraphs.labelTool = Smartgraphs.Tool.create(
         maxNoOfLabels = args.maxNoOfLabels,
         allowCoordinatesChange = args.allowCoordinatesChange;
 
-    controller.labelToolStartTool({ 
+    controller.labelToolStartTool({
       annotationName: annotationName,
       markOnDataPoints: markOnDataPoints,
       datadefName: datadefName,
@@ -69,6 +69,6 @@ Smartgraphs.labelTool = Smartgraphs.Tool.create(
 
   graphViewForPane: function (pane) {
     return Smartgraphs.activityPage.getPath(Smartgraphs.activityViewController.firstOrSecondFor(pane) + 'GraphPane.graphView');
-  },
+  }
 
 });

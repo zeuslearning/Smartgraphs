@@ -101,14 +101,14 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
   graphableDataObjects: null,
 
   /**
-   An array of legends which are to be displayed. 
-   */
+   An array of legends which are to be displayed.
+  */
   arrLegends: null,
 
   /**
     @property {Smartgraphs.Datadef[]}
 
-    A list of all the Datadefs added to this graph 
+    A list of all the Datadefs added to this graph
  
   */
   datadefList: null,
@@ -538,7 +538,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
             }
           }
         }
-        dataSpecs = dataSpecs.concat(activeDatadefs); 
+        dataSpecs = dataSpecs.concat(activeDatadefs);
       }
     }
     this.clear();
@@ -560,7 +560,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
       widthMultiplier = 21;
     }
     var iTooltipWidth = (xMax + "," + yMax).length * widthMultiplier;
-    var tooltipCoords = this.get("tooltipCoords"); 
+    var tooltipCoords = this.get("tooltipCoords");
     this.set("tooltipCoords", { x: 0, y: 0, top: 0, left: 0, coordOffset: 5, width: iTooltipWidth});
 
     dataSpecs.forEach(function (dataSpec) {
@@ -604,7 +604,7 @@ Smartgraphs.GraphController = SC.Object.extend( Smartgraphs.AnnotationSupport,
     }
 
     if (legendDetails !== undefined) {
-      var referenceDatadef = legendDetails.referenceDatadef; 
+      var referenceDatadef = legendDetails.referenceDatadef;
       if (referenceDatadef !== undefined) {
         var len = legendDetails.datadefs.length;
         for (var m = 0; m < len; m++) {
