@@ -428,6 +428,28 @@ Smartgraphs.GraphView = SC.View.extend(
       cursor.bind('cursorStyle', this, 'requestedCursorStyle');
       this.set('cursor', cursor);
     },
+
+    viewDidResize: function () {
+      sc_super();
+      var topAnnotationChildViews = this.get('childViews');
+      for (var i = 0; i < topAnnotationChildViews.length; i++) {
+        var child = topAnnotationChildViews[i];
+        if (child.kindOf(Smartgraphs.LabelSetView)) {
+          var childLabels = child.get('childViews');
+          var noOfLabels = childLabels.length; 
+          for (var j = 0; j < noOfLabels; j++) {
+            var label = childLabels[j];
+            label.get('labelTextView').updateLayer();
+          }
+        }
+        else if (child.kindOf(Smartgraphs.LabelView)) {
+          if (child.get('isEditing')) {
+            child.get('labelTextView').updateLayer();
+          }
+        }
+      }
+    },
+
     didCreateLayer: function () {
       sc_super();
       var self = this;

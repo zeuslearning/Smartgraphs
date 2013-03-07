@@ -270,7 +270,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
 
   renderCallback: function (raphaelCanvas, attrs, adjustTextFieldView) {
     var ret = raphaelCanvas.text().attr(attrs);
-    adjustTextFieldView();
+    adjustTextFieldView(true);
     return ret;
   },
 
@@ -298,18 +298,19 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
         textFieldView       = this.textFieldView,
         pane            = this.get('pane'),
 
-        adjustTextFieldView = function () {
+        adjustTextFieldView = function (firstTime) {
           var offset;
 
           if (isEditing) {
-           // textFieldView.set('value', self.get('text'));
             offset = graphCanvasView.$().offset();
-            textFieldView.set('layout', {
-              top:    offset.top + y,
-              left:   offset.left + x,
-              width:  width,
-              height: height
-            });
+            if (!firstTime || offset.left !== 0) { // Sometimes resizing gives offset values as 0 which is not valid.
+              textFieldView.set('layout', {
+                top:    offset.top + y,
+                left:   offset.left + x,
+                width:  width,
+                height: height
+              });
+            }
             SC.run();
             pane.appendChild(textFieldView);
             textFieldView.becomeFirstResponder();
@@ -337,7 +338,7 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
     else {
       raphaelText = this.get('raphaelObject');
       raphaelText.attr(attrs);
-      adjustTextFieldView();
+      adjustTextFieldView(false);
     }
   },
 
