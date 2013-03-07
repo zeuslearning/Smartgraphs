@@ -625,6 +625,13 @@ Smartgraphs.LabelView = RaphaelViews.RaphaelView.extend(
     sc_super();
     this.$().css('cursor', 'default');
     this.get('item').set('view', this);
+    var labelElement = this.get('layer');
+    if (labelElement.getAttribute('class')) {
+      labelElement.setAttribute('class', labelElement.getAttribute('class') + ' labelView');
+    }
+    else {
+      labelElement.setAttribute('class', 'labelView');
+    }
   },
 
   viewDidResize: function () {

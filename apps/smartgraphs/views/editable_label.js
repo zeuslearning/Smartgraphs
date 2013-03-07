@@ -402,11 +402,9 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
     var labelViewLayer = this.getPath('labelView.layer');
 
     if (evt.target !== this.textFieldView.$().find('textarea')[0] &&
-         evt.target !== labelViewLayer &&
-         !$.contains(labelViewLayer, evt.target)) {
-      $('body').unbind('mousedown', this.mousedownHandler).unbind('touchstart', this.mousedownHandler);
-      this.textFieldView.resignFirstResponder(); // see if this works better than jQuery's blur or focusout...
-      
+        evt.target !== labelViewLayer &&
+        !$.contains(labelViewLayer, evt.target)) {
+      this.commitEditing();
       var topAnnotationsHolder = this.getPath('graphView.topAnnotationsHolder');
       var topAnnotationChildViews = topAnnotationsHolder.get('childViews');
       var stopEvent = true;
