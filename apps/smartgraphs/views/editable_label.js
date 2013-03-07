@@ -20,6 +20,9 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
   textFieldView:       null,  // defined on init
   fontSize:            12,
 
+  prevLayer: null,
+  createFreshLayer: NO,
+
   displayProperties:   'displayText textColor x y raphTextY isEditing width height'.w(),
 
   labelBodyView:       SC.outlet('parentView'),
@@ -132,6 +135,45 @@ Smartgraphs.EditableLabelView = RaphaelViews.RaphaelView.extend({
       }
     }
     return { beforeText : text.substring(0, index), afterText: text.substring(index, text.length) };
+  },
+
+  didCreateLayer: function () {
+    sc_super();
+
+    var prevLayer = this.get('prevLayer');
+    if (prevLayer) {
+      var layer = this.get('layer');
+      if (layer === prevLayer) {
+        this.set('createFreshLayer', YES);
+      }
+    }
+    else {
+      this.set('prevLayer', this.get('layer'));
+    }
+  },
+
+  destroyLayer: function () {
+    sc_super();
+
+    this.set('prevLayer', null);
+  },
+
+  updateLayer: function () {
+    if (this.get('createFreshLayer')) {
+      this.set('createFreshLayer', NO);
+
+      var raphaelContext = RaphaelViews.RaphaelContext();
+      raphaelContext.isTopLevel = NO;
+
+      this.prepareRaphaelContext(raphaelContext, YES);
+      this.set('layer', raphaelContext.populateCanvas(this.get('raphaelCanvas')));
+
+      // now notify the view and its child views..
+      this._notifyDidCreateLayer();
+    }
+    else {
+      sc_super();
+    }
   },
 
   init: function () {
