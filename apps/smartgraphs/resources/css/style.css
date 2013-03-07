@@ -319,3 +319,13 @@ body.sc-theme {
 {
   border-radius: 5px;
 }
+
+.topAnnotationsHolder
+{
+  pointer-events: none;
+}
+
+.labelView
+{
+  pointer-events: all;
+}

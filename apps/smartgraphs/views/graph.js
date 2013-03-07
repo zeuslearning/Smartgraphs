@@ -408,6 +408,13 @@ Smartgraphs.GraphView = SC.View.extend(
     didCreateLayer: function () {
       sc_super();
       var self = this;
+      var view = this.$();
+      if (view.attr('class')) {
+        view.attr('class', view.attr('class') + ' topAnnotationsHolder');
+      }
+      else {
+        view.attr('class', 'topAnnotationsHolder');
+      }
       /* "this.childNodes && evt.target === this.childNodes[0]"
        * The above condition is to check whether the events are fired on 'topAnnotationsHolder' or its children.
        * If the events are fired on 'topAnnotationsHolder', they are to be propagated to the layers beneath it.
